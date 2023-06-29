@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/.idea/CV2PPG.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/.idea/CV2PPG.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/matplotlib/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/matplotlib/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/matplotlib/realtime_graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/matplotlib/realtime_graph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/Text_game/1.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/Text_game/1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/chatGPT/GoL OpenCL 3.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/chatGPT/GoL OpenCL 3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/flops_bench/AVX_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/flops_bench/AVX_1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/flops_bench/AVX_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/flops_bench/AVX_2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/platformer/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/platformer/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/platformer/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/platformer/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/pygame/pymunk/2.py" beforeDir="false" afterPath="$PROJECT_DIR$/../CV2PPG/CRR/my_projects/pygame/pymunk/2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a113.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a113.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,16 +16,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2RsxRihbWadnWyjaoWTHymFhlZB" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/User/PycharmProjects/CV2PPG"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

@@ -4,14 +4,14 @@ from random import *
 import pygame_gui
 import random
 from pymunk import Vec2d
+import math
+import numpy as np
 import pymunk.pygame_util
 import pickle
 import tkinter as tk
 from tkinter import filedialog
-import ctypes
-#import math
-#import numpy as np
-#from numba import jit
+from numba import jit
+
 guide_text = (
     "L: show this guide"
     "\nF: Spawn object"
@@ -22,29 +22,16 @@ guide_text = (
     "\nA/Z: Camera zoom"
     "\nS/X: Camera roll"
     "\nP: Screenshot"
-    "\nShift: Move faster"
 )
 
 debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len(space.bodies))) +'\nGravity: ' + (str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))"
 
 show_guide = True
-fullscreen = False
-screen_width, screen_height = 1920, 1080
-shift_speed = 1
 pygame.init()
-pygame.display.set_caption("Newgodoo a0.1.3")
+pygame.display.set_caption("Newgodoo a0.1.2")
 COLLTYPE_DEFAULT = 0
-if fullscreen == True:
-    user32 = ctypes.windll.user32
-    user32.SetProcessDPIAware()
-
-    screen_width = int(user32.GetSystemMetrics(0))
-    screen_height = int(user32.GetSystemMetrics(1))
-    screen = pygame.display.set_mode((screen_width, screen_height))
-else:
-    screen = pygame.display.set_mode((screen_width, screen_height))
-
-
+screen_width, screen_height = 1920, 1080
+screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
 space = pymunk.Space()
@@ -74,7 +61,6 @@ f2 = pygame.font.Font(None, 25)
 static_field_start = (0, 0)
 static_field_end = (0, 0)
 creating_static_field = False
-creating_spring = False
 creating_force_field = False
 force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
@@ -82,11 +68,6 @@ force_field_radius = 500  # Радиус действия поля
 # Инициализация GUI Manager
 gui_manager = pygame_gui.UIManager((screen_width, screen_height))
 clock = pygame.time.Clock()
-
-
-KEY_HOLD_TIME = 1000  #в миллисекундах
-key_f_pressed = False
-key_f_hold_start_time = 0
 
 # Создание кнопок для спавна предметов
 spawn_buttons = []
@@ -106,7 +87,7 @@ set_friction = 0.7
 segment_length = 50
 segment_thickness = 2
 segment_color = pygame.Color("white")
-options = pymunk.pygame_util.DrawOptions(screen)
+
 
 running_physics = True
 
@@ -145,7 +126,6 @@ for i, pos in enumerate(spawn_button_positions):
         relative_rect=button_rect, text=button_text, manager=gui_manager
     )
     spawn_buttons.append(button)
-selected_button = None
 # FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(350, 10, 200, 20),
@@ -270,28 +250,13 @@ save_world_button = pygame_gui.elements.UIButton(
         relative_rect=pygame.Rect(screen_width - 135, 10, 125, 40),
         text="Save World",
         manager=gui_manager
-)
+    )
 load_world_button = pygame_gui.elements.UIButton(
         relative_rect=pygame.Rect(screen_width - 135, 60, 125, 40),
         text="Load World",
         manager=gui_manager
-)
-
-
-
-
-debug_info_lines = debug_info.split('\n')
-debug_info_labels = []
-debug_y_pos = 10
-
-for line in debug_info_lines:
-    label = pygame_gui.elements.UILabel(
-        relative_rect=pygame.Rect(screen_height+400, debug_y_pos, 300, 50),
-        text=line,
-        manager=gui_manager,
     )
-    debug_info_labels.append(label)
-    debug_y_pos += 20
+selected_button = None
 
 
 def mouse_get_pos():
@@ -347,7 +312,6 @@ def spawn_circle(position):
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
     add_body_shape(body, shape)
-    shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
 
 def spawn_square(position):
@@ -369,8 +333,6 @@ def spawn_square(position):
     shape.friction = set_friction
     shape.elasticity = set_elasticity
     add_body_shape(body, shape)
-    shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
-
 
 
 def spawn_triangle(position):
@@ -386,7 +348,6 @@ def spawn_triangle(position):
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
     add_body_shape(body, shape)
-    shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
 
 
 def add_body_shape(body, shape):
@@ -399,6 +360,13 @@ def force_field_update():
         # distance = world_mouse_pos.get_distance(body.position)
         # if distance <= force_field_radius:
         if creating_force_field and shape.point_query(world_mouse_pos):
+            pygame.draw.circle(
+                screen,
+                (100, 0, 0),
+                pygame.mouse.get_pos(),
+                force_field_radius + (world_mouse_pos[0] + world_mouse_pos[1]),
+                2,
+            )
             force_vector = (
                 (world_mouse_pos - body.position).rotated(-body.angle).normalized()
                 * force_field_strength
@@ -411,6 +379,13 @@ def object_drag():
     for body, shape in objects:
         if world_mouse_pos.get_distance(body.position) <= 10:
             if object_dragging and shape.point_query(world_mouse_pos):
+                pygame.draw.circle(
+                    screen,
+                    (100, 0, 0),
+                    pygame.mouse.get_pos(),
+                    force_field_radius + (world_mouse_pos[0] + world_mouse_pos[1]),
+                    2,
+                )
                 force_vector = (
                     (world_mouse_pos - body.position).rotated(-body.angle).normalized()
                     * force_field_strength
@@ -428,17 +403,12 @@ def save_data(data):
     )
 
     # Если путь и имя файла выбраны
-
     if file_path:
         with open(file_path, "wb") as f:
-            try:
-                pickle.dump(data, f)
-            except:
-                print("Что-то пошло не так")
+            pickle.dump(data, f)
         print("Сохранение успешно.")
     else:
         print("Отменено сохранение.")
-
 
 
 # Функция для загрузки данных
@@ -452,15 +422,9 @@ def load_data():
     )
 
     # Если файл выбран
-
     if file_path:
         with open(file_path, "rb") as f:
-            try:
-                delete_all(space)
-                data = pickle.load(f)
-            except:
-                print("Что-то пошло не так")
-
+            data = pickle.load(f)
         print("Загрузка успешна.")
         return data
     else:
@@ -469,13 +433,12 @@ def load_data():
 
 def update():
     if running_physics == True:
-        dt = 2.0 / simulation_frequency
         space.step(dt)
-        space.gravity = rotation * 1000, 1000
         force_field_update()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 20, 2)
 
 
+translate_speed = 10
 zoom_speed = 0.02
 rotation_speed = 0.01
 scaling = 1
@@ -489,10 +452,6 @@ running = True
 guide = f2.render(str(guide_text), True, (180, 180, 0))
 space.sleep_time_threshold = 0.5
 
-def create_spring(body1, body2):
-    global spring
-    spring = pymunk.DampedSpring(body1, body2, (0, 0), (0, 0), 100, 100, 0.1)
-
 
 while running:
     time_delta = clock.tick(60)
@@ -504,7 +463,7 @@ while running:
     cursor_pos = pymunk.Vec2d(mouse_pos[0], mouse_pos[1])
 
     # Выполнить обратные операции трансформации
-    inverse_translation = pymunk.Transform.translation(-screen_width/2, -screen_height/2)
+    inverse_translation = pymunk.Transform.translation(-300, -300)
     inverse_rotation = pymunk.Transform.rotation(-rotation)
     inverse_scaling = pymunk.Transform.scaling(1 / scaling)
 
@@ -522,23 +481,14 @@ while running:
 
     # Вычислить позицию курсора в мире игры с учетом позиции камеры
     world_mouse_pos = (
-        world_cursor_pos.x + world_translation.x + screen_width/2,
-        world_cursor_pos.y + world_translation.y + screen_height/2,
+        world_cursor_pos.x + world_translation.x + 300,
+        world_cursor_pos.y + world_translation.y + 300,
     )
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         # Обработка событий GUI Manager
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_f:
-                key_f_pressed = True
-                key_f_hold_start_time = pygame.time.get_ticks()
-        elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_f:
-                toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
-                key_f_pressed = False
-                key_f_hold_start_time = 0
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_world_button:
@@ -561,7 +511,7 @@ while running:
                         selected_shape = "spam"
                     elif selected_button == spawn_buttons[5]:
                         selected_shape = "delete all"
-                        delete_all(space)
+                        delete_all(0)
                     elif selected_button == spawn_buttons[6]:
                         selected_shape = "force field"
             elif event.user_type == pygame_gui.UI_BUTTON_PRESSED:
@@ -617,20 +567,9 @@ while running:
                     text_elasticity.set_text(
                         "elasticity       :{}".format(set_elasticity)
                     )
-
-        # Update the text of each label with the new values
-        debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
-        debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
-        debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
-        debug_info_labels[3].set_text(f"Threads: {round(space.threads)}")
-
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
-            shift_speed = 4
-        if event.type == pygame.KEYUP and event.key == pygame.K_LSHIFT:
-            shift_speed = 1
-            
         if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
             # Начало создания статического поля
+            init_static_field_start = pygame.mouse.get_pos()
             static_field_start = world_mouse_pos
             creating_static_field = True
         elif event.type == pygame.KEYUP and event.key == pygame.K_b:
@@ -644,11 +583,12 @@ while running:
             space.add(static_field)
             creating_static_field = False
 
-
         # Обработка событий клавиатуры
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 running_physics = not running_physics
+            elif event.key == pygame.K_f:
+                toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
             elif event.key == pygame.K_n:
                 creating_force_field = not creating_force_field
             elif event.key == pygame.K_l:
@@ -660,38 +600,16 @@ while running:
                 if line_point1 is None:
                     line_point1 = world_mouse_pos
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Check if mouse is hovering over a Pymunk shape
-            for shape in space.shapes:
-                if shape.point_query(world_mouse_pos):
-                    selected_body = shape.body
-        elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            # Check if mouse is hovering over a Pymunk shape
-            for shape in space.shapes:
-                if shape.point_query(world_mouse_pos):
-                    if selected_body != shape.body:
-                        create_spring(selected_body, shape.body)
-                    selected_body = None
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_j:
-            # Check if two bodies are selected and create a spring joint between them
-            if spring and spring.a and spring.b:
-                space.add(spring)
-
-
+        # Обработка событий мыши
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 object_dragging = True
+                # Другие обработчики событий мыш
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 object_dragging = False
 
-    if key_f_pressed:
-        hold_time = pygame.time.get_ticks() - key_f_hold_start_time
-        if hold_time >= KEY_HOLD_TIME:
-            toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
-
-    translate_speed = 10 * shift_speed
     keys = pygame.key.get_pressed()
     left = int(keys[pygame.K_LEFT])
     up = int(keys[pygame.K_UP])
@@ -702,17 +620,17 @@ while running:
     zoom_out = int(keys[pygame.K_z])
     rotate_left = int(keys[pygame.K_s])
     rotate_right = int(keys[pygame.K_x])
-    
+
     translation = translation.translated(
         translate_speed * left - translate_speed * right,
         translate_speed * up - translate_speed * down,
     )
     draw_options.transform = (
-        pymunk.Transform.translation(screen_width/2, screen_height/2)
+        pymunk.Transform.translation(300, 300)
         @ pymunk.Transform.scaling(scaling)
         @ translation
         @ pymunk.Transform.rotation(rotation)
-        @ pymunk.Transform.translation(-screen_width/2, -screen_height/2)
+        @ pymunk.Transform.translation(-300, -300)
     )
 
     scaling *= 1 + (zoom_speed * zoom_in - zoom_speed * zoom_out)
@@ -721,38 +639,34 @@ while running:
     # Отрисовка
     screen.fill((0, 0, 0))
 
-    #fps_debug = f1.render(
-    #    "FPS: "
-    #    + (str(round(clock.get_fps())))
-    #    + "\nEntities: "
-    #    + (str(len(space.bodies)))
-    #    + "\nGravity: "
-    #    + (str(len(space.gravity)))
-    #    + "\nThreads: "
-    #    + (str(round(space.threads))),
-    #    True,
-    #    (180, 0, 0),
-    #)
-    #screen.blit(fps_debug, (screen_width - 300, 10))
-
+    fps_debug = f1.render(
+        "FPS: "
+        + (str(round(clock.get_fps())))
+        + "\nEntities: "
+        + (str(len(space.bodies)))
+        + "\nGravity: "
+        + (str(len(space.gravity)))
+        + "\nThreads: "
+        + (str(round(space.threads))),
+        True,
+        (180, 0, 0),
+    )
+    screen.blit(fps_debug, (screen_width - 300, 10))
     if show_guide == True:
         text_guide_gui.visible = True
 
     if creating_static_field:
         static_field_end = pygame.mouse.get_pos()
-        pygame.draw.line(screen, (255, 255, 255), (static_field_start[0] - world_translation[0],
-                                                   static_field_start[1] - world_translation[1]), static_field_end, 10)
-    if creating_spring:
-        spring_end = pygame.mouse.get_pos()
-        pygame.draw.line(screen, (255, 255, 255), (spring_start[0] - world_translation[0],
-                                                   spring_start[1] - world_translation[1]), spring_end, 10)
+        pygame.draw.line(screen, (255, 255, 255), (static_field_start[0] - world_translation[0], static_field_start[1] - world_translation[1]), static_field_end, 10)
 
     for line in static_lines:
         body = line.body
         pv1 = body.position + line.a.rotated(body.angle)
         pv2 = body.position + line.b.rotated(body.angle)
-
-
+    space.gravity = rotation * 1000, 1000
+    dt = 1.0 / simulation_frequency
+    if running_physics == True:
+        space.step(dt)
     # Обновление GUI Manager
     gui_manager.process_events(event)
     gui_manager.update(time_delta)
