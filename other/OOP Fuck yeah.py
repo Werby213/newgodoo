@@ -9,9 +9,7 @@ import pymunk.pygame_util
 import pickle
 import tkinter as tk
 from tkinter import filedialog
-import taichi as ti
 
-ti.init(arch=ti.gpu)
 
 guide_text = "L: show this guide" \
              "\nF: Spawn object" \
@@ -34,7 +32,6 @@ space.iterations = 30
 pygame.init()
 pygame.display.set_caption('PhysicsGame')
 
-@ti.data_oriented
 class PhysicsGame:
     def __init__(self):
         self.show_guide = True
