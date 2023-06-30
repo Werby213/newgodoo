@@ -45,7 +45,7 @@ if fullscreen == True:
     screen_height = int(user32.GetSystemMetrics(1))
     screen = pygame.display.set_mode((screen_width, screen_height))
 else:
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 
 
 clock = pygame.time.Clock()
@@ -462,7 +462,7 @@ def save_data(data):
 
     # Открыть диалоговое окно проводника для выбора пути сохранения и имени файла
     file_path = filedialog.asksaveasfilename(
-        defaultextension=".grsv", filetypes=[("Newgodoo Save File", "*.grsv")]
+        defaultextension=".ngsv", filetypes=[("Newgodoo Save File", "*.grsv")]
     )
 
     # Если путь и имя файла выбраны
