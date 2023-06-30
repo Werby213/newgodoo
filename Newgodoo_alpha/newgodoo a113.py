@@ -9,8 +9,8 @@ import pickle
 import tkinter as tk
 from tkinter import filedialog
 import ctypes
-#import math
-#import numpy as np
+import math
+import numpy as np
 #from numba import jit
 guide_text = (
     "L: show this guide"
@@ -25,7 +25,8 @@ guide_text = (
     "\nShift: Move faster"
 )
 
-debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len(space.bodies))) +'\nGravity: ' + (str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))"
+debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len(space.bodies))) +'\nGravity: ' + " \
+             "(str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))"
 
 show_guide = True
 fullscreen = False
@@ -103,6 +104,10 @@ set_square_size = [30, 30]
 set_circle_radius = 30
 set_friction = 0.7
 
+set_number_faces = 5
+
+
+
 segment_length = 50
 segment_thickness = 2
 segment_color = pygame.Color("white")
@@ -124,7 +129,7 @@ for i, pos in enumerate(spawn_button_positions):
     elif i == 2:
         button_text = "Triangle"
     elif i == 3:
-        button_text = "Random"
+        button_text = "Polyhedron"
     elif i == 4:
         button_text = "Spam"
     elif i == 5:
@@ -304,7 +309,7 @@ def toolset(position):
         "circle": spawn_circle,
         "square": spawn_square,
         "triangle": spawn_triangle,
-        "random": spawn_random,
+        "polyhedron": spawn_polyhedron,
         "spam": random_spam,
     }
 
@@ -334,6 +339,36 @@ def delete_all(position):
         space.remove(body, shape)
     objects = []
 
+
+def spawn_polyhedron(position):
+    tooth_angle = 2 * math.pi / set_number_faces
+
+    radius = set_circle_radius / 2
+
+    tooth_radius = radius * 0.4
+
+    points = []
+    for i in range(set_number_faces * 2):
+        angle = i * tooth_angle / 2
+        if i % 2 == 0:
+            points.append((radius * math.cos(angle), radius * math.sin(angle)))
+        else:
+            points.append((tooth_radius * math.cos(angle), tooth_radius * math.sin(angle)))
+
+    # Calculate the moment of inertia for the gear
+    mass = (set_circle_radius ** 2) / 200
+    moment = pymunk.moment_for_poly(mass, points)
+
+    # Create the Pymunk Body and Shape objects
+    body = pymunk.Body(mass, moment)
+    body.position = position
+    shape = pymunk.Poly(body, points)
+    shape.collision_type = COLLTYPE_DEFAULT
+    shape.friction = set_friction
+    shape.elasticity = set_elasticity
+
+    # Add the Body and Shape to the Space
+    add_body_shape(body, shape)
 
 def spawn_circle(position):
     radius = set_circle_radius
@@ -556,7 +591,7 @@ while running:
                     elif selected_button == spawn_buttons[2]:
                         selected_shape = "triangle"
                     elif selected_button == spawn_buttons[3]:
-                        selected_shape = "random"
+                        selected_shape = "gear"
                     elif selected_button == spawn_buttons[4]:
                         selected_shape = "spam"
                     elif selected_button == spawn_buttons[5]:
@@ -660,22 +695,22 @@ while running:
                 if line_point1 is None:
                     line_point1 = world_mouse_pos
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            # Check if mouse is hovering over a Pymunk shape
-            for shape in space.shapes:
-                if shape.point_query(world_mouse_pos):
-                    selected_body = shape.body
-        elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            # Check if mouse is hovering over a Pymunk shape
-            for shape in space.shapes:
-                if shape.point_query(world_mouse_pos):
-                    if selected_body != shape.body:
-                        create_spring(selected_body, shape.body)
-                    selected_body = None
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_j:
-            # Check if two bodies are selected and create a spring joint between them
-            if spring and spring.a and spring.b:
-                space.add(spring)
+        #elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        #    # Check if mouse is hovering over a Pymunk shape
+        #    for shape in space.shapes:
+        #        if shape.point_query(world_mouse_pos):
+        #            selected_body = shape.body
+        #elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+        #    # Check if mouse is hovering over a Pymunk shape
+        #    for shape in space.shapes:
+        #        if shape.point_query(world_mouse_pos):
+        #            if selected_body != shape.body:
+        #                create_spring(selected_body, shape.body)
+        #            selected_body = None
+        #elif event.type == pygame.KEYDOWN and event.key == pygame.K_j:
+        #    # Check if two bodies are selected and create a spring joint between them
+        #    if spring and spring.a and spring.b:
+        #        space.add(spring)
 
 
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -742,10 +777,10 @@ while running:
         static_field_end = pygame.mouse.get_pos()
         pygame.draw.line(screen, (255, 255, 255), (static_field_start[0] - world_translation[0],
                                                    static_field_start[1] - world_translation[1]), static_field_end, 10)
-    if creating_spring:
-        spring_end = pygame.mouse.get_pos()
-        pygame.draw.line(screen, (255, 255, 255), (spring_start[0] - world_translation[0],
-                                                   spring_start[1] - world_translation[1]), spring_end, 10)
+    #if creating_spring:
+    #    spring_end = pygame.mouse.get_pos()
+    #    pygame.draw.line(screen, (255, 255, 255), (spring_start[0] - world_translation[0],
+    #                                               spring_start[1] - world_translation[1]), spring_end, 10)
 
     for line in static_lines:
         body = line.body
