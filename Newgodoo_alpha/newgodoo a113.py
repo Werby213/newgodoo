@@ -33,6 +33,8 @@ fullscreen = False
 screen_width, screen_height = 1920, 1080
 shift_speed = 1
 pygame.init()
+pygame.display.set_icon(pygame.image.load("laydigital.png"))
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 pygame.display.set_caption("Newgodoo a0.1.3")
 COLLTYPE_DEFAULT = 0
 if fullscreen == True:
@@ -105,8 +107,8 @@ set_circle_radius = 30
 set_friction = 0.7
 
 set_number_faces = 5
-
-
+gear_radius = 30
+gear_thickness = 5
 
 segment_length = 50
 segment_thickness = 2
@@ -359,19 +361,16 @@ def spawn_polyhedron(position):
         else:
             points.append((tooth_radius * math.cos(angle), tooth_radius * math.sin(angle)))
 
-    # Calculate the moment of inertia for the gear
     mass = (set_circle_radius ** 2) / 200
     moment = pymunk.moment_for_poly(mass, points)
 
-    # Create the Pymunk Body and Shape objects
     body = pymunk.Body(mass, moment)
     body.position = position
     shape = pymunk.Poly(body, points)
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
     shape.elasticity = set_elasticity
-
-    # Add the Body and Shape to the Space
+    shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
     add_body_shape(body, shape)
 
 def spawn_circle(position):
@@ -597,7 +596,7 @@ while running:
                     elif selected_button == spawn_buttons[2]:
                         selected_shape = "triangle"
                     elif selected_button == spawn_buttons[3]:
-                        selected_shape = "gear"
+                        selected_shape = "polyhedron"
                     elif selected_button == spawn_buttons[4]:
                         selected_shape = "spam"
                     elif selected_button == spawn_buttons[5]:
