@@ -281,7 +281,12 @@ load_world_button = pygame_gui.elements.UIButton(
         text="Load World",
         manager=gui_manager
 )
-
+#DELETE_ALL_BUTTON##########################################################################
+delete_all_button = pygame_gui.elements.UIButton(
+        relative_rect=pygame.Rect(10, screen_height-50, 125, 40),
+        text="Delete all",
+        manager=gui_manager
+)
 
 
 
@@ -333,12 +338,11 @@ def spawn_random(position):
     toolset(position, shape_type)
 
 
-def delete_all(position):
+def delete_all():
     global objects
     for body, shape in objects:
         space.remove(body, shape)
     objects = []
-
 
 def spawn_polyhedron(position):
     tooth_angle = 2 * math.pi / set_number_faces
@@ -578,10 +582,12 @@ while running:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_world_button:
                     save_data(space)
-                if event.ui_element == load_world_button:
+                elif event.ui_element == load_world_button:
                     loaded_data = load_data()
                     if loaded_data:
                         space = loaded_data
+                elif event.ui_element == delete_all_button:
+                    delete_all()
                 if event.ui_element in spawn_buttons:
                     selected_button = event.ui_element
                     if selected_button == spawn_buttons[0]:
@@ -596,7 +602,7 @@ while running:
                         selected_shape = "spam"
                     elif selected_button == spawn_buttons[5]:
                         selected_shape = "delete all"
-                        delete_all(space)
+                        delete_all()
                     elif selected_button == spawn_buttons[6]:
                         selected_shape = "force field"
             elif event.user_type == pygame_gui.UI_BUTTON_PRESSED:
