@@ -29,7 +29,7 @@ debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len
              "(str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))"
 
 show_guide = True
-fullscreen = False
+fullscreen = True
 screen_width, screen_height = 1920, 1080
 shift_speed = 1
 pygame.init()
@@ -37,13 +37,14 @@ pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 pygame.display.set_caption("Newgodoo a0.1.3")
 COLLTYPE_DEFAULT = 0
+
 if fullscreen == True:
     user32 = ctypes.windll.user32
     user32.SetProcessDPIAware()
 
     screen_width = int(user32.GetSystemMetrics(0))
     screen_height = int(user32.GetSystemMetrics(1))
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 else:
     screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 
@@ -530,7 +531,6 @@ space.sleep_time_threshold = 0.5
 def create_spring(body1, body2):
     global spring
     spring = pymunk.DampedSpring(body1, body2, (0, 0), (0, 0), 100, 100, 0.1)
-
 
 while running:
     time_delta = clock.tick(60)
