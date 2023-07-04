@@ -379,13 +379,6 @@ def object_drag():
     for body, shape in objects:
         if world_mouse_pos.get_distance(body.position) <= 10:
             if object_dragging and shape.point_query(world_mouse_pos):
-                pygame.draw.circle(
-                    screen,
-                    (100, 0, 0),
-                    pygame.mouse.get_pos(),
-                    force_field_radius + (world_mouse_pos[0] + world_mouse_pos[1]),
-                    2,
-                )
                 force_vector = (
                     (world_mouse_pos - body.position).rotated(-body.angle).normalized()
                     * force_field_strength

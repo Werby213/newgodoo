@@ -10,7 +10,7 @@ import tkinter as tk
 from tkinter import filedialog
 import ctypes
 import math
-import numpy as np
+#import numpy as np
 #from numba import jit
 guide_text = (
     "L: show this guide"
@@ -26,10 +26,10 @@ guide_text = (
 )
 
 debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len(space.bodies))) +'\nGravity: ' + " \
-             "(str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))"
+             "(str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))\nstatick_lines"
 
 show_guide = True
-fullscreen = True
+fullscreen = False
 screen_width, screen_height = 1920, 1080
 shift_speed = 1
 pygame.init()
@@ -67,6 +67,7 @@ objects = []
 static_lines = []
 line_point1 = None
 selected_shape = None
+selected_force_field = None
 camera_offset = Vec2d(0, 0)
 
 camera_dragging = False
@@ -79,7 +80,9 @@ static_field_start = (0, 0)
 static_field_end = (0, 0)
 creating_static_field = False
 creating_spring = False
-creating_force_field = False
+creating_force_field_1 = False
+creating_force_field_2 = False
+creating_object_drag = False
 force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
@@ -94,6 +97,7 @@ key_f_hold_start_time = 0
 
 # Создание кнопок для спавна предметов
 spawn_buttons = []
+force_field_buttons = []
 spawn_button_width = 120
 spawn_button_height = 50
 button_x = 10
@@ -118,12 +122,33 @@ options = pymunk.pygame_util.DrawOptions(screen)
 
 running_physics = True
 
-spawn_button_positions = [
-    (button_x, button_y + (spawn_button_height + button_spacing) * i) for i in range(11)
+force_field_button_positions = [
+    (screen_width-135, screen_height-300 + (50 + 10) * i) for i in range(3)
 ]
 
+for i, pos in enumerate(force_field_button_positions):
+    button_rect = pygame.Rect(pos, (120, 50))
+    button_text = ""
+    if i == 0:
+        button_text = "attraction"
+    elif i == 1:
+        button_text = "repulsion"
+    elif i == 2:
+        button_text = "ring"
+    if selected_shape == button_text.lower():
+        button_text += " (selected)"
+    button = pygame_gui.elements.UIButton(
+        relative_rect=button_rect, text=button_text, manager=gui_manager
+    )
+    force_field_buttons.append(button)
+selected_force_field_button = None
+
+
+spawn_button_positions = [
+    (10, 10 + (50 + 10) * i) for i in range(11)
+]
 for i, pos in enumerate(spawn_button_positions):
-    button_rect = pygame.Rect(pos, (spawn_button_width, spawn_button_height))
+    button_rect = pygame.Rect(pos, (120, 50))
     button_text = ""
     if i == 0:
         button_text = "Circle"
@@ -153,7 +178,7 @@ for i, pos in enumerate(spawn_button_positions):
         relative_rect=button_rect, text=button_text, manager=gui_manager
     )
     spawn_buttons.append(button)
-selected_button = None
+selected_spawn_button = None
 # FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(350, 10, 200, 20),
@@ -325,6 +350,18 @@ def toolset(position):
     if spawn_func:
         spawn_func(position)
 
+def toolset_force_field():
+    type_mapping = {
+        "attraction": force_field_1,
+        "repulsion": force_field_2,
+        "ring": force_field_2,
+    }
+    if selected_force_field_button is not None:
+        force_field_function = type_mapping.get(button_text)
+        if force_field_function is not None:
+            force_field_function()
+    return selected_force_field
+
 
 def random_spam(position):
     for i in range(100):
@@ -334,6 +371,8 @@ def random_spam(position):
             spawn_square(position)
         if random.randrange(0, 15) == 1:
             spawn_triangle(position)
+        if random.randrange(0, 15) == 1:
+            spawn_polyhedron(position)
 
 
 def spawn_random(position):
@@ -342,10 +381,14 @@ def spawn_random(position):
 
 
 def delete_all():
-    global objects
+    global objects, static_lines
     for body, shape in objects:
         space.remove(body, shape)
     objects = []
+
+    for static_line in static_lines:
+        space.remove(static_line)
+    static_lines = []
 
 def spawn_polyhedron(position):
     tooth_angle = 2 * math.pi / set_number_faces
@@ -433,26 +476,54 @@ def add_body_shape(body, shape):
     objects.append((body, shape))
 
 
-def force_field_update():
-    for body, shape in objects:
-        # distance = world_mouse_pos.get_distance(body.position)
-        # if distance <= force_field_radius:
-        if creating_force_field and shape.point_query(world_mouse_pos):
-            force_vector = (
-                (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                * force_field_strength
-                * 30
-            )
-            body.apply_force_at_local_point(force_vector, (0, 0))
-    # if world_mouse_pos[0] == body.position <= force_field_radius or world_mouse_pos[1] == body.position <= force_field_radius:
+def force_field_1():
+    if creating_force_field_1:
+        for body, shape in objects:
+             if shape.point_query(world_mouse_pos):
+                distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+    
+                if distance <= force_field_radius:
+    
+                        force_vector = (
+                            (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                            * force_field_strength
+                            * 30
+                        )
+                        body.apply_force_at_local_point(force_vector, (0, 0))
 
-def object_drag():
-    for body, shape in objects:
-        if world_mouse_pos.get_distance(body.position) <= 10:
-            if object_dragging and shape.point_query(world_mouse_pos):
+def force_field_2():
+    if creating_force_field_2:
+        for body, shape in objects:
+        # if distance <= force_field_radius:
+            if shape.point_query(world_mouse_pos):
+                distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
+                            world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
                 force_vector = (
                     (world_mouse_pos - body.position).rotated(-body.angle).normalized()
                     * force_field_strength
+                    * 30
+                )
+                body.apply_force_at_local_point(force_vector, (0, 0))
+    
+                if distance <= force_field_radius-300:
+                    if shape.point_query(world_mouse_pos):
+                        force_vector_in = (
+                                (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                                * force_field_strength
+                                * 50
+                        )
+    
+                        body.apply_force_at_local_point(-force_vector_in, (0, 0))
+
+def object_drag():
+    for body, shape in objects:
+        distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+
+        if distance <= 50:
+            if object_dragging and shape.point_query(world_mouse_pos):
+                force_vector = (
+                    (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                    * 1000
                     * 30
                 )
                 body.apply_force_at_local_point(force_vector, (0, 0))
@@ -511,7 +582,9 @@ def update():
         dt = 2.0 / simulation_frequency
         space.step(dt)
         space.gravity = rotation * 1000, 1000
-        force_field_update()
+        force_field_1()
+        force_field_2()
+        object_drag()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 20, 2)
 
 
@@ -535,30 +608,24 @@ def create_spring(body1, body2):
 while running:
     time_delta = clock.tick(60)
 
-    # Получить позицию курсора относительно окна игры
+    # Получить позицию курсора относительно мира игры
     mouse_pos = pymunk.pygame_util.get_mouse_pos(screen)
 
-    # Преобразовать координаты курсора в объект Vec2d
     cursor_pos = pymunk.Vec2d(mouse_pos[0], mouse_pos[1])
 
-    # Выполнить обратные операции трансформации
     inverse_translation = pymunk.Transform.translation(-screen_width/2, -screen_height/2)
     inverse_rotation = pymunk.Transform.rotation(-rotation)
     inverse_scaling = pymunk.Transform.scaling(1 / scaling)
 
-    # Объединить обратные операции в одну трансформацию
     inverse_transform = inverse_scaling @ inverse_rotation @ inverse_translation
 
-    # Вычислить обратную трансформацию позиции камеры
     inverse_translation_cam = pymunk.Transform.translation(
         -translation.tx, -translation.ty
     )
 
-    # Применить обратные трансформации к позиции курсора и позиции камеры
     world_cursor_pos = inverse_transform @ cursor_pos
     world_translation = inverse_translation_cam @ pymunk.Vec2d(0, 0)
 
-    # Вычислить позицию курсора в мире игры с учетом позиции камеры
     world_mouse_pos = (
         world_cursor_pos.x + world_translation.x + screen_width/2,
         world_cursor_pos.y + world_translation.y + screen_height/2,
@@ -572,6 +639,13 @@ while running:
             if event.key == pygame.K_f:
                 key_f_pressed = True
                 key_f_hold_start_time = pygame.time.get_ticks()
+            if event.key == pygame.K_n:
+                key_n_pressed = True
+                if selected_force_field_button is not None:
+                    if selected_force_field_button == force_field_buttons[0]:
+                        creating_force_field_1 = not creating_force_field_1
+                    elif selected_force_field_button == force_field_buttons[1]:
+                        creating_force_field_2 = not creating_force_field_2
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_f:
                 toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
@@ -587,22 +661,27 @@ while running:
                         space = loaded_data
                 elif event.ui_element == delete_all_button:
                     delete_all()
+                elif event.ui_element in force_field_buttons:
+                    selected_force_field_button = event.ui_element
+                    toolset_force_field()
+
+
+                        
                 if event.ui_element in spawn_buttons:
-                    selected_button = event.ui_element
-                    if selected_button == spawn_buttons[0]:
+                    selected_spawn_button = event.ui_element
+                    if selected_spawn_button == spawn_buttons[0]:
                         selected_shape = "circle"
-                    elif selected_button == spawn_buttons[1]:
+                    elif selected_spawn_button == spawn_buttons[1]:
                         selected_shape = "square"
-                    elif selected_button == spawn_buttons[2]:
+                    elif selected_spawn_button == spawn_buttons[2]:
                         selected_shape = "triangle"
-                    elif selected_button == spawn_buttons[3]:
+                    elif selected_spawn_button == spawn_buttons[3]:
                         selected_shape = "polyhedron"
-                    elif selected_button == spawn_buttons[4]:
+                    elif selected_spawn_button == spawn_buttons[4]:
                         selected_shape = "spam"
-                    elif selected_button == spawn_buttons[5]:
+                    elif selected_spawn_button == spawn_buttons[5]:
                         selected_shape = "delete all"
-                        delete_all()
-                    elif selected_button == spawn_buttons[6]:
+                    elif selected_spawn_button == spawn_buttons[6]:
                         selected_shape = "force field"
             elif event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element in spawn_buttons:
@@ -658,11 +737,10 @@ while running:
                         "elasticity       :{}".format(set_elasticity)
                     )
 
-        # Update the text of each label with the new values
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
-        debug_info_labels[3].set_text(f"Threads: {round(space.threads)}")
+        debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
             shift_speed = 4
@@ -689,8 +767,7 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 running_physics = not running_physics
-            elif event.key == pygame.K_n:
-                creating_force_field = not creating_force_field
+            
             elif event.key == pygame.K_l:
                 show_guide = not show_guide
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
