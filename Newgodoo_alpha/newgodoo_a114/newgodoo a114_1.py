@@ -1,3 +1,5 @@
+import time
+
 import pygame
 import pymunk
 from random import *
@@ -30,6 +32,7 @@ debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len
 
 show_guide = True
 fullscreen = False
+key_f11_pressed = False
 screen_width, screen_height = 1920, 1080
 shift_speed = 1
 pygame.init()
@@ -51,9 +54,8 @@ else:
 
 clock = pygame.time.Clock()
 
-space = pymunk.Space()
-
-space.threads = 2
+space = pymunk.Space(threaded=True)
+space.threads = 8
 space.iterations = 30
 simulation_frequency = 60
 static_body = space.static_body
@@ -178,15 +180,13 @@ image_spawn_paths = [
     "sprites/gui/spawn/placeholder.png",#17
     "sprites/gui/spawn/placeholder.png",#18
     "sprites/gui/spawn/placeholder.png",#19
-
-
 ]
 
 spawn_button_positions = [
     (10, 10 + (50 + 1) * i) for i in range(19)
 ]
 for i, pos in enumerate(spawn_button_positions):
-    image_rect = pygame.Rect(pos[0] + 120, pos[1]+2, 45, 45)
+    image_rect = pygame.Rect(pos[0] + 118, pos[1]+2, 45, 45)
     button_rect = pygame.Rect(pos, (115, 50))
     button_text = ""
     if i == 0:
@@ -222,14 +222,6 @@ for i, pos in enumerate(spawn_button_positions):
     spawn_buttons.append(button)
 selected_spawn_button = None
 
-
-
-shadow_style = {
-    "font": pygame.font.Font("unispace bd.ttf", 24),
-    "text_color": (255, 255, 255),
-    "shadow_color": (0, 0, 0),
-    "shadow_offset": (2, 2)
-}
 #FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(400, 10, 200, 20),
@@ -678,6 +670,8 @@ sound_error = pygame.mixer.Sound("sounds/gui/error.mp3")
 sound_spawn = pygame.mixer.Sound("sounds/spawn.mp3")
 sound_slider = pygame.mixer.Sound("sounds/gui/slider.mp3")
 sound_beep_1 = pygame.mixer.Sound("sounds/gui/beep_1.mp3")
+sound_pause = pygame.mixer.Sound("sounds/pause.mp3")
+sound_close = pygame.mixer.Sound("sounds/close.mp3")
 sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
 
@@ -724,16 +718,18 @@ while running:
             running = False
         # Обработка событий gui Manager
         elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                sound_close.play()
+                pygame.quit()
+            if event.key == pygame.K_F11:
+                sound_close.play()
+                key_f11_pressed = True
             if event.key == pygame.K_f:
                 key_f_pressed = True
                 key_f_hold_start_time = pygame.time.get_ticks()
             if event.key == pygame.K_n:
                 sound_beep_1.play()
                 if selected_force_field_button is not None:
-                    force_field_settings_visible = not force_field_settings_visible
-                    text_label_strength.visible = force_field_settings_visible
-                    radius_slider.visible = force_field_settings_visible
-                    text_label_radius.visible = force_field_settings_visible
                     if selected_force_field_button == force_field_buttons[0]:
                         creating_attraction = not creating_attraction
                     elif selected_force_field_button == force_field_buttons[1]:
@@ -835,6 +831,8 @@ while running:
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
         debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
 
+        if key_f11_pressed:
+            fullscreen = not fullscreen
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
             shift_speed = 5
         if event.type == pygame.KEYUP and event.key == pygame.K_LSHIFT:
@@ -846,7 +844,6 @@ while running:
             static_field_start = world_mouse_pos
             creating_static_field = True
         elif event.type == pygame.KEYUP and event.key == pygame.K_b:
-
             sound_click_4.play()
             print("Создается барьер")
             # Создание статического поля между точками
@@ -862,6 +859,7 @@ while running:
         # Обработка событий клавиатуры
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
+                sound_pause.play()
                 running_physics = not running_physics
             
             elif event.key == pygame.K_l:
@@ -948,7 +946,7 @@ while running:
     #)
     #screen.blit(fps_debug, (screen_width - 300, 10))
 
-    if show_guide == True:
+    if show_guide:
         text_guide_gui.visible = True
 
     if creating_static_field:
@@ -964,8 +962,6 @@ while running:
         body = line.body
         pv1 = body.position + line.a.rotated(body.angle)
         pv2 = body.position + line.b.rotated(body.angle)
-
-
 
     gui_manager.process_events(event)
     gui_manager.update(time_delta)

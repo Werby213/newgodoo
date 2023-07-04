@@ -34,7 +34,7 @@ screen_width, screen_height = 1920, 1080
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 
-space = pymunk.Space()
+space = pymunk.Space(threaded=True)
 
 space.threads = 2
 space.iterations = 30

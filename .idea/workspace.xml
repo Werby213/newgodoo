@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="05.07.23">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/unispace bd.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/close.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/pause.mp3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/other/11.py" beforeDir="false" afterPath="$PROJECT_DIR$/other/11.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
     <list id="62aea2a1-7142-4d70-bf62-9d99139542a1" name="New changelist-2" comment="" />
@@ -37,14 +39,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a114"
+    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a114/sounds"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sounds" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sounds\gui" />
-      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sounds" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\spawn" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui" />
     </key>
@@ -53,7 +55,7 @@
     </key>
   </component>
   <component name="RunManager" selected="Python.newgodoo a114_1">
-    <configuration name="7" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="11" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="newgodoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -65,7 +67,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/other/7.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/other/11.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -74,7 +76,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="newgodoo a112" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="111" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="newgodoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -86,28 +88,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a112.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="newgodoo a113" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="newgodoo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a113.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/111.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -158,13 +139,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests in 1_checkbox.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="newgodoo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/1_checkbox.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.newgodoo a114_1" />
+        <item itemvalue="Python.11" />
+        <item itemvalue="Python.111" />
+        <item itemvalue="Python tests.Python tests in 1_checkbox.py" />
         <item itemvalue="Python.newgodoo a114" />
-        <item itemvalue="Python.7" />
-        <item itemvalue="Python.newgodoo a112" />
-        <item itemvalue="Python.newgodoo a113" />
       </list>
     </recent_temporary>
   </component>
@@ -259,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688480604847</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="05.07.23">
+      <option name="closed" value="true" />
+      <created>1688483124405</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1688483124405</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
