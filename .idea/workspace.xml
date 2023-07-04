@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="04.07.23">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/gui/beep_1.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/gui/click_3.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/gui/click_4.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/gui/error.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sounds/gui/slider.mp3" afterDir="false" />
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="05.07.23">
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/unispace bd.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" afterDir="false" />
     </list>
@@ -41,16 +37,16 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a114/sounds/gui"
+    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a114"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sounds\gui" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sounds" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\spawn" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui" />
-      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\force_field" />
@@ -255,7 +251,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688474345116</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="05.07.23">
+      <option name="closed" value="true" />
+      <created>1688480604847</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1688480604847</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -264,6 +268,7 @@
     <MESSAGE value="force field UI choice fixed" />
     <MESSAGE value="added force field UI images button" />
     <MESSAGE value="04.07.23" />
-    <option name="LAST_COMMIT_MESSAGE" value="04.07.23" />
+    <MESSAGE value="05.07.23" />
+    <option name="LAST_COMMIT_MESSAGE" value="05.07.23" />
   </component>
 </project>

@@ -223,7 +223,13 @@ for i, pos in enumerate(spawn_button_positions):
 selected_spawn_button = None
 
 
-force_field_settings_visible = False
+
+shadow_style = {
+    "font": pygame.font.Font("unispace bd.ttf", 24),
+    "text_color": (255, 255, 255),
+    "shadow_color": (0, 0, 0),
+    "shadow_offset": (2, 2)
+}
 #FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(400, 10, 200, 20),
@@ -291,13 +297,16 @@ text_circle_radius = pygame_gui.elements.UILabel(
 )
 
 
+
 # OTHER_GUI######################################################################################
 text_guide_gui = pygame_gui.elements.UITextBox(
     relative_rect=pygame.Rect(screen_width - 280, 150, 240, 300),
     html_text=guide_text,
     visible=show_guide,
+    object_id="#bounce_text_box",
     manager=gui_manager,
 )
+text_guide_gui.set_active_effect(pygame_gui.TEXT_EFFECT_TYPING_APPEAR)
 iterations_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(screen_width - 250, screen_height - 30, 200, 20),
     start_value=set_square_size[0],
@@ -710,7 +719,6 @@ while running:
         world_cursor_pos.x + world_translation.x + screen_width/2,
         world_cursor_pos.y + world_translation.y + screen_height/2,
     )
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -722,6 +730,10 @@ while running:
             if event.key == pygame.K_n:
                 sound_beep_1.play()
                 if selected_force_field_button is not None:
+                    force_field_settings_visible = not force_field_settings_visible
+                    text_label_strength.visible = force_field_settings_visible
+                    radius_slider.visible = force_field_settings_visible
+                    text_label_radius.visible = force_field_settings_visible
                     if selected_force_field_button == force_field_buttons[0]:
                         creating_attraction = not creating_attraction
                     elif selected_force_field_button == force_field_buttons[1]:
