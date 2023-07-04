@@ -99,6 +99,7 @@ key_f_hold_start_time = 0
 # Создание кнопок для спавна предметов
 spawn_buttons = []
 force_field_buttons = []
+force_field_images = []
 spawn_button_width = 120
 spawn_button_height = 50
 button_x = 10
@@ -123,11 +124,17 @@ options = pymunk.pygame_util.DrawOptions(screen)
 
 running_physics = True
 
+image_force_field_paths = [
+    "sprites/gui/force_field/attraction.png",
+    "sprites/gui/force_field/repulsion.png",
+    "sprites/gui/force_field/ring.png"
+]
 force_field_button_positions = [
     (screen_width-135, screen_height-300 + (50 + 1) * i) for i in range(3)
 ]
 
 for i, pos in enumerate(force_field_button_positions):
+    image_rect = pygame.Rect(pos[0]-50, pos[1], 50, 50)
     button_rect = pygame.Rect(pos, (120, 50))
     button_text = ""
     if i == 0:
@@ -136,12 +143,24 @@ for i, pos in enumerate(force_field_button_positions):
         button_text = "repulsion"
     elif i == 2:
         button_text = "ring"
+    image = pygame_gui.elements.UIImage(
+        relative_rect=image_rect,
+        image_surface=pygame.image.load(image_force_field_paths[i]),
+        manager=gui_manager
+    )
     button = pygame_gui.elements.UIButton(
         relative_rect=button_rect, text=button_text, manager=gui_manager
     )
     force_field_buttons.append(button)
+    force_field_images.append(image)
 selected_force_field_button = force_field_buttons[0]
 
+
+image_spawn_paths = [
+    "sprites/gui/attraction.png",
+    "sprites/gui/repulsion.png",
+    "sprites/gui/ring.png"
+]
 
 spawn_button_positions = [
     (10, 10 + (50 + 1) * i) for i in range(19)
@@ -600,7 +619,7 @@ def update():
         repulsion()
         ring()
         object_drag()
-        pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 20, 2)
+        pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 10, 2)
 
 
 zoom_speed = 0.02

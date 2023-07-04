@@ -10,6 +10,8 @@ import tkinter as tk
 from tkinter import filedialog
 import ctypes
 import math
+
+
 #import numpy as np
 #from numba import jit
 guide_text = (
@@ -178,144 +180,8 @@ for i, pos in enumerate(spawn_button_positions):
     )
     spawn_buttons.append(button)
 selected_spawn_button = None
-# FORCE_FIELD######################################################################################
-strength_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(350, 10, 200, 20),
-    start_value=force_field_strength,
-    value_range=(0, 5000),
-    manager=gui_manager,
-)
 
-text_label_strength = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(330, 10, 250, 50),
-    text="force field strength: {}".format(force_field_strength),
-    manager=gui_manager,
-)
-
-radius_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(350, 40, 200, 20),
-    start_value=force_field_radius,
-    value_range=(0, 1000),
-    manager=gui_manager,
-)
-
-text_label_radius = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(350, 40, 200, 50),
-    text="force field radius: {}".format(force_field_radius),
-    manager=gui_manager,
-)
-
-# SQUARE######################################################################################
-square_size_slider_x = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(150, 70, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(1, 1000),
-    manager=gui_manager,
-)
-
-text_square_size_x = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(5, 55, 600, 50),
-    text="square X        :{}".format(set_square_size[0]),
-    manager=gui_manager,
-)
-square_size_slider_y = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(150, 100, 200, 20),
-    start_value=set_square_size[1],
-    value_range=(1, 1000),
-    manager=gui_manager,
-)
-
-text_square_size_y = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(5, 85, 600, 50),
-    text="square Y        :{}".format(set_square_size[1]),
-    manager=gui_manager,
-)
-# CIRCLE######################################################################################
-circle_radius_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(150, 10, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(1, 100),
-    manager=gui_manager,
-)
-text_circle_radius = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(150, 10, 200, 50),
-    text="Circle R: {}".format(set_circle_radius),
-    manager=gui_manager,
-)
-
-
-# OTHER_GUI######################################################################################
-text_guide_gui = pygame_gui.elements.UITextBox(
-    relative_rect=pygame.Rect(screen_width - 280, 150, 240, 300),
-    html_text=guide_text,
-    visible=show_guide,
-    manager=gui_manager,
-)
-iterations_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(screen_width - 250, screen_height - 30, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(1, 128),
-    manager=gui_manager,
-)
-text_iterations = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(screen_width - 260, screen_height - 30, 300, 20),
-    text="iterations        :{}".format(space.iterations),
-    manager=gui_manager,
-)
-simulation_frequency_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(screen_width - 250, screen_height - 60, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(1, 300),
-    manager=gui_manager,
-)
-text_simulation_frequency = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(screen_width - 260, screen_height - 60, 300, 20),
-    text="sim. frequency     :{}".format(simulation_frequency),
-    manager=gui_manager,
-)
-# FRICTION######################################################################
-friction_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(screen_width - 250, screen_height - 90, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(0.01, 10),
-    manager=gui_manager,
-)
-text_friction = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(screen_width - 260, screen_height - 90, 300, 20),
-    text="friction     :{}".format(set_friction),
-    manager=gui_manager,
-)
-# elasticity@#####################################################################
-elasticity_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(screen_width - 250, screen_height - 120, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(0.01, 10),
-    manager=gui_manager,
-)
-text_elasticity = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(screen_width - 260, screen_height - 120, 300, 20),
-    text="elasticity     :{}".format(set_friction),
-    manager=gui_manager,
-)
-#SAVE/LOAD BUTTONS#####################################################################
-save_world_button = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect(screen_width - 135, 10, 125, 40),
-        text="Save World",
-        manager=gui_manager
-)
-load_world_button = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect(screen_width - 135, 60, 125, 40),
-        text="Load World",
-        manager=gui_manager
-)
-#DELETE_ALL_BUTTON##########################################################################
-delete_all_button = pygame_gui.elements.UIButton(
-        relative_rect=pygame.Rect(10, screen_height-50, 125, 40),
-        text="Delete all",
-        manager=gui_manager
-)
-
-
+from GUI import *
 
 debug_info_lines = debug_info.split('\n')
 debug_info_labels = []
