@@ -221,6 +221,9 @@ for i, pos in enumerate(spawn_button_positions):
     )
     spawn_buttons.append(button)
 selected_spawn_button = None
+
+
+force_field_settings_visible = False
 #FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(400, 10, 200, 20),
@@ -395,6 +398,7 @@ def toolset(position):
         spawn_func(position)
 
 def toolset_force_field():
+    sound_click_2.play()
     type_mapping = {
         "attraction": attraction,
         "repulsion": repulsion,
@@ -425,6 +429,7 @@ def spawn_random(position):
 
 
 def delete_all():
+    sound_error.play()
     global objects, static_lines
     for body, shape in objects:
         space.remove(body, shape)
@@ -658,7 +663,13 @@ rotation = 0
 
 sound_click = pygame.mixer.Sound("sounds/gui/click.mp3")
 sound_click_2 = pygame.mixer.Sound("sounds/gui/click_2.mp3")
+sound_click_3 = pygame.mixer.Sound("sounds/gui/click_3.mp3")
+sound_click_4 = pygame.mixer.Sound("sounds/gui/click_4.mp3")
+sound_error = pygame.mixer.Sound("sounds/gui/error.mp3")
 sound_spawn = pygame.mixer.Sound("sounds/spawn.mp3")
+sound_slider = pygame.mixer.Sound("sounds/gui/slider.mp3")
+sound_beep_1 = pygame.mixer.Sound("sounds/gui/beep_1.mp3")
+sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
 
 draw_options = pymunk.pygame_util.DrawOptions(screen)
@@ -709,6 +720,7 @@ while running:
                 key_f_pressed = True
                 key_f_hold_start_time = pygame.time.get_ticks()
             if event.key == pygame.K_n:
+                sound_beep_1.play()
                 if selected_force_field_button is not None:
                     if selected_force_field_button == force_field_buttons[0]:
                         creating_attraction = not creating_attraction
@@ -724,8 +736,10 @@ while running:
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_world_button:
+                    sound_click.play()
                     save_data(space)
                 elif event.ui_element == load_world_button:
+                    sound_click.play()
                     loaded_data = load_data()
                     if loaded_data:
                         space = loaded_data
@@ -804,7 +818,6 @@ while running:
                     text_elasticity.set_text(
                         "elasticity       :{}".format(set_elasticity)
                     )
-
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
@@ -816,10 +829,13 @@ while running:
             shift_speed = 1
             
         if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+            sound_click_3.play()
             # Начало создания статического поля
             static_field_start = world_mouse_pos
             creating_static_field = True
         elif event.type == pygame.KEYUP and event.key == pygame.K_b:
+
+            sound_click_4.play()
             print("Создается барьер")
             # Создание статического поля между точками
             static_field_end = world_mouse_pos
