@@ -80,8 +80,9 @@ static_field_start = (0, 0)
 static_field_end = (0, 0)
 creating_static_field = False
 creating_spring = False
-creating_force_field_1 = False
-creating_force_field_2 = False
+creating_attraction = False
+creating_repulsion = False
+creating_force_ring = False
 creating_object_drag = False
 force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
@@ -135,13 +136,11 @@ for i, pos in enumerate(force_field_button_positions):
         button_text = "repulsion"
     elif i == 2:
         button_text = "ring"
-    if selected_shape == button_text.lower():
-        button_text += " (selected)"
     button = pygame_gui.elements.UIButton(
         relative_rect=button_rect, text=button_text, manager=gui_manager
     )
     force_field_buttons.append(button)
-selected_force_field_button = None
+selected_force_field_button = force_field_buttons[0]
 
 
 spawn_button_positions = [
@@ -352,9 +351,9 @@ def toolset(position):
 
 def toolset_force_field():
     type_mapping = {
-        "attraction": force_field_1,
-        "repulsion": force_field_2,
-        "ring": force_field_2,
+        "attraction": attraction,
+        "repulsion": repulsion,
+        "ring": ring,
     }
     if selected_force_field_button is not None:
         force_field_function = type_mapping.get(button_text)
@@ -476,8 +475,8 @@ def add_body_shape(body, shape):
     objects.append((body, shape))
 
 
-def force_field_1():
-    if creating_force_field_1:
+def attraction():
+    if creating_attraction:
         for body, shape in objects:
              if shape.point_query(world_mouse_pos):
                 distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
@@ -491,8 +490,23 @@ def force_field_1():
                         )
                         body.apply_force_at_local_point(force_vector, (0, 0))
 
-def force_field_2():
-    if creating_force_field_2:
+
+def repulsion():
+    if creating_repulsion:
+        for body, shape in objects:
+            if shape.point_query(world_mouse_pos):
+                distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
+                            world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+
+                if distance <= force_field_radius:
+                    force_vector = (
+                            (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                            * force_field_strength
+                            * 30
+                    )
+                    body.apply_force_at_local_point(-force_vector, (0, 0))
+def ring():
+    if creating_force_ring:
         for body, shape in objects:
         # if distance <= force_field_radius:
             if shape.point_query(world_mouse_pos):
@@ -582,8 +596,9 @@ def update():
         dt = 2.0 / simulation_frequency
         space.step(dt)
         space.gravity = rotation * 1000, 1000
-        force_field_1()
-        force_field_2()
+        attraction()
+        repulsion()
+        ring()
         object_drag()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 20, 2)
 
@@ -600,7 +615,6 @@ mouse_joint = None
 running = True
 guide = f2.render(str(guide_text), True, (180, 180, 0))
 space.sleep_time_threshold = 0.5
-
 def create_spring(body1, body2):
     global spring
     spring = pymunk.DampedSpring(body1, body2, (0, 0), (0, 0), 100, 100, 0.1)
@@ -640,12 +654,13 @@ while running:
                 key_f_pressed = True
                 key_f_hold_start_time = pygame.time.get_ticks()
             if event.key == pygame.K_n:
-                key_n_pressed = True
                 if selected_force_field_button is not None:
                     if selected_force_field_button == force_field_buttons[0]:
-                        creating_force_field_1 = not creating_force_field_1
+                        creating_attraction = not creating_attraction
                     elif selected_force_field_button == force_field_buttons[1]:
-                        creating_force_field_2 = not creating_force_field_2
+                        creating_repulsion = not creating_repulsion
+                    elif selected_force_field_button == force_field_buttons[2]:
+                        creating_force_ring = not creating_force_ring
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_f:
                 toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
@@ -664,9 +679,6 @@ while running:
                 elif event.ui_element in force_field_buttons:
                     selected_force_field_button = event.ui_element
                     toolset_force_field()
-
-
-                        
                 if event.ui_element in spawn_buttons:
                     selected_spawn_button = event.ui_element
                     if selected_spawn_button == spawn_buttons[0]:
@@ -743,7 +755,7 @@ while running:
         debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
-            shift_speed = 4
+            shift_speed = 5
         if event.type == pygame.KEYUP and event.key == pygame.K_LSHIFT:
             shift_speed = 1
             
