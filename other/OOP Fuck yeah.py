@@ -67,7 +67,7 @@ class PhysicsGame:
         self.force_field_strength = 5000  # Сила притяжения поля
         self.force_field_radius = 500  # Радиус действия поля
 
-        # Инициализация GUI Manager
+        # Инициализация gui Manager
         self.gui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height))
         self.clock = pygame.time.Clock()
         self.spawn_buttons = []
@@ -431,7 +431,7 @@ class PhysicsGame:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                # Обработка событий GUI Manager
+                # Обработка событий gui Manager
                 if event.type == pygame.USEREVENT:
                     if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                         if event.ui_element in self.spawn_buttons:
@@ -604,11 +604,11 @@ class PhysicsGame:
             self.dt = 1.0 / self.simulation_frequency
             if self.running_physics == True:
                 space.step(self.dt)
-            # Обновление GUI Manager
+            # Обновление gui Manager
             self.gui_manager.process_events(event)
             self.gui_manager.update(self.time_delta)
             self.update()
-            # Отрисовка GUI Manager
+            # Отрисовка gui Manager
             space.debug_draw(self.draw_options)
             self.gui_manager.draw_ui(self.screen)
             pygame.display.flip()

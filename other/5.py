@@ -25,7 +25,7 @@ class PhysicsDemo:
         pygame.init()
         self.w, self.h = 1280, 720
         self.screen = pygame.display.set_mode((self.w, self.h))
-        # Инициализация GUI Manager
+        # Инициализация gui Manager
         self.gui_manager = pygame_gui.UIManager((self.w, self.h))
 
         self.spawn_buttons = []

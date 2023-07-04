@@ -79,7 +79,7 @@ creating_force_field = False
 force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
-# Инициализация GUI Manager
+# Инициализация gui Manager
 gui_manager = pygame_gui.UIManager((screen_width, screen_height))
 clock = pygame.time.Clock()
 
@@ -565,7 +565,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # Обработка событий GUI Manager
+        # Обработка событий gui Manager
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f:
                 key_f_pressed = True
@@ -787,11 +787,11 @@ while running:
     dt = 1.0 / simulation_frequency
     if running_physics == True:
         space.step(dt)
-    # Обновление GUI Manager
+    # Обновление gui Manager
     gui_manager.process_events(event)
     gui_manager.update(time_delta)
     update()
-    # Отрисовка GUI Manager
+    # Отрисовка gui Manager
     space.debug_draw(draw_options)
     gui_manager.draw_ui(screen)
     pygame.display.flip()

@@ -48,7 +48,7 @@ creating_force_field = False
 force_field_strength = 5000  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
-# Инициализация GUI Manager
+# Инициализация gui Manager
 gui_manager = pygame_gui.UIManager((screen_width, screen_height))
 clock = pygame.time.Clock()
 
@@ -302,7 +302,7 @@ while running:
             running = False
 
 
-        # Обработка событий GUI Manager
+        # Обработка событий gui Manager
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element in spawn_buttons:
@@ -391,7 +391,7 @@ while running:
             if event.button == 2:
                 camera_dragging = False
 
-    # Обновление GUI Manager
+    # Обновление gui Manager
     gui_manager.process_events(event)
 
     # Обновление состояния камеры
@@ -425,10 +425,10 @@ while running:
     if running_physics:
         space.step(dt)
         update_rotation()
-    # Обновление GUI Manager
+    # Обновление gui Manager
     gui_manager.update(time_delta)
 
-    # Отрисовка GUI Manager
+    # Отрисовка gui Manager
     gui_manager.draw_ui(screen)
 
     pygame.display.flip()

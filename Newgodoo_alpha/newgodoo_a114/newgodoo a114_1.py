@@ -87,7 +87,7 @@ creating_object_drag = False
 force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
-# Инициализация GUI Manager
+# Инициализация gui Manager
 gui_manager = pygame_gui.UIManager((screen_width, screen_height))
 clock = pygame.time.Clock()
 
@@ -134,8 +134,8 @@ force_field_button_positions = [
 ]
 
 for i, pos in enumerate(force_field_button_positions):
-    image_rect = pygame.Rect(pos[0]-50, pos[1], 50, 50)
-    button_rect = pygame.Rect(pos, (120, 50))
+    image_rect = pygame.Rect(pos[0]-50, pos[1]+1, 47, 47)
+    button_rect = pygame.Rect(pos, (110, 50))
     button_text = ""
     if i == 0:
         button_text = "attraction"
@@ -157,16 +157,37 @@ selected_force_field_button = force_field_buttons[0]
 
 
 image_spawn_paths = [
-    "sprites/gui/attraction.png",
-    "sprites/gui/repulsion.png",
-    "sprites/gui/ring.png"
+    "sprites/gui/spawn/circle.png",#1
+    "sprites/gui/spawn/square.png",#2
+    "sprites/gui/spawn/triangle.png",#3
+    "sprites/gui/spawn/polyhedron.png",#4
+    "sprites/gui/spawn/placeholder.png",#5
+    "sprites/gui/spawn/placeholder.png",#6
+    "sprites/gui/spawn/placeholder.png",#7
+    "sprites/gui/spawn/placeholder.png",#8
+    "sprites/gui/spawn/placeholder.png",#9
+    "sprites/gui/spawn/placeholder.png",#9
+    "sprites/gui/spawn/placeholder.png",#10
+    "sprites/gui/spawn/placeholder.png",#11
+    "sprites/gui/spawn/placeholder.png",#12
+    "sprites/gui/spawn/placeholder.png",#13
+    "sprites/gui/spawn/placeholder.png",#13
+    "sprites/gui/spawn/placeholder.png",#14
+    "sprites/gui/spawn/placeholder.png",#15
+    "sprites/gui/spawn/placeholder.png",#16
+    "sprites/gui/spawn/placeholder.png",#17
+    "sprites/gui/spawn/placeholder.png",#18
+    "sprites/gui/spawn/placeholder.png",#19
+
+
 ]
 
 spawn_button_positions = [
     (10, 10 + (50 + 1) * i) for i in range(19)
 ]
 for i, pos in enumerate(spawn_button_positions):
-    button_rect = pygame.Rect(pos, (120, 50))
+    image_rect = pygame.Rect(pos[0] + 120, pos[1]+2, 45, 45)
+    button_rect = pygame.Rect(pos, (115, 50))
     button_text = ""
     if i == 0:
         button_text = "Circle"
@@ -190,74 +211,78 @@ for i, pos in enumerate(spawn_button_positions):
         button_text = "spawner"
     elif i == 10:
         button_text = "deleter"
-    if selected_shape == button_text.lower():
-        button_text += " (selected)"
     button = pygame_gui.elements.UIButton(
         relative_rect=button_rect, text=button_text, manager=gui_manager
     )
+    image = pygame_gui.elements.UIImage(
+        relative_rect=image_rect,
+        image_surface=pygame.image.load(image_spawn_paths[i]),
+        manager=gui_manager
+    )
     spawn_buttons.append(button)
 selected_spawn_button = None
-# FORCE_FIELD######################################################################################
+#FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(350, 10, 200, 20),
+    relative_rect=pygame.Rect(400, 10, 200, 20),
     start_value=force_field_strength,
     value_range=(0, 5000),
     manager=gui_manager,
 )
 
 text_label_strength = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(330, 10, 250, 50),
+    relative_rect=pygame.Rect(380, 10, 250, 50),
     text="force field strength: {}".format(force_field_strength),
     manager=gui_manager,
 )
 
 radius_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(350, 40, 200, 20),
+    relative_rect=pygame.Rect(400, 40, 200, 20),
     start_value=force_field_radius,
     value_range=(0, 1000),
     manager=gui_manager,
 )
 
 text_label_radius = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(350, 40, 200, 50),
+    relative_rect=pygame.Rect(400, 40, 200, 50),
     text="force field radius: {}".format(force_field_radius),
     manager=gui_manager,
 )
 
-# SQUARE######################################################################################
+#SQUARE######################################################################################
 square_size_slider_x = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(150, 70, 200, 20),
+    relative_rect=pygame.Rect(200, 70, 200, 20),
     start_value=set_square_size[0],
     value_range=(1, 1000),
     manager=gui_manager,
 )
 
 text_square_size_x = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(5, 55, 600, 50),
-    text="square X        :{}".format(set_square_size[0]),
+    relative_rect=pygame.Rect(55, 55, 600, 50),
+    text="square X :{}".format(set_square_size[0]),
     manager=gui_manager,
 )
 square_size_slider_y = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(150, 100, 200, 20),
+    relative_rect=pygame.Rect(200, 100, 200, 20),
     start_value=set_square_size[1],
     value_range=(1, 1000),
     manager=gui_manager,
 )
 
 text_square_size_y = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(5, 85, 600, 50),
-    text="square Y        :{}".format(set_square_size[1]),
+    relative_rect=pygame.Rect(55, 85, 600, 50),
+    text="square Y :{}".format(set_square_size[1]),
     manager=gui_manager,
 )
-# CIRCLE######################################################################################
+
+#CIRCLE######################################################################################
 circle_radius_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(150, 10, 200, 20),
+    relative_rect=pygame.Rect(200, 10, 200, 20),
     start_value=set_square_size[0],
     value_range=(1, 100),
     manager=gui_manager,
 )
 text_circle_radius = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(150, 10, 200, 50),
+    relative_rect=pygame.Rect(200, 10, 200, 50),
     text="Circle R: {}".format(set_circle_radius),
     manager=gui_manager,
 )
@@ -356,6 +381,7 @@ def mouse_get_pos():
 
 
 def toolset(position):
+    sound_spawn.play()
     shape_mapping = {
         "circle": spawn_circle,
         "square": spawn_square,
@@ -432,12 +458,12 @@ def spawn_polyhedron(position):
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
     shape.elasticity = set_elasticity
-    shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
+    shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
     add_body_shape(body, shape)
 
 def spawn_circle(position):
     radius = set_circle_radius
-    mass = set_circle_radius / 10
+    mass = radius * math.pi / 10
     moment = pymunk.moment_for_circle(
         mass, 0, radius
     )  # Calculate moment of inertia for a circle
@@ -458,7 +484,7 @@ def spawn_square(position):
         (size[0], size[1]),
         (size[0], -size[1]),
     ]
-    mass = (set_square_size[0] * set_square_size[1]) / 200
+    mass = (size[0] * size[1]) / 200
     moment = pymunk.moment_for_box(
         mass, (2 * size[0], 2 * size[1])
     )  # Calculate moment of inertia for a square
@@ -469,24 +495,27 @@ def spawn_square(position):
     shape.friction = set_friction
     shape.elasticity = set_elasticity
     add_body_shape(body, shape)
-    shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
+    shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
 
 
 def spawn_triangle(position):
-    size = random.randrange(10, 40)
-    points = [(0, 0), (-size, -size), (size, -size)]
-    mass = 1
-    moment = pymunk.moment_for_poly(
-        mass, points
-    )  # Calculate moment of inertia for an isosceles triangle
+    size = set_circle_radius
+    height = size * math.sqrt(3) / 2
+    points = [
+        (0, height / 2),
+        (-size / 2, -height / 2),
+        (size / 2, -height / 2)
+    ]
+    mass = size * height / 100
+    moment = pymunk.moment_for_poly(mass, points)
     body = pymunk.Body(mass, moment)
     body.position = position
     shape = pymunk.Poly(body, points)
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
     add_body_shape(body, shape)
-    shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
+    shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
 
 def add_body_shape(body, shape):
@@ -626,6 +655,12 @@ zoom_speed = 0.02
 rotation_speed = 0.01
 scaling = 1
 rotation = 0
+
+sound_click = pygame.mixer.Sound("sounds/gui/click.mp3")
+sound_click_2 = pygame.mixer.Sound("sounds/gui/click_2.mp3")
+sound_spawn = pygame.mixer.Sound("sounds/spawn.mp3")
+sound_spawn.set_volume(0.2)
+
 draw_options = pymunk.pygame_util.DrawOptions(screen)
 translation = pymunk.Transform()
 
@@ -639,6 +674,7 @@ def create_spring(body1, body2):
     spring = pymunk.DampedSpring(body1, body2, (0, 0), (0, 0), 100, 100, 0.1)
 
 while running:
+    screen.fill((20, 20, 20))
     time_delta = clock.tick(60)
 
     # Получить позицию курсора относительно мира игры
@@ -667,7 +703,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # Обработка событий GUI Manager
+        # Обработка событий gui Manager
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_f:
                 key_f_pressed = True
@@ -699,6 +735,7 @@ while running:
                     selected_force_field_button = event.ui_element
                     toolset_force_field()
                 if event.ui_element in spawn_buttons:
+                    sound_click_2.play()
                     selected_spawn_button = event.ui_element
                     if selected_spawn_button == spawn_buttons[0]:
                         selected_shape = "circle"
@@ -867,7 +904,7 @@ while running:
 
     rotation += rotation_speed * rotate_left - rotation_speed * rotate_right
     # Отрисовка
-    screen.fill((0, 0, 0))
+
 
     #fps_debug = f1.render(
     #    "FPS: "
@@ -901,11 +938,10 @@ while running:
         pv2 = body.position + line.b.rotated(body.angle)
 
 
-    # Обновление GUI Manager
+
     gui_manager.process_events(event)
     gui_manager.update(time_delta)
     update()
-    # Отрисовка GUI Manager
     space.debug_draw(draw_options)
     gui_manager.draw_ui(screen)
     pygame.display.flip()
