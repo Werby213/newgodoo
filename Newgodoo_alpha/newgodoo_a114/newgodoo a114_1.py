@@ -113,6 +113,7 @@ X, Y = 0, 1
 set_elasticity = 0
 set_square_size = [30, 30]
 set_circle_radius = 30
+set_triangle_size = 30
 set_friction = 0.7
 
 set_number_faces = 5
@@ -259,7 +260,7 @@ square_size_slider_x = pygame_gui.elements.UIHorizontalSlider(
 
 text_square_size_x = pygame_gui.elements.UILabel(
     relative_rect=pygame.Rect(55, 55, 600, 50),
-    text="square X :{}".format(set_square_size[0]),
+    text="square X        :{}".format(set_square_size[0]),
     manager=gui_manager,
 )
 square_size_slider_y = pygame_gui.elements.UIHorizontalSlider(
@@ -271,7 +272,7 @@ square_size_slider_y = pygame_gui.elements.UIHorizontalSlider(
 
 text_square_size_y = pygame_gui.elements.UILabel(
     relative_rect=pygame.Rect(55, 85, 600, 50),
-    text="square Y :{}".format(set_square_size[1]),
+    text="square Y        :{}".format(set_square_size[1]),
     manager=gui_manager,
 )
 
@@ -291,16 +292,15 @@ text_circle_radius = pygame_gui.elements.UILabel(
 
 triangle_size_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(200, 10, 200, 20),
-    start_value=set_square_size[0],
+    start_value=set_triangle_size,
     value_range=(1, 100),
     manager=gui_manager,
 )
 text_triangle_size = pygame_gui.elements.UILabel(
     relative_rect=pygame.Rect(200, 10, 200, 50),
-    text="Triangle Size: {}".format(set_circle_radius),
+    text="Triangle Size: {}".format(set_triangle_size),
     manager=gui_manager,
 )
-
 
 # OTHER_GUI######################################################################################
 text_guide_gui = pygame_gui.elements.UITextBox(
@@ -333,9 +333,10 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
     text="sim. frequency     :{}".format(simulation_frequency),
     manager=gui_manager,
 )
+
 # FRICTION######################################################################
 friction_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(screen_width - 250, screen_height - 90, 200, 20),
+    relative_rect=pygame.Rect(200, 50, 200, 20),
     start_value=set_square_size[0],
     value_range=(0.01, 10),
     manager=gui_manager,
@@ -518,7 +519,7 @@ def spawn_square(position):
 
 
 def spawn_triangle(position):
-    size = set_circle_radius
+    size = set_triangle_size * 2
     height = size * math.sqrt(3) / 2
     points = [
         (0, height / 2),
@@ -709,6 +710,9 @@ def hide_all_sliders():
     circle_radius_slider.hide()
     text_circle_radius.hide()
 
+    triangle_size_slider.hide()
+    text_triangle_size.hide()
+
     strength_slider.hide()
     radius_slider.hide()
     text_label_radius.hide()
@@ -728,10 +732,8 @@ def show_square_settings():
     text_square_size_y.show()
 
 def show_triangle_settings():
-    square_size_slider_x.show()
-    text_square_size_x.show()
-    square_size_slider_y.show()
-    text_square_size_y.show()
+    triangle_size_slider.show()
+    text_triangle_size.show()
 
 def show_circle_settings():
     circle_radius_slider.show()
@@ -821,6 +823,8 @@ while running:
                         show_square_settings()
                     elif selected_spawn_button == spawn_buttons[2]:
                         selected_shape = "triangle"
+                        hide_all_sliders()
+                        show_triangle_settings()
                     elif selected_spawn_button == spawn_buttons[3]:
                         selected_shape = "polyhedron"
                     elif selected_spawn_button == spawn_buttons[4]:
@@ -860,6 +864,12 @@ while running:
                     set_circle_radius = int(event.value)
                     text_circle_radius.set_text(
                         "Circle R: {}".format(set_circle_radius)
+                    )
+
+                elif event.ui_element == triangle_size_slider:
+                    set_triangle_size = int(event.value)
+                    text_triangle_size.set_text(
+                        "Triangle Size: {}".format(set_triangle_size)
                     )
 
                 elif event.ui_element == iterations_slider:
