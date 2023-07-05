@@ -307,10 +307,10 @@ text_guide_gui = pygame_gui.elements.UITextBox(
     relative_rect=pygame.Rect(screen_width - 280, 150, 240, 300),
     html_text=guide_text,
     visible=show_guide,
-    object_id="#bounce_text_box",
     manager=gui_manager,
 )
 text_guide_gui.set_active_effect(pygame_gui.TEXT_EFFECT_TYPING_APPEAR)
+
 iterations_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(screen_width - 250, screen_height - 30, 200, 20),
     start_value=set_square_size[0],
@@ -647,7 +647,6 @@ def load_data():
     if file_path:
         with open(file_path, "rb") as f:
             try:
-                delete_all(space)
                 data = pickle.load(f)
             except:
                 print("Что-то пошло не так")

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="show and hide UI elements functions added">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="triangle settings added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" afterDir="false" />
     </list>
@@ -73,7 +73,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="111" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="newgodoo a112" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="newgodoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -85,7 +85,28 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/111.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a112.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="newgodoo a113" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="newgodoo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a113.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -102,11 +123,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a114.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -136,27 +157,13 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests in 1_checkbox.py" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="newgodoo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/1_checkbox.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.newgodoo a114_1" />
-        <item itemvalue="Python.11" />
-        <item itemvalue="Python.111" />
-        <item itemvalue="Python tests.Python tests in 1_checkbox.py" />
         <item itemvalue="Python.newgodoo a114" />
+        <item itemvalue="Python.newgodoo a113" />
+        <item itemvalue="Python.newgodoo a112" />
+        <item itemvalue="Python.11" />
       </list>
     </recent_temporary>
   </component>
@@ -267,7 +274,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688539710161</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="triangle settings added">
+      <option name="closed" value="true" />
+      <created>1688543138578</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1688543138578</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -278,6 +293,7 @@
     <MESSAGE value="04.07.23" />
     <MESSAGE value="05.07.23" />
     <MESSAGE value="show and hide UI elements functions added" />
-    <option name="LAST_COMMIT_MESSAGE" value="show and hide UI elements functions added" />
+    <MESSAGE value="triangle settings added" />
+    <option name="LAST_COMMIT_MESSAGE" value="triangle settings added" />
   </component>
 </project>
