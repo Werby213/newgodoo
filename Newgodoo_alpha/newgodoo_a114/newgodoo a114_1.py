@@ -38,7 +38,7 @@ shift_speed = 1
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
-pygame.display.set_caption("Newgodoo a0.1.3")
+pygame.display.set_caption("Newgodoo a0.1.4")
 COLLTYPE_DEFAULT = 0
 
 if fullscreen == True:
@@ -287,7 +287,19 @@ text_circle_radius = pygame_gui.elements.UILabel(
     text="Circle R: {}".format(set_circle_radius),
     manager=gui_manager,
 )
+#TRIANGLE##########################################
 
+triangle_size_slider = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(200, 10, 200, 20),
+    start_value=set_square_size[0],
+    value_range=(1, 100),
+    manager=gui_manager,
+)
+text_triangle_size = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(200, 10, 200, 50),
+    text="Triangle Size: {}".format(set_circle_radius),
+    manager=gui_manager,
+)
 
 
 # OTHER_GUI######################################################################################
@@ -656,6 +668,8 @@ def update():
         object_drag()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 10, 2)
 
+circle_elements = [circle_radius_slider, text_circle_radius]
+square_elements = [square_size_slider_x, text_square_size_x, square_size_slider_y, text_square_size_y]
 
 zoom_speed = 0.02
 rotation_speed = 0.01
@@ -687,6 +701,43 @@ def create_spring(body1, body2):
     global spring
     spring = pymunk.DampedSpring(body1, body2, (0, 0), (0, 0), 100, 100, 0.1)
 
+def hide_all_sliders():
+    square_size_slider_x.hide()
+    text_square_size_x.hide()
+    square_size_slider_y.hide()
+    text_square_size_y.hide()
+    circle_radius_slider.hide()
+    text_circle_radius.hide()
+
+    strength_slider.hide()
+    radius_slider.hide()
+    text_label_radius.hide()
+    text_label_strength.hide()
+
+
+def show_force_field_settings():
+    strength_slider.show()
+    radius_slider.show()
+    text_label_radius.show()
+    text_label_strength.show()
+
+def show_square_settings():
+    square_size_slider_x.show()
+    text_square_size_x.show()
+    square_size_slider_y.show()
+    text_square_size_y.show()
+
+def show_triangle_settings():
+    square_size_slider_x.show()
+    text_square_size_x.show()
+    square_size_slider_y.show()
+    text_square_size_y.show()
+
+def show_circle_settings():
+    circle_radius_slider.show()
+    text_circle_radius.show()
+
+hide_all_sliders()
 while running:
     screen.fill((20, 20, 20))
     time_delta = clock.tick(60)
@@ -756,13 +807,18 @@ while running:
                 elif event.ui_element in force_field_buttons:
                     selected_force_field_button = event.ui_element
                     toolset_force_field()
+                    show_force_field_settings()
                 if event.ui_element in spawn_buttons:
                     sound_click_2.play()
                     selected_spawn_button = event.ui_element
                     if selected_spawn_button == spawn_buttons[0]:
                         selected_shape = "circle"
+                        hide_all_sliders()
+                        show_circle_settings()
                     elif selected_spawn_button == spawn_buttons[1]:
                         selected_shape = "square"
+                        hide_all_sliders()
+                        show_square_settings()
                     elif selected_spawn_button == spawn_buttons[2]:
                         selected_shape = "triangle"
                     elif selected_spawn_button == spawn_buttons[3]:
@@ -773,6 +829,7 @@ while running:
                         selected_shape = "delete all"
                     elif selected_spawn_button == spawn_buttons[6]:
                         selected_shape = "force field"
+
             elif event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element in spawn_buttons:
                     toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
@@ -826,6 +883,9 @@ while running:
                     text_elasticity.set_text(
                         "elasticity       :{}".format(set_elasticity)
                     )
+
+
+
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
