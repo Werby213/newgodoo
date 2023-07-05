@@ -38,7 +38,8 @@ shift_speed = 1
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
-pygame.display.set_caption("Newgodoo a0.1.4")
+version = "Newgodoo a0.1.4"
+pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 0
 
 if fullscreen == True:
@@ -333,6 +334,20 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
     text="sim. frequency     :{}".format(simulation_frequency),
     manager=gui_manager,
 )
+
+
+
+
+
+pause_icon = pygame_gui.elements.UIImage(
+        relative_rect=pygame.Rect(screen_width - 450, 10, 50, 50),
+        image_surface=pygame.image.load("sprites/gui/pause.png"),
+        manager=gui_manager
+)
+
+
+
+
 
 # FRICTION######################################################################
 friction_slider = pygame_gui.elements.UIHorizontalSlider(
@@ -724,6 +739,21 @@ def show_force_field_settings():
     text_label_radius.show()
     text_label_strength.show()
 
+pause_icon.hide()
+pause_icon_visible = False
+def vis_pause_icon(show):
+    global pause_icon_visible
+    if show:
+        pause_icon.show()
+        pause_icon_visible = True
+        pygame.display.set_caption(version + " (simulation paused)")
+
+    else:
+        pause_icon.hide()
+        pause_icon_visible = False
+        pygame.display.set_caption(version)
+
+
 def show_square_settings():
     square_size_slider_x.show()
     text_square_size_x.show()
@@ -929,6 +959,7 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 sound_pause.play()
+                vis_pause_icon(show=not pause_icon_visible)
                 running_physics = not running_physics
             
             elif event.key == pygame.K_l:
