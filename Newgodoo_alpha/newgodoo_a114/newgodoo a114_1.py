@@ -32,6 +32,7 @@ debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len
 
 show_guide = True
 fullscreen = False
+use_system_dpi = True
 key_f11_pressed = False
 screen_width, screen_height = 1920, 1080
 shift_speed = 1
@@ -50,7 +51,12 @@ if fullscreen == True:
     screen_height = int(user32.GetSystemMetrics(1))
     screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 else:
-    screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+    user32 = ctypes.windll.user32
+    if use_system_dpi == True:
+        screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+    else:
+        user32.SetProcessDPIAware()
+        screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 
 
 clock = pygame.time.Clock()
@@ -165,7 +171,7 @@ image_spawn_paths = [
     "sprites/gui/spawn/square.png",#2
     "sprites/gui/spawn/triangle.png",#3
     "sprites/gui/spawn/polyhedron.png",#4
-    "sprites/gui/spawn/placeholder.png",#5
+    "sprites/gui/spawn/spam.png",#5
     "sprites/gui/spawn/placeholder.png",#6
     "sprites/gui/spawn/placeholder.png",#7
     "sprites/gui/spawn/placeholder.png",#8
@@ -339,10 +345,14 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
 
 
 
+pause_icon_image = pygame.image.load("sprites/gui/pause.png").convert_alpha()
+pause_icon_rect = pygame.Rect(screen_width - 450, 10, 50, 50)
+
+# Create the UIImage object for the pause icon
 pause_icon = pygame_gui.elements.UIImage(
-        relative_rect=pygame.Rect(screen_width - 450, 10, 50, 50),
-        image_surface=pygame.image.load("sprites/gui/pause.png"),
-        manager=gui_manager
+    relative_rect=pause_icon_rect,
+    image_surface=pause_icon_image,
+    manager=gui_manager
 )
 
 
@@ -741,6 +751,8 @@ def show_force_field_settings():
 
 pause_icon.hide()
 pause_icon_visible = False
+
+
 def vis_pause_icon(show):
     global pause_icon_visible
     if show:
@@ -752,6 +764,7 @@ def vis_pause_icon(show):
         pause_icon.hide()
         pause_icon_visible = False
         pygame.display.set_caption(version)
+
 
 
 def show_square_settings():
@@ -999,6 +1012,14 @@ while running:
 
     if key_f_pressed:
         hold_time = pygame.time.get_ticks() - key_f_hold_start_time
+        fill_fraction = min(hold_time / KEY_HOLD_TIME, 1.0)
+        radius = int(20 * fill_fraction)
+
+        if hold_time >= 100:
+            pygame.draw.circle(screen, (255, 255, 255),
+                               (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), 20, 1)
+            pygame.draw.circle(screen, (255, 255, 255),
+                               (pygame.mouse.get_pos()[0]+30,pygame.mouse.get_pos()[1]-20) , radius, 20)
         if hold_time >= KEY_HOLD_TIME:
             toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
 
