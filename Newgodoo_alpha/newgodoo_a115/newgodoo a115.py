@@ -29,7 +29,7 @@ guide_text = (
 )
 
 debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len(space.bodies))) +'\nGravity: ' + " \
-             "(str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))\nstatick_lines"
+             "(str(len(space.gravity))) +'\nThreads: ' + (str(round(space.threads)))\nstatic_lines: "
 
 show_guide = True
 fullscreen = False
@@ -41,6 +41,7 @@ pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 version = "Newgodoo a0.1.5"
+version_save = version
 pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 0
 
@@ -75,6 +76,7 @@ space.add(floor)
 
 objects = []
 static_lines = []
+static_field = []
 line_point1 = None
 selected_shape = None
 selected_force_field = None
@@ -518,6 +520,7 @@ def spawn_circle(position):
     shape = pymunk.Circle(body, radius)
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
+    shape.elasticity = set_elasticity
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
@@ -560,6 +563,7 @@ def spawn_triangle(position):
     shape = pymunk.Poly(body, points)
     shape.collision_type = COLLTYPE_DEFAULT
     shape.friction = set_friction
+    shape.elasticity = set_elasticity
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
@@ -572,56 +576,52 @@ def add_body_shape(body, shape):
 def attraction():
     if creating_attraction:
         for body, shape in objects:
-             if shape.point_query(world_mouse_pos):
-                distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
-    
-                if distance <= force_field_radius:
-    
-                        force_vector = (
-                            (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                            * force_field_strength
-                            * 30
-                        )
-                        body.apply_force_at_local_point(force_vector, (0, 0))
+            distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+
+            if distance <= force_field_radius:
+
+                    force_vector = (
+                        (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                        * force_field_strength
+                        * 30
+                    )
+                    body.apply_force_at_local_point(force_vector, (0, 0))
 
 
 def repulsion():
     if creating_repulsion:
         for body, shape in objects:
-            if shape.point_query(world_mouse_pos):
-                distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
-                            world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+            distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
+                        world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
 
-                if distance <= force_field_radius:
-                    force_vector = (
-                            (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                            * force_field_strength
-                            * 30
-                    )
-                    body.apply_force_at_local_point(-force_vector, (0, 0))
+            if distance <= force_field_radius:
+                force_vector = (
+                        (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                        * force_field_strength
+                        * 30
+                )
+                body.apply_force_at_local_point(-force_vector, (0, 0))
 def ring():
     if creating_force_ring:
         for body, shape in objects:
-        # if distance <= force_field_radius:
-            if shape.point_query(world_mouse_pos):
-                distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
-                            world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
-                force_vector = (
-                    (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                    * force_field_strength
-                    * 30
-                )
-                body.apply_force_at_local_point(force_vector, (0, 0))
-    
-                if distance <= force_field_radius-300:
-                    if shape.point_query(world_mouse_pos):
-                        force_vector_in = (
-                                (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                                * force_field_strength
-                                * 50
-                        )
-    
-                        body.apply_force_at_local_point(-force_vector_in, (0, 0))
+            distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
+                        world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+            force_vector = (
+                (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                * force_field_strength
+                * 30
+            )
+            body.apply_force_at_local_point(force_vector, (0, 0))
+
+            if distance <= force_field_radius-300:
+                if shape.point_query(world_mouse_pos):
+                    force_vector_in = (
+                            (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+                            * force_field_strength
+                            * 50
+                    )
+
+                    body.apply_force_at_local_point(-force_vector_in, (0, 0))
 
 def object_drag():
     for body, shape in objects:
@@ -636,12 +636,13 @@ def object_drag():
                 )
                 body.apply_force_at_local_point(force_vector, (0, 0))
 
-def save_data(space, objects):
+
+def save_data(space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation):
+    data = (space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation)
     root = tk.Tk()
     root.withdraw()
-    data = (space, objects)
     file_path = filedialog.asksaveasfilename(
-        defaultextension=".ngsv", filetypes=[("Newgodoo Save File", "*.grsv")]
+        defaultextension=".ngsv", filetypes=[("Newgodoo Save File", "*.ngsv")]
     )
 
     if file_path:
@@ -659,7 +660,7 @@ def load_data():
     root = tk.Tk()
     root.withdraw()
     file_path = filedialog.askopenfilename(
-        filetypes=[("Newgodoo Save Files", "*.grsv")]
+        filetypes=[("Newgodoo Save Files", "*.ngsv")]
     )
 
     if file_path:
@@ -669,15 +670,15 @@ def load_data():
             except:
                 print("Что-то пошло не так")
 
-        if len(data) == 2:
-            space, objects = data
+        if len(data) == 9:
+            space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation = data
             print("Загрузка успешна.")
-            return space, objects
+            return space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation
         else:
             print("Неправильный формат данных.")
     else:
         print("Отменена загрузка.")
-    return None, None
+    return None, None, None, None, None, None, None, None, None
 
 def update():
     if running_physics == True:
@@ -837,13 +838,15 @@ while running:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_world_button:
                     sound_click.play()
-                    save_data(space, objects)
+                    save_data(space, objects, space.iterations, simulation_frequency, floor.friction, version_save,
+                              static_lines, static_field, world_translation)
                 elif event.ui_element == load_world_button:
                     sound_click.play()
-                    loaded_space, loaded_objects = load_data()
+                    loaded_space, loaded_objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation = load_data()
                     if loaded_space and loaded_objects:
                         space = loaded_space
                         objects = loaded_objects
+                        space.iterations = iterations
                 elif event.ui_element == delete_all_button:
                     delete_all()
                 elif event.ui_element in force_field_buttons:
@@ -939,7 +942,7 @@ while running:
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
-        debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
+        #debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
 
         if key_f11_pressed:
             fullscreen = not fullscreen
@@ -1048,8 +1051,6 @@ while running:
     scaling *= 1 + (zoom_speed * zoom_in - zoom_speed * zoom_out)
 
     rotation += rotation_speed * rotate_left - rotation_speed * rotate_right
-    # Отрисовка
-
 
     #fps_debug = f1.render(
     #    "FPS: "
