@@ -40,7 +40,7 @@ shift_speed = 1
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
-version = "Newgodoo a0.1.4"
+version = "Newgodoo a0.1.5"
 pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 0
 
@@ -636,10 +636,10 @@ def object_drag():
                 )
                 body.apply_force_at_local_point(force_vector, (0, 0))
 
-def save_data(data):
+def save_data(space, objects):
     root = tk.Tk()
     root.withdraw()
-
+    data = (space, objects)
     file_path = filedialog.asksaveasfilename(
         defaultextension=".ngsv", filetypes=[("Newgodoo Save File", "*.grsv")]
     )
@@ -655,11 +655,9 @@ def save_data(data):
         print("Отменено сохранение.")
 
 
-
 def load_data():
     root = tk.Tk()
     root.withdraw()
-
     file_path = filedialog.askopenfilename(
         filetypes=[("Newgodoo Save Files", "*.grsv")]
     )
@@ -671,11 +669,15 @@ def load_data():
             except:
                 print("Что-то пошло не так")
 
-        print("Загрузка успешна.")
-        return data
+        if len(data) == 2:
+            space, objects = data
+            print("Загрузка успешна.")
+            return space, objects
+        else:
+            print("Неправильный формат данных.")
     else:
         print("Отменена загрузка.")
-        return None
+    return None, None
 
 def update():
     if running_physics == True:
@@ -835,12 +837,13 @@ while running:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_world_button:
                     sound_click.play()
-                    save_data(space)
+                    save_data(space, objects)
                 elif event.ui_element == load_world_button:
                     sound_click.play()
-                    loaded_data = load_data()
-                    if loaded_data:
-                        space = loaded_data
+                    loaded_space, loaded_objects = load_data()
+                    if loaded_space and loaded_objects:
+                        space = loaded_space
+                        objects = loaded_objects
                 elif event.ui_element == delete_all_button:
                     delete_all()
                 elif event.ui_element in force_field_buttons:

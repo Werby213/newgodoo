@@ -4,8 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="pause icon added">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/sprites/gui/spawn/spam.png" afterDir="false" />
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="auto spawn indicator added">
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/console_example.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/GUI.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/laydigital.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/newgodoo a115.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/close.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/beep_1.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/click.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/click_2.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/click_3.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/click_4.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/error.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/gui/slider.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/pause.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sounds/spawn.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/force_field/attraction.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/force_field/repulsion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/force_field/ring.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/spawn/circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/spawn/placeholder.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/spawn/polyhedron.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/spawn/spam.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/spawn/square.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/sprites/gui/spawn/triangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/unispace bd.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" afterDir="false" />
     </list>
@@ -37,7 +61,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a114/sprites/gui/spawn"
+    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -52,8 +76,8 @@
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\force_field" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.newgodoo a114_1">
-    <configuration name="11" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.newgodoo a115">
+    <configuration name="console_example" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="newgodoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -61,32 +85,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/other" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/other/11.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="newgodoo a112" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="newgodoo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo a112.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/console_example.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -158,13 +161,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="newgodoo a115" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="newgodoo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/newgodoo a115.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.newgodoo a115" />
         <item itemvalue="Python.newgodoo a114_1" />
+        <item itemvalue="Python.console_example" />
         <item itemvalue="Python.newgodoo a114" />
         <item itemvalue="Python.newgodoo a113" />
-        <item itemvalue="Python.newgodoo a112" />
-        <item itemvalue="Python.11" />
       </list>
     </recent_temporary>
   </component>
@@ -299,7 +323,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688558715059</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="auto spawn indicator added">
+      <option name="closed" value="true" />
+      <created>1688560668921</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1688560668921</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -312,6 +344,7 @@
     <MESSAGE value="triangle settings added" />
     <MESSAGE value="05.07.23" />
     <MESSAGE value="pause icon added" />
-    <option name="LAST_COMMIT_MESSAGE" value="pause icon added" />
+    <MESSAGE value="auto spawn indicator added" />
+    <option name="LAST_COMMIT_MESSAGE" value="auto spawn indicator added" />
   </component>
 </project>
