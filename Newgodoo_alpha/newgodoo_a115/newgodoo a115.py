@@ -36,7 +36,7 @@ fullscreen = False
 use_system_dpi = True
 key_f11_pressed = False
 screen_width, screen_height = 1920, 1080
-shift_speed = 1
+
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
@@ -45,20 +45,24 @@ version_save = version
 pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 0
 
-if fullscreen == True:
+if fullscreen:
     user32 = ctypes.windll.user32
-    user32.SetProcessDPIAware()
-
-    screen_width = int(user32.GetSystemMetrics(0))
-    screen_height = int(user32.GetSystemMetrics(1))
-    screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
-else:
-    user32 = ctypes.windll.user32
-    if use_system_dpi == True:
-        screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+    if use_system_dpi:
+        screen_width = int(user32.GetSystemMetrics(0))
+        screen_height = int(user32.GetSystemMetrics(1))
+        screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE)
     else:
         user32.SetProcessDPIAware()
-        screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+        screen_width = int(user32.GetSystemMetrics(0))
+        screen_height = int(user32.GetSystemMetrics(1))
+        screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE)
+else:
+    user32 = ctypes.windll.user32
+    if use_system_dpi:
+        screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE)
+    else:
+        user32.SetProcessDPIAware()
+        screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE)
 
 
 clock = pygame.time.Clock()
@@ -76,7 +80,6 @@ space.add(floor)
 
 objects = []
 static_lines = []
-static_field = []
 line_point1 = None
 selected_shape = None
 selected_force_field = None
@@ -103,7 +106,7 @@ force_field_radius = 500  # Радиус действия поля
 gui_manager = pygame_gui.UIManager((screen_width, screen_height))
 clock = pygame.time.Clock()
 
-
+shift_speed = 1
 KEY_HOLD_TIME = 1000  #в миллисекундах
 key_f_pressed = False
 key_f_hold_start_time = 0
@@ -637,8 +640,8 @@ def object_drag():
                 body.apply_force_at_local_point(force_vector, (0, 0))
 
 
-def save_data(space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation):
-    data = (space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation)
+def save_data(space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation):
+    data = (space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation)
     root = tk.Tk()
     root.withdraw()
     file_path = filedialog.asksaveasfilename(
@@ -670,15 +673,15 @@ def load_data():
             except:
                 print("Что-то пошло не так")
 
-        if len(data) == 9:
-            space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation = data
+        if len(data) == 7:
+            space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation = data
             print("Загрузка успешна.")
-            return space, objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation
+            return space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation
         else:
             print("Неправильный формат данных.")
     else:
         print("Отменена загрузка.")
-    return None, None, None, None, None, None, None, None, None
+    return None, None, None, None, None, None, None
 
 def update():
     if running_physics == True:
@@ -780,6 +783,7 @@ def show_circle_settings():
     text_circle_radius.show()
 
 hide_all_sliders()
+
 while running:
     screen.fill((20, 20, 20))
     time_delta = clock.tick(60)
@@ -809,7 +813,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        # Обработка событий gui Manager
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 sound_close.play()
@@ -838,11 +841,10 @@ while running:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == save_world_button:
                     sound_click.play()
-                    save_data(space, objects, space.iterations, simulation_frequency, floor.friction, version_save,
-                              static_lines, static_field, world_translation)
+                    save_data(space, objects, space.iterations, simulation_frequency, floor.friction, version_save, world_translation)
                 elif event.ui_element == load_world_button:
                     sound_click.play()
-                    loaded_space, loaded_objects, iterations, simulation_frequency, floor_friction, version_save, static_lines, static_field, world_translation = load_data()
+                    loaded_space, loaded_objects, iterations, simulation_frequency, floor_friction, version_save, world_translation = load_data()
                     if loaded_space and loaded_objects:
                         space = loaded_space
                         objects = loaded_objects
@@ -937,12 +939,10 @@ while running:
                         "elasticity       :{}".format(set_elasticity)
                     )
 
-
-
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
-        #debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
+        debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
 
         if key_f11_pressed:
             fullscreen = not fullscreen
@@ -950,7 +950,7 @@ while running:
             shift_speed = 5
         if event.type == pygame.KEYUP and event.key == pygame.K_LSHIFT:
             shift_speed = 1
-            
+
         if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
             sound_click_3.play()
             # Начало создания статического поля
@@ -975,7 +975,7 @@ while running:
                 sound_pause.play()
                 vis_pause_icon(show=not pause_icon_visible)
                 running_physics = not running_physics
-            
+
             elif event.key == pygame.K_l:
                 show_guide = not show_guide
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
@@ -1035,7 +1035,7 @@ while running:
     zoom_out = int(keys[pygame.K_z])
     rotate_left = int(keys[pygame.K_s])
     rotate_right = int(keys[pygame.K_x])
-    
+
     translation = translation.translated(
         translate_speed * left - translate_speed * right,
         translate_speed * up - translate_speed * down,
