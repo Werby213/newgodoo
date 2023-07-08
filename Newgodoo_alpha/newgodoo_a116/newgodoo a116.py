@@ -1,4 +1,5 @@
 import time
+import traceback
 
 import pygame
 import pymunk
@@ -12,6 +13,8 @@ import tkinter as tk
 from tkinter import filedialog
 import ctypes
 import math
+import subprocess
+import threading
 #import numpy as np
 #from numba import jit
 guide_text = (
@@ -40,7 +43,7 @@ screen_width, screen_height = 1920, 1080
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
-version = "Newgodoo a0.1.5"
+version = "Newgodoo a0.1.6"
 version_save = version
 pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 0
@@ -123,7 +126,7 @@ button_spacing = 10
 
 X, Y = 0, 1
 
-set_elasticity = 0
+set_elasticity = 0.25
 set_square_size = [30, 30]
 set_circle_radius = 30
 set_triangle_size = 30
@@ -237,6 +240,11 @@ for i, pos in enumerate(spawn_button_positions):
     spawn_buttons.append(button)
 selected_spawn_button = None
 
+window_console = pygame_gui.windows.UIConsoleWindow(
+    pygame.Rect(200, screen_height-100, 400, 300),
+    manager=gui_manager,
+)
+
 #FORCE_FIELD######################################################################################
 strength_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(400, 10, 200, 20),
@@ -264,58 +272,166 @@ text_label_radius = pygame_gui.elements.UILabel(
     manager=gui_manager,
 )
 
-#SQUARE######################################################################################
-square_size_slider_x = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(200, 70, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(1, 1000),
-    manager=gui_manager,
-)
 
-text_square_size_x = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(55, 55, 600, 50),
-    text="square X        :{}".format(set_square_size[0]),
+#SQUARE######################################################################################
+window_square = pygame_gui.elements.UIWindow(
+    pygame.Rect(200, 10, 300, 200),
+    manager=gui_manager,
+    window_display_title="square settings"
+)
+square_image = pygame_gui.elements.UIImage(
+    relative_rect=pygame.Rect(215, 5, 50, 50),
+    image_surface=pygame.image.load(image_spawn_paths[1]),
+    container=window_square,
+    manager=gui_manager
+)
+square_size_input_x = pygame_gui.elements.UITextEntryLine(
+    initial_text=str(set_square_size[0]),
+    relative_rect=pygame.Rect(30, 10, 100, 20),
+    container=window_square,
     manager=gui_manager,
 )
-square_size_slider_y = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(200, 100, 200, 20),
-    start_value=set_square_size[1],
-    value_range=(1, 1000),
+text_square_size_x = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(10, 10, 20, 20),
+    text="X:",
+    container=window_square,
+    manager=gui_manager,
+)
+square_size_input_y = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(30, 30, 100, 20),
+    initial_text=str(set_square_size[1]),
+    container=window_square,
     manager=gui_manager,
 )
 
 text_square_size_y = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(55, 85, 600, 50),
-    text="square Y        :{}".format(set_square_size[1]),
+    relative_rect=pygame.Rect(10, 30, 20, 20),
+    text="Y:",
+    container=window_square,
     manager=gui_manager,
 )
-
+square_friction_input = pygame_gui.elements.UITextEntryLine(
+    initial_text=str(set_friction),
+    relative_rect=pygame.Rect(80, 55, 100, 20),
+    container=window_square,
+    manager=gui_manager,
+)
+text_square_friction = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 55, 80, 20),
+    text="friction:",
+    container=window_square,
+    manager=gui_manager,
+)
+square_elasticity_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(90, 75, 105, 20),
+    initial_text=str(set_elasticity),
+    container=window_square,
+    manager=gui_manager,
+)
+square_text_elasticity = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 75, 85, 20),
+    text="elasticity:",
+    container=window_square,
+    manager=gui_manager,
+)
 #CIRCLE######################################################################################
-circle_radius_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(200, 10, 200, 20),
-    start_value=set_square_size[0],
-    value_range=(1, 100),
+window_circle = pygame_gui.elements.UIWindow(
+    pygame.Rect(200, 10, 300, 200),
+    manager=gui_manager,
+    window_display_title="circle settings"
+)
+
+circle_image = pygame_gui.elements.UIImage(
+    relative_rect=pygame.Rect(215, 5, 50, 50),
+    image_surface=pygame.image.load(image_spawn_paths[0]),
+    container=window_circle,
+    manager=gui_manager
+)
+circle_radius_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(30, 10, 100, 20),
+    initial_text=str(set_circle_radius),
+    container=window_circle,
     manager=gui_manager,
 )
 text_circle_radius = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(200, 10, 200, 50),
-    text="Circle R: {}".format(set_circle_radius),
+    relative_rect=pygame.Rect(10, 10, 20, 20),
+    text="R:",
+    container=window_circle,
+    manager=gui_manager,
+)
+circle_friction_input = pygame_gui.elements.UITextEntryLine(
+    initial_text=str(set_friction),
+    relative_rect=pygame.Rect(80, 55, 100, 20),
+    container=window_circle,
+    manager=gui_manager,
+)
+text_circle_friction = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 55, 80, 20),
+    text="friction:",
+    container=window_circle,
+    manager=gui_manager,
+)
+circle_elasticity_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(90, 75, 105, 20),
+    initial_text=str(set_elasticity),
+    container=window_circle,
+    manager=gui_manager,
+)
+circle_text_elasticity = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 75, 85, 20),
+    text="elasticity:",
+    container=window_circle,
     manager=gui_manager,
 )
 #TRIANGLE##########################################
-
-triangle_size_slider = pygame_gui.elements.UIHorizontalSlider(
-    relative_rect=pygame.Rect(200, 10, 200, 20),
-    start_value=set_triangle_size,
-    value_range=(1, 100),
+window_triangle = pygame_gui.elements.UIWindow(
+    pygame.Rect(200, 10, 300, 200),
+    manager=gui_manager,
+    window_display_title="triangle settings"
+)
+triangle_image = pygame_gui.elements.UIImage(
+    relative_rect=pygame.Rect(215, 5, 50, 50),
+    image_surface=pygame.image.load(image_spawn_paths[2]),
+    container=window_triangle,
+    manager=gui_manager
+)
+triangle_size_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(60, 10, 100, 20),
+    container=window_triangle,
+    initial_text=str(set_triangle_size),
     manager=gui_manager,
 )
 text_triangle_size = pygame_gui.elements.UILabel(
-    relative_rect=pygame.Rect(200, 10, 200, 50),
-    text="Triangle Size: {}".format(set_triangle_size),
+    relative_rect=pygame.Rect(10, 10, 50, 20),
+    text="Size:",
+    container=window_triangle,
     manager=gui_manager,
 )
 
+triangle_friction_input = pygame_gui.elements.UITextEntryLine(
+    initial_text=str(set_friction),
+    relative_rect=pygame.Rect(80, 55, 100, 20),
+    container=window_triangle,
+    manager=gui_manager,
+)
+text_triangle_friction = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 55, 80, 20),
+    text="friction:",
+    container=window_triangle,
+    manager=gui_manager,
+)
+triangle_elasticity_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(90, 75, 105, 20),
+    initial_text=str(set_elasticity),
+    container=window_triangle,
+    manager=gui_manager,
+)
+triangle_text_elasticity = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 75, 85, 20),
+    text="elasticity:",
+    container=window_triangle,
+    manager=gui_manager,
+)
 # OTHER_GUI######################################################################################
 text_guide_gui = pygame_gui.elements.UITextBox(
     relative_rect=pygame.Rect(screen_width - 280, 150, 240, 300),
@@ -430,7 +546,6 @@ def mouse_get_pos():
 
 
 def toolset(position):
-    sound_spawn.play()
     shape_mapping = {
         "circle": spawn_circle,
         "square": spawn_square,
@@ -441,7 +556,13 @@ def toolset(position):
 
     spawn_func = shape_mapping.get(selected_shape)
     if spawn_func:
-        spawn_func(position)
+        try:
+            spawn_func(position)
+            if ValueError != True:
+                sound_spawn.play()
+        except:
+            sound_error.play()
+            traceback.print_exc()
 
 def toolset_force_field():
     sound_click_2.play()
@@ -514,7 +635,7 @@ def spawn_polyhedron(position):
 
 
 def spawn_circle(position):
-    radius = set_circle_radius
+    radius = float(circle_radius_input.get_text())
     mass = radius * math.pi / 10
     moment = pymunk.moment_for_circle(
         mass, 0, radius
@@ -530,7 +651,7 @@ def spawn_circle(position):
 
 
 def spawn_square(position):
-    size = set_square_size
+    size = (float(square_size_input_x.get_text()), float(square_size_input_y.get_text()))
     points = [
         (-size[0], -size[1]),
         (-size[0], size[1]),
@@ -545,8 +666,8 @@ def spawn_square(position):
     body.position = position
     shape = pymunk.Poly(body, points)
     shape.collision_type = COLLTYPE_DEFAULT
-    shape.friction = set_friction
-    shape.elasticity = set_elasticity
+    shape.friction = float(square_friction_input.get_text())
+    shape.elasticity = float(square_elasticity_input.get_text())
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
@@ -695,8 +816,6 @@ def update():
         object_drag()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 10, 2)
 
-circle_elements = [circle_radius_slider, text_circle_radius]
-square_elements = [square_size_slider_x, text_square_size_x, square_size_slider_y, text_square_size_y]
 
 zoom_speed = 0.02
 rotation_speed = 0.01
@@ -716,7 +835,6 @@ sound_close = pygame.mixer.Sound("sounds/close.mp3")
 sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
 
-
 translation = pymunk.Transform()
 
 dragging_body = None
@@ -728,16 +846,10 @@ def create_spring(body1, body2):
     global spring
     spring = pymunk.DampedSpring(body1, body2, (0, 0), (0, 0), 100, 100, 0.1)
 
-def hide_all_sliders():
-    square_size_slider_x.hide()
-    text_square_size_x.hide()
-    square_size_slider_y.hide()
-    text_square_size_y.hide()
-    circle_radius_slider.hide()
-    text_circle_radius.hide()
-
-    triangle_size_slider.hide()
-    text_triangle_size.hide()
+def hide_all_windows():
+    window_square.hide()
+    window_circle.hide()
+    window_triangle.hide()
 
     strength_slider.hide()
     radius_slider.hide()
@@ -767,23 +879,17 @@ def vis_pause_icon(show):
         pause_icon_visible = False
         pygame.display.set_caption(version)
 
+hide_all_windows()
+class ConsoleOutput:
+    def __init__(self):
+        self.text = ''
 
 
-def show_square_settings():
-    square_size_slider_x.show()
-    text_square_size_x.show()
-    square_size_slider_y.show()
-    text_square_size_y.show()
+python_process = None
 
-def show_triangle_settings():
-    triangle_size_slider.show()
-    text_triangle_size.show()
+output_str = None
+data_lock = None
 
-def show_circle_settings():
-    circle_radius_slider.show()
-    text_circle_radius.show()
-
-hide_all_sliders()
 
 while running:
     screen.fill((20, 20, 20))
@@ -814,6 +920,275 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+        if (event.type == pygame_gui.UI_CONSOLE_COMMAND_ENTERED and
+                event.ui_element == window_console):
+            command = event.command
+            if python_process is not None and output_str is not None:
+                bytes_command = (command + '\n').encode()
+                python_process.stdin.write(bytes_command)
+                python_process.stdin.flush()
+
+            else:
+                if command == "web":
+                    space.gravity = 0, -900
+                    space.damping = 0.999
+                    web_group = 1
+                    bs = []
+                    dist = 0.3
+                    c = Vec2d(world_mouse_pos[0], world_mouse_pos[1])
+                    cb = pymunk.Body(1, 1)
+                    cb.position = c
+                    s = pymunk.Circle(cb, 15)  # to have something to grab
+                    s.filter = pymunk.ShapeFilter(group=web_group)
+                    s.ignore_draw = True
+                    space.add(cb, s)
+
+                    # generate each crossing in the net
+                    for x in range(0, 101):
+                        b = pymunk.Body(1, 1)
+                        v = Vec2d(1, 0).rotated_degrees(x * 18)
+                        scale = screen_height / 2.0 / 6.0 * 0.5
+
+                        dist += 1 / 18.0
+                        dist = dist ** 1.005
+
+                        offset = 100.0
+                        offset = [0.0, -0.80, -1.0, -0.80][((x * 18) % 360) // 18 % 4]
+                        offset = 0.8 + offset
+
+                        offset *= dist ** 2.8 / 100.0
+
+                        v = v.scale_to_length(scale * (dist + offset))
+
+                        b.position = c + v
+                        s = pymunk.Circle(b, 15)
+                        s.filter = pymunk.ShapeFilter(group=web_group)
+                        s.ignore_draw = True
+                        space.add(b, s)
+                        bs.append(b)
+
+
+                    def add_joint(a, b):
+                        rl = a.position.get_distance(b.position) * 0.9
+                        stiffness = 5000.0
+                        damping = 100
+                        j = pymunk.DampedSpring(a, b, (0, 0), (0, 0), rl, stiffness, damping)
+                        j.max_bias = 1000
+                        # j.max_force = 50000
+                        space.add(j)
+
+
+                    for b in bs[:20]:
+                        add_joint(cb, b)
+
+                    for i in range(len(bs) - 1):
+                        add_joint(bs[i], bs[i + 1])
+
+                        i2 = i + 20
+                        if len(bs) > i2:
+                            add_joint(bs[i], bs[i2])
+
+                    ### WEB ATTACH POINTS
+                    static_bs = []
+                    for b in bs[-17::4]:
+                        static_body = pymunk.Body(body_type=pymunk.Body.STATIC)
+                        static_body.position = b.position
+                        static_bs.append(static_body)
+
+                        # j = pymunk.PivotJoint(static_body, b, static_body.position)
+                        j = pymunk.DampedSpring(static_body, b, (0, 0), (0, 0), 0, 0, 0)
+                        j.damping = 100
+                        j.stiffness = 20000
+                        space.add(j)
+
+                if command == "tank":
+                    def init():
+
+                        static_body = space.static_body
+
+                        # Create segments around the edge of the screen.
+                        shape = pymunk.Segment(static_body, (1, 1), (1, 480), 1.0)
+                        space.add(shape)
+                        shape.elasticity = 1
+                        shape.friction = 1
+
+                        shape = pymunk.Segment(static_body, (640, 1), (640, 480), 1.0)
+                        space.add(shape)
+                        shape.elasticity = 1
+                        shape.friction = 1
+
+                        shape = pymunk.Segment(static_body, (1, 1), (640, 1), 1.0)
+                        space.add(shape)
+                        shape.elasticity = 1
+                        shape.friction = 1
+
+                        shape = pymunk.Segment(static_body, (1, 480), (640, 480), 1.0)
+                        space.add(shape)
+                        shape.elasticity = 1
+                        shape.friction = 1
+
+                        for _ in range(50):
+                            body = add_box(space, 20, 1)
+
+                            pivot = pymunk.PivotJoint(static_body, body, (0, 0), (0, 0))
+                            space.add(pivot)
+                            pivot.max_bias = 0  # disable joint correction
+                            pivot.max_force = 1000  # emulate linear friction
+
+                            gear = pymunk.GearJoint(static_body, body, 0.0, 1.0)
+                            space.add(gear)
+                            gear.max_bias = 0  # disable joint correction
+                            gear.max_force = 5000  # emulate angular friction
+
+                        # We joint the tank to the control body and control the tank indirectly by modifying the control body.
+                        global tank_control_body
+                        tank_control_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+                        tank_control_body.position = 320, 240
+                        space.add(tank_control_body)
+                        global tank_body
+                        tank_body = add_box(space, 30, 10)
+                        tank_body.position = 320, 240
+                        for s in tank_body.shapes:
+                            s.color = (0, 255, 100, 255)
+
+                        pivot = pymunk.PivotJoint(tank_control_body, tank_body, (0, 0), (0, 0))
+                        space.add(pivot)
+                        pivot.max_bias = 0  # disable joint correction
+                        pivot.max_force = 10000  # emulate linear friction
+
+                        gear = pymunk.GearJoint(tank_control_body, tank_body, 0.0, 1.0)
+                        space.add(gear)
+                        gear.error_bias = 0  # attempt to fully correct the joint each step
+                        gear.max_bias = 1.2  # but limit it's angular correction rate
+                        gear.max_force = 50000  # emulate angular friction
+
+                        return space
+                    def update():
+                        global tank_body
+                        global tank_control_body
+
+                        mpos = pygame.mouse.get_pos()
+                        mouse_pos = pymunk.pygame_util.from_pygame(Vec2d(*mpos), screen)
+
+                        mouse_delta = mouse_pos - tank_body.position
+                        turn = tank_body.rotation_vector.cpvunrotate(mouse_delta).angle
+                        tank_control_body.angle = tank_body.angle - turn
+
+                        # drive the tank towards the mouse
+                        if (mouse_pos - tank_body.position).get_length_sqrd() < 30 ** 2:
+                            tank_control_body.velocity = 0, 0
+                        else:
+                            if mouse_delta.dot(tank_body.rotation_vector) > 0.0:
+                                direction = 1.0
+                            else:
+                                direction = -1.0
+                            dv = Vec2d(30.0 * direction, 0.0)
+                            tank_control_body.velocity = tank_body.rotation_vector.cpvrotate(dv)
+
+
+                    def add_box(space, size, mass):
+                        radius = Vec2d(size, size).length
+
+                        body = pymunk.Body()
+                        space.add(body)
+
+                        body.position = Vec2d(
+                            random.random() * (640 - 2 * radius) + radius,
+                            random.random() * (480 - 2 * radius) + radius,
+                        )
+
+                        shape = pymunk.Poly.create_box(body, (size, size), 0.0)
+                        shape.mass = mass
+                        shape.friction = 0.7
+                        space.add(shape)
+
+                        return body
+                    init()
+                if command == 'planet':
+                    gravityStrength = 5.0e6
+                    def planetGravity(body, gravity, damping, dt):
+                        # Gravitational acceleration is proportional to the inverse square of
+                        # distance, and directed toward the origin. The central planet is assumed
+                        # to be massive enough that it affects the satellites but not vice versa.
+                        sq_dist = body.position.get_dist_sqrd((300, 300))
+                        g = (
+                                (body.position - pymunk.Vec2d(300, 300))
+                                * -gravityStrength
+                                / (sq_dist * math.sqrt(sq_dist))
+                        )
+                        pymunk.Body.update_velocity(body, g, damping, dt)
+
+
+                    def add_box(space):
+                        body = pymunk.Body()
+                        body.position = pymunk.Vec2d(random.randint(50, 550), random.randint(50, 550))
+                        body.velocity_func = planetGravity
+
+                        # Set the box's velocity to put it into a circular orbit from its
+                        # starting position.
+                        r = body.position.get_distance((300, 300))
+                        v = math.sqrt(gravityStrength / r) / r
+                        body.velocity = (body.position - pymunk.Vec2d(300, 300)).perpendicular() * v
+                        # Set the box's angular velocity to match its orbital period and
+                        # align its initial angle with its position.
+                        body.angular_velocity = v
+                        body.angle = math.atan2(body.position.y, body.position.x)
+
+                        box = pymunk.Poly.create_box(body, size=(10, 10))
+                        box.mass = 1
+                        box.friction = 0.7
+                        box.elasticity = 0
+                        box.color = pygame.Color("white")
+                        space.add(body, box)
+
+
+                    for x in range(30):
+                        add_box(space)
+
+
+                if command == 'python':
+                    window_console.set_log_prefix(" ")
+                    python_process = subprocess.Popen(['python', '-i'],
+                                                      stdin=subprocess.PIPE,
+                                                      stdout=subprocess.PIPE,
+                                                      stderr=subprocess.STDOUT, shell=False)
+                    output_str = ConsoleOutput()
+                    data_lock = threading.Lock()
+
+                    def write_all(process, output, lock):
+                        while True:
+                            data = process.stdout.read(1).decode("utf-8")
+                            if not data:
+                                break
+                            with lock:
+                                output.text += data
+
+
+                    writer = threading.Thread(target=write_all, args=(python_process,
+                                                                      output_str,
+                                                                      data_lock))
+                    writer.start()
+
+                elif command == 'clear':
+                    window_console.clear_log()
+
+        if python_process is not None:
+            if "\n" in output_str.text:
+                split_output = output_str.text.split('\n', 1)
+                with data_lock:
+                    output_str.text = split_output[1]
+                output_line_to_print = split_output[0].strip()
+                window_console.add_output_line_to_log(output_line_to_print)
+            elif len(output_str.text) > 0:
+                output_line_to_print = output_str.text.strip()
+                with data_lock:
+                    output_str.text = ""
+                window_console.add_output_line_to_log(output_line_to_print, remove_line_break=True)
+
+            if python_process.poll() is not None:
+                print('Python finished')
+                python_process = None
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 sound_close.play()
@@ -861,16 +1236,16 @@ while running:
                     selected_spawn_button = event.ui_element
                     if selected_spawn_button == spawn_buttons[0]:
                         selected_shape = "circle"
-                        hide_all_sliders()
-                        show_circle_settings()
+                        hide_all_windows()
+                        window_circle.show()
                     elif selected_spawn_button == spawn_buttons[1]:
                         selected_shape = "square"
-                        hide_all_sliders()
-                        show_square_settings()
+                        hide_all_windows()
+                        window_square.show()
                     elif selected_spawn_button == spawn_buttons[2]:
                         selected_shape = "triangle"
-                        hide_all_sliders()
-                        show_triangle_settings()
+                        hide_all_windows()
+                        window_triangle.show()
                     elif selected_spawn_button == spawn_buttons[3]:
                         selected_shape = "polyhedron"
                     elif selected_spawn_button == spawn_buttons[4]:
@@ -893,29 +1268,6 @@ while running:
                     force_field_radius = int(event.value)
                     text_label_radius.set_text(
                         "Force Field Radius: {}".format(force_field_radius)
-                    )
-
-                elif event.ui_element == square_size_slider_x:
-                    set_square_size[0] = int(event.value)
-                    text_square_size_x.set_text(
-                        "square X        :{}".format(set_square_size[0])
-                    )
-                elif event.ui_element == square_size_slider_y:
-                    set_square_size[1] = int(event.value)
-                    text_square_size_y.set_text(
-                        "square Y        :{}".format(set_square_size[1])
-                    )
-
-                elif event.ui_element == circle_radius_slider:
-                    set_circle_radius = int(event.value)
-                    text_circle_radius.set_text(
-                        "Circle R: {}".format(set_circle_radius)
-                    )
-
-                elif event.ui_element == triangle_size_slider:
-                    set_triangle_size = int(event.value)
-                    text_triangle_size.set_text(
-                        "Triangle Size: {}".format(set_triangle_size)
                     )
 
                 elif event.ui_element == iterations_slider:
@@ -944,6 +1296,8 @@ while running:
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
         debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
+
+
 
         if key_f11_pressed:
             fullscreen = not fullscreen
