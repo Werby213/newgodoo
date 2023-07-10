@@ -1249,7 +1249,7 @@ while running:
             )
             static_field.friction = set_friction
             try:
-                add_body_shape(static_field, static_field)
+                space.add(static_field)
             except:
                 traceback.print_exc()
             creating_static_field = False
@@ -1310,7 +1310,7 @@ while running:
         if hold_time >= KEY_HOLD_TIME:
             toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
 
-    translate_speed = 10 * shift_speed
+    translate_speed = 10 * shift_speed / scaling
     keys = pygame.key.get_pressed()
     left = int(keys[pygame.K_LEFT])
     up = int(keys[pygame.K_UP])
@@ -1356,8 +1356,9 @@ while running:
 
     if creating_static_field:
         static_field_end = pygame.mouse.get_pos()
-        pygame.draw.line(screen, (255, 255, 255), (static_field_start[0] - world_translation[0],
-                                                   static_field_start[1] - world_translation[1]), static_field_end, 10)
+        pygame.draw.line(screen, (255, 255, 255), (static_field_start[0],
+                                                   static_field_start[1]),
+                         static_field_end, 10)
     #if creating_spring:
     #    spring_end = pygame.mouse.get_pos()
     #    pygame.draw.line(screen, (255, 255, 255), (spring_start[0] - world_translation[0],
