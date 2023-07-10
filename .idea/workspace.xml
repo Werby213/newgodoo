@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added object dragging">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added object dragging using force vector">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
     </list>
@@ -356,7 +356,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688996982326</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="added object dragging using force vector">
+      <option name="closed" value="true" />
+      <created>1688999432554</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1688999432554</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -376,6 +384,7 @@
     <MESSAGE value="added exec and eval console commands" />
     <MESSAGE value="scaling now affects camera speed" />
     <MESSAGE value="added object dragging" />
-    <option name="LAST_COMMIT_MESSAGE" value="added object dragging" />
+    <MESSAGE value="added object dragging using force vector" />
+    <option name="LAST_COMMIT_MESSAGE" value="added object dragging using force vector" />
   </component>
 </project>

@@ -38,7 +38,7 @@ show_guide = True
 fullscreen = False
 use_system_dpi = True
 key_f11_pressed = False
-screen_width, screen_height = 1920, 1080
+screen_width, screen_height = 2440, 1600
 
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
@@ -46,7 +46,7 @@ ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 version = "Newgodoo a0.1.6"
 version_save = version
 pygame.display.set_caption(version)
-COLLTYPE_DEFAULT = 0
+COLLTYPE_DEFAULT = 1
 
 if fullscreen:
     user32 = ctypes.windll.user32
@@ -263,7 +263,7 @@ text_label_strength = pygame_gui.elements.UILabel(
 radius_slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(400, 40, 200, 20),
     start_value=force_field_radius,
-    value_range=(0, 1000),
+    value_range=(0, 10000),
     manager=gui_manager,
 )
 
@@ -701,16 +701,13 @@ def add_body_shape(body, shape):
 def attraction():
     if creating_attraction:
         for body, shape in objects:
-            distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+            distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
+                        world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
 
             if distance <= force_field_radius:
-
-                    force_vector = (
-                        (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                        * force_field_strength
-                        * 30
-                    )
-                    body.apply_force_at_local_point(force_vector, (0, 0))
+                force_vector = (
+                (world_mouse_pos[0] - body.position[0])*2, (world_mouse_pos[1] - body.position[1])*2)
+                body.velocity = force_vector  # Assign the force_vector directly to the velocity property
 
 
 def repulsion():
@@ -1044,11 +1041,13 @@ while running:
 
                 if command == 'exit':
                     pygame.quit()
+                if command == 'help':
+                    window_console.add_output_line_to_log(guide_text)
 
                 if command.startswith('exec '):
                     code = command[5:]
                     try:
-                        exec(code, globals())
+                        window_console.add_output_line_to_log(str(exec(code, globals())))
                     except Exception as e:
                         sound_error.play()
                         result = 'Error executing Python code:', e
@@ -1058,21 +1057,12 @@ while running:
                 if command.startswith('eval '):
                     code = command[5:]
                     try:
-                        result = eval(code, globals())
-                        result_str = str(result)
-                        window_console.add_output_line_to_log(result_str)
+                        window_console.add_output_line_to_log(str(eval(code, globals())))
                     except Exception as e:
                         sound_error.play()
                         result = 'Error executing Python code:', e
                         result_str = str(result)
                         window_console.add_output_line_to_log(result_str)
-
- #               if command == 'exec':
- #                   try:
- #                       exec(command)
- #                       print('Command executed successfully')
- #                   except Exception as e:
- #                       print('Error executing command:', str(e))
 
                 if command == 'python':
                     window_console.set_log_prefix(" ")
@@ -1261,7 +1251,7 @@ while running:
                 sound_pause.play()
                 vis_pause_icon(show=not pause_icon_visible)
                 running_physics = not running_physics
-                key_space = True
+                key_space = not key_space
 
             elif event.key == pygame.K_l:
                 show_guide = not show_guide
