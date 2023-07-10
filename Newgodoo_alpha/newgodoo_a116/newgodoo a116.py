@@ -747,18 +747,18 @@ def ring():
 
                     body.apply_force_at_local_point(-force_vector_in, (0, 0))
 
-def object_drag():
-    for body, shape in objects:
-        distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
-
-        if distance <= 50:
-            if object_dragging and shape.point_query(world_mouse_pos):
-                force_vector = (
-                    (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                    * 1000
-                    * 30
-                )
-                body.apply_force_at_local_point(force_vector, (0, 0))
+# def object_drag():
+#     for body, shape in objects:
+#         distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
+#
+#         if distance <= 50:
+#             if object_dragging and shape.point_query(world_mouse_pos):
+#                 force_vector = (
+#                     (world_mouse_pos - body.position).rotated(-body.angle).normalized()
+#                     * 1000
+#                     * 30
+#                 )
+#                 body.apply_force_at_local_point(force_vector, (0, 0))
 
 
 def save_data(space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation):
@@ -812,7 +812,6 @@ def update():
         attraction()
         repulsion()
         ring()
-        object_drag()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 10, 2)
 
 
@@ -835,7 +834,7 @@ sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
 
 translation = pymunk.Transform()
-
+object_dragging = None
 dragging_body = None
 mouse_joint = None
 running = True
@@ -1288,14 +1287,25 @@ while running:
         #    if spring and spring.a and spring.b:
         #        space.add(spring)
 
-
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
-                object_dragging = True
+                info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+                if info is not None:
+                    object_dragging = info.shape.body
+                    object_dragging.is_dragging = True
+                    object_dragging.position = world_mouse_pos
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
-                object_dragging = False
+                if object_dragging is not None:
+                    object_dragging.is_dragging = False
+                object_dragging = None
+
+        elif event.type == pygame.MOUSEMOTION:
+            if object_dragging is not None:
+                if object_dragging.is_dragging:
+                    object_dragging.position = world_mouse_pos
+                    object_dragging.velocity = (0, 0)
 
     if key_f_pressed:
         hold_time = pygame.time.get_ticks() - key_f_hold_start_time

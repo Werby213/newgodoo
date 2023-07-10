@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added exec and eval console commands">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="scaling now affects camera speed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
     </list>
@@ -340,7 +340,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688990079666</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="scaling now affects camera speed">
+      <option name="closed" value="true" />
+      <created>1688993768491</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1688993768491</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -358,6 +366,7 @@
     <MESSAGE value="added system_dpi setting for fullscreen" />
     <MESSAGE value="added windows for shape settings, added console and 3 examples." />
     <MESSAGE value="added exec and eval console commands" />
-    <option name="LAST_COMMIT_MESSAGE" value="added exec and eval console commands" />
+    <MESSAGE value="scaling now affects camera speed" />
+    <option name="LAST_COMMIT_MESSAGE" value="scaling now affects camera speed" />
   </component>
 </project>
