@@ -4,32 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added system_dpi setting for fullscreen">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/laydigital.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/close.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/beep_1.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/click.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/click_2.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/click_3.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/click_4.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/error.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/gui/slider.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/pause.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/spawn.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/force_field/attraction.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/force_field/repulsion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/force_field/ring.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/pause.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/spawn/circle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/spawn/placeholder.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/spawn/polyhedron.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/spawn/spam.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/spawn/square.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sprites/gui/spawn/triangle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/unispace bd.ttf" afterDir="false" />
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added windows for shape settings, added console and 3 examples.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/newgodoo a115.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a115/newgodoo a115.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/saves/SAVE_TEST.ngsv" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/saves/SAVE_TEST.ngsv" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
     <list id="62aea2a1-7142-4d70-bf62-9d99139542a1" name="New changelist-2" comment="" />
@@ -347,7 +325,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688713396482</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="added windows for shape settings, added console and 3 examples.">
+      <option name="closed" value="true" />
+      <created>1688792607160</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1688792607160</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -363,6 +349,7 @@
     <MESSAGE value="auto spawn indicator added" />
     <MESSAGE value="fixed objects list save, a1.1.5 version" />
     <MESSAGE value="added system_dpi setting for fullscreen" />
-    <option name="LAST_COMMIT_MESSAGE" value="added system_dpi setting for fullscreen" />
+    <MESSAGE value="added windows for shape settings, added console and 3 examples." />
+    <option name="LAST_COMMIT_MESSAGE" value="added windows for shape settings, added console and 3 examples." />
   </component>
 </project>

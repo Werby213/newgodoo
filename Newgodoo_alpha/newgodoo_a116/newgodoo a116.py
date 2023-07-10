@@ -241,7 +241,7 @@ for i, pos in enumerate(spawn_button_positions):
 selected_spawn_button = None
 
 window_console = pygame_gui.windows.UIConsoleWindow(
-    pygame.Rect(200, screen_height-100, 400, 300),
+    pygame.Rect(screen_width-410, screen_height-600, 400, 300),
     manager=gui_manager,
 )
 
@@ -471,7 +471,6 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
 pause_icon_image = pygame.image.load("sprites/gui/pause.png").convert_alpha()
 pause_icon_rect = pygame.Rect(screen_width - 450, 10, 50, 50)
 
-# Create the UIImage object for the pause icon
 pause_icon = pygame_gui.elements.UIImage(
     relative_rect=pause_icon_rect,
     image_surface=pause_icon_image,
@@ -840,7 +839,6 @@ translation = pymunk.Transform()
 dragging_body = None
 mouse_joint = None
 running = True
-guide = f2.render(str(guide_text), True, (180, 180, 0))
 space.sleep_time_threshold = 0.5
 def create_spring(body1, body2):
     global spring
@@ -893,7 +891,7 @@ data_lock = None
 
 while running:
     screen.fill((20, 20, 20))
-    time_delta = clock.tick(60)
+    time_delta = clock.tick(60) / 1000
 
     # Получить позицию курсора относительно мира игры
     mouse_pos = pymunk.pygame_util.get_mouse_pos(screen)
@@ -931,18 +929,19 @@ while running:
 
             else:
                 if command == "web":
+                    simulation_frequency = 120
                     space.gravity = 0, -900
-                    space.damping = 0.999
+                    space.damping = 0.5
                     web_group = 1
                     bs = []
-                    dist = 0.3
+                    dist = 0.5
                     c = Vec2d(world_mouse_pos[0], world_mouse_pos[1])
                     cb = pymunk.Body(1, 1)
                     cb.position = c
                     s = pymunk.Circle(cb, 15)  # to have something to grab
                     s.filter = pymunk.ShapeFilter(group=web_group)
                     s.ignore_draw = True
-                    space.add(cb, s)
+                    add_body_shape(cb, s)
 
                     # generate each crossing in the net
                     for x in range(0, 101):
@@ -1002,109 +1001,6 @@ while running:
                         j.stiffness = 20000
                         space.add(j)
 
-                if command == "tank":
-                    def init():
-
-                        static_body = space.static_body
-
-                        # Create segments around the edge of the screen.
-                        shape = pymunk.Segment(static_body, (1, 1), (1, 480), 1.0)
-                        space.add(shape)
-                        shape.elasticity = 1
-                        shape.friction = 1
-
-                        shape = pymunk.Segment(static_body, (640, 1), (640, 480), 1.0)
-                        space.add(shape)
-                        shape.elasticity = 1
-                        shape.friction = 1
-
-                        shape = pymunk.Segment(static_body, (1, 1), (640, 1), 1.0)
-                        space.add(shape)
-                        shape.elasticity = 1
-                        shape.friction = 1
-
-                        shape = pymunk.Segment(static_body, (1, 480), (640, 480), 1.0)
-                        space.add(shape)
-                        shape.elasticity = 1
-                        shape.friction = 1
-
-                        for _ in range(50):
-                            body = add_box(space, 20, 1)
-
-                            pivot = pymunk.PivotJoint(static_body, body, (0, 0), (0, 0))
-                            space.add(pivot)
-                            pivot.max_bias = 0  # disable joint correction
-                            pivot.max_force = 1000  # emulate linear friction
-
-                            gear = pymunk.GearJoint(static_body, body, 0.0, 1.0)
-                            space.add(gear)
-                            gear.max_bias = 0  # disable joint correction
-                            gear.max_force = 5000  # emulate angular friction
-
-                        # We joint the tank to the control body and control the tank indirectly by modifying the control body.
-                        global tank_control_body
-                        tank_control_body = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
-                        tank_control_body.position = 320, 240
-                        space.add(tank_control_body)
-                        global tank_body
-                        tank_body = add_box(space, 30, 10)
-                        tank_body.position = 320, 240
-                        for s in tank_body.shapes:
-                            s.color = (0, 255, 100, 255)
-
-                        pivot = pymunk.PivotJoint(tank_control_body, tank_body, (0, 0), (0, 0))
-                        space.add(pivot)
-                        pivot.max_bias = 0  # disable joint correction
-                        pivot.max_force = 10000  # emulate linear friction
-
-                        gear = pymunk.GearJoint(tank_control_body, tank_body, 0.0, 1.0)
-                        space.add(gear)
-                        gear.error_bias = 0  # attempt to fully correct the joint each step
-                        gear.max_bias = 1.2  # but limit it's angular correction rate
-                        gear.max_force = 50000  # emulate angular friction
-
-                        return space
-                    def update():
-                        global tank_body
-                        global tank_control_body
-
-                        mpos = pygame.mouse.get_pos()
-                        mouse_pos = pymunk.pygame_util.from_pygame(Vec2d(*mpos), screen)
-
-                        mouse_delta = mouse_pos - tank_body.position
-                        turn = tank_body.rotation_vector.cpvunrotate(mouse_delta).angle
-                        tank_control_body.angle = tank_body.angle - turn
-
-                        # drive the tank towards the mouse
-                        if (mouse_pos - tank_body.position).get_length_sqrd() < 30 ** 2:
-                            tank_control_body.velocity = 0, 0
-                        else:
-                            if mouse_delta.dot(tank_body.rotation_vector) > 0.0:
-                                direction = 1.0
-                            else:
-                                direction = -1.0
-                            dv = Vec2d(30.0 * direction, 0.0)
-                            tank_control_body.velocity = tank_body.rotation_vector.cpvrotate(dv)
-
-
-                    def add_box(space, size, mass):
-                        radius = Vec2d(size, size).length
-
-                        body = pymunk.Body()
-                        space.add(body)
-
-                        body.position = Vec2d(
-                            random.random() * (640 - 2 * radius) + radius,
-                            random.random() * (480 - 2 * radius) + radius,
-                        )
-
-                        shape = pymunk.Poly.create_box(body, (size, size), 0.0)
-                        shape.mass = mass
-                        shape.friction = 0.7
-                        space.add(shape)
-
-                        return body
-                    init()
                 if command == 'planet':
                     gravityStrength = 5.0e6
                     def planetGravity(body, gravity, damping, dt):
@@ -1146,6 +1042,37 @@ while running:
                     for x in range(30):
                         add_box(space)
 
+                if command == 'exit':
+                    pygame.quit()
+
+                if command.startswith('exec '):
+                    code = command[5:]
+                    try:
+                        exec(code, globals())
+                    except Exception as e:
+                        sound_error.play()
+                        result = 'Error executing Python code:', e
+                        result_str = str(result)
+                        window_console.add_output_line_to_log(result_str)
+
+                if command.startswith('eval '):
+                    code = command[5:]
+                    try:
+                        result = eval(code, globals())
+                        result_str = str(result)
+                        window_console.add_output_line_to_log(result_str)
+                    except Exception as e:
+                        sound_error.play()
+                        result = 'Error executing Python code:', e
+                        result_str = str(result)
+                        window_console.add_output_line_to_log(result_str)
+
+ #               if command == 'exec':
+ #                   try:
+ #                       exec(command)
+ #                       print('Command executed successfully')
+ #                   except Exception as e:
+ #                       print('Error executing command:', str(e))
 
                 if command == 'python':
                     window_console.set_log_prefix(" ")
@@ -1189,6 +1116,7 @@ while running:
             if python_process.poll() is not None:
                 print('Python finished')
                 python_process = None
+
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 sound_close.play()
@@ -1320,7 +1248,10 @@ while running:
                 static_body, static_field_start, static_field_end, 10
             )
             static_field.friction = set_friction
-            space.add(static_field)
+            try:
+                add_body_shape(static_field, static_field)
+            except:
+                traceback.print_exc()
             creating_static_field = False
 
 
@@ -1386,10 +1317,10 @@ while running:
     down = int(keys[pygame.K_DOWN])
     right = int(keys[pygame.K_RIGHT])
 
-    zoom_in = int(keys[pygame.K_a])
-    zoom_out = int(keys[pygame.K_z])
-    rotate_left = int(keys[pygame.K_s])
-    rotate_right = int(keys[pygame.K_x])
+    zoom_in = int(keys[pygame.K_KP_PLUS])
+    zoom_out = int(keys[pygame.K_KP_MINUS])
+    rotate_left = int(keys[pygame.K_KP_6])
+    rotate_right = int(keys[pygame.K_KP_4])
 
     translation = translation.translated(
         translate_speed * left - translate_speed * right,
@@ -1404,7 +1335,6 @@ while running:
     )
 
     scaling *= 1 + (zoom_speed * zoom_in - zoom_speed * zoom_out)
-
     rotation += rotation_speed * rotate_left - rotation_speed * rotate_right
 
     #fps_debug = f1.render(
