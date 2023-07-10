@@ -72,7 +72,7 @@ clock = pygame.time.Clock()
 
 space = pymunk.Space(threaded=True)
 space.threads = 8
-space.iterations = 30
+space.iterations = 256
 simulation_frequency = 60
 static_body = space.static_body
 floor = pymunk.Segment(
@@ -102,6 +102,7 @@ creating_attraction = False
 creating_repulsion = False
 creating_force_ring = False
 creating_object_drag = False
+key_space = False
 force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
@@ -673,7 +674,7 @@ def spawn_square(position):
 
 
 def spawn_triangle(position):
-    size = set_triangle_size * 2
+    size = float(triangle_size_input.get_text()) * 2
     height = size * math.sqrt(3) / 2
     points = [
         (0, height / 2),
@@ -1260,6 +1261,7 @@ while running:
                 sound_pause.play()
                 vis_pause_icon(show=not pause_icon_visible)
                 running_physics = not running_physics
+                key_space = True
 
             elif event.key == pygame.K_l:
                 show_guide = not show_guide
@@ -1293,7 +1295,6 @@ while running:
                 if info is not None:
                     object_dragging = info.shape.body
                     object_dragging.is_dragging = True
-                    object_dragging.position = world_mouse_pos
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
@@ -1301,11 +1302,16 @@ while running:
                     object_dragging.is_dragging = False
                 object_dragging = None
 
-        elif event.type == pygame.MOUSEMOTION:
+        if key_space == False:
             if object_dragging is not None:
-                if object_dragging.is_dragging:
-                    object_dragging.position = world_mouse_pos
-                    object_dragging.velocity = (0, 0)
+                mouse_pos = pygame.mouse.get_pos()
+                object_dragging.velocity = (
+                    (world_mouse_pos[0] - object_dragging.position[0])*10, (world_mouse_pos[1] - object_dragging.position[1])*10)
+        else:
+            if object_dragging is not None:
+                object_dragging.position = world_mouse_pos
+                object_dragging.velocity = (0, 0)
+
 
     if key_f_pressed:
         hold_time = pygame.time.get_ticks() - key_f_hold_start_time
@@ -1366,8 +1372,8 @@ while running:
 
     if creating_static_field:
         static_field_end = pygame.mouse.get_pos()
-        pygame.draw.line(screen, (255, 255, 255), (static_field_start[0],
-                                                   static_field_start[1]),
+        pygame.draw.line(screen, (255, 255, 255), (static_field_start[0] - world_mouse_pos[0],
+                                                   static_field_start[1]- world_mouse_pos[1]),
                          static_field_end, 10)
     #if creating_spring:
     #    spring_end = pygame.mouse.get_pos()
