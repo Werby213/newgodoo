@@ -824,7 +824,7 @@ def object_drag():
 #             if object_dragging and shape.point_query(world_mouse_pos):
 #                 force_vector = (
 #                     (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-#                     * 1000
+#                     * 100012
 #                     * 30
 #                 )
 #                 body.apply_force_at_local_point(force_vector, (0, 0))
