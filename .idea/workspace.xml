@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="polyhedron settings added">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/theme.json" afterDir="false" />
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="custom theme added, static body glitch fixed">
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/sounds/pause_in.mp3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
     </list>
@@ -34,20 +34,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a116/sounds",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a116\sounds" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\spawn" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sounds" />
-      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha" />
@@ -389,7 +389,15 @@
       <option name="project" value="LOCAL" />
       <updated>1689136623054</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="custom theme added, static body glitch fixed">
+      <option name="closed" value="true" />
+      <created>1689150128119</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1689150128119</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -412,6 +420,7 @@
     <MESSAGE value="added object dragging using force vector" />
     <MESSAGE value="11.07.23" />
     <MESSAGE value="polyhedron settings added" />
-    <option name="LAST_COMMIT_MESSAGE" value="polyhedron settings added" />
+    <MESSAGE value="custom theme added, static body glitch fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="custom theme added, static body glitch fixed" />
   </component>
 </project>

@@ -234,6 +234,8 @@ for i, pos in enumerate(spawn_button_positions):
         button_text = "spawner"
     elif i == 10:
         button_text = "deleter"
+    elif i == 11:
+        button_text = "human"
     button = pygame_gui.elements.UIButton(
         relative_rect=button_rect, text=button_text, manager=gui_manager
     )
@@ -618,6 +620,7 @@ def toolset(position):
         "triangle": spawn_triangle,
         "polyhedron": spawn_polyhedron,
         "spam": random_spam,
+        "human": spawn_human
     }
 
     spawn_func = shape_mapping.get(selected_shape)
@@ -671,6 +674,72 @@ def delete_all():
     for static_line in static_lines:
         space.remove(static_line)
     static_lines = []
+
+def spawn_human(position):
+    # Создание головы
+    head_radius = 30
+    head_mass = 10
+    head_moment = pymunk.moment_for_circle(head_mass, 0, head_radius)
+    head_body = pymunk.Body(head_mass, head_moment)
+    head_body.position = position
+    head_shape = pymunk.Circle(head_body, head_radius)
+    add_body_shape(head_body, head_shape)
+
+    # Создание туловища
+    torso_width = 20
+    torso_height = 80
+    torso_mass = 20
+    torso_moment = pymunk.moment_for_box(torso_mass, (torso_width, torso_height))
+    torso_body = pymunk.Body(torso_mass, torso_moment)
+    torso_body.position = position[0], position[1] - head_radius - torso_height / 2
+    torso_shape = pymunk.Poly.create_box(torso_body, (torso_width, torso_height))
+    add_body_shape(torso_body, torso_shape)
+
+    # Создание ног
+    leg_width = 15
+    leg_height = 60
+    leg_mass = 15
+    leg_moment = pymunk.moment_for_box(leg_mass, (leg_width, leg_height))
+    left_leg_body = pymunk.Body(leg_mass, leg_moment)
+    left_leg_body.position = position[0] - torso_width / 2 + leg_width / 2, position[1] - head_radius - torso_height - leg_height / 2
+    left_leg_shape = pymunk.Poly.create_box(left_leg_body, (leg_width, leg_height))
+    add_body_shape(left_leg_body, left_leg_shape)
+
+    right_leg_body = pymunk.Body(leg_mass, leg_moment)
+    right_leg_body.position = position[0] + torso_width / 2 - leg_width / 2, position[1] - head_radius - torso_height - leg_height / 2
+    right_leg_shape = pymunk.Poly.create_box(right_leg_body, (leg_width, leg_height))
+    add_body_shape(right_leg_body, right_leg_shape)
+
+    # Создание рук
+    arm_width = 12
+    arm_height = 50
+    arm_mass = 10
+    arm_moment = pymunk.moment_for_box(arm_mass, (arm_width, arm_height))
+    left_arm_body = pymunk.Body(arm_mass, arm_moment)
+    left_arm_body.position = position[0] - torso_width / 2 - arm_width / 2, position[1] - head_radius - torso_height / 2
+    left_arm_shape = pymunk.Poly.create_box(left_arm_body, (arm_width, arm_height))
+    add_body_shape(left_arm_body, left_arm_shape)
+
+    right_arm_body = pymunk.Body(arm_mass, arm_moment)
+    right_arm_body.position = position[0] + torso_width / 2 + arm_width / 2, position[1] - head_radius - torso_height / 2
+    right_arm_shape = pymunk.Poly.create_box(right_arm_body, (arm_width, arm_height))
+    add_body_shape(right_arm_body, right_arm_shape)
+
+    # Создание сочленений
+    head_torso_joint = pymunk.PinJoint(head_body, torso_body, (0, head_radius), (0, torso_height / 2))
+    space.add(head_torso_joint)
+
+    left_leg_torso_joint = pymunk.PinJoint(left_leg_body, torso_body, (0, leg_height / 2), (-torso_width / 2, -torso_height / 2))
+    space.add(left_leg_torso_joint)
+
+    right_leg_torso_joint = pymunk.PinJoint(right_leg_body, torso_body, (0, leg_height / 2), (torso_width / 2, -torso_height / 2))
+    space.add(right_leg_torso_joint)
+
+    left_arm_torso_joint = pymunk.PinJoint(left_arm_body, torso_body, (0, arm_height / 2), (-torso_width / 2, 0))
+    space.add(left_arm_torso_joint)
+
+    right_arm_torso_joint = pymunk.PinJoint(right_arm_body, torso_body, (0, arm_height / 2), (torso_width / 2, 0))
+    space.add(right_arm_torso_joint)
 
 def spawn_polyhedron(position):
     tooth_angle = 2 * math.pi / int(polyhedron_faces_input.get_text())
@@ -898,6 +967,7 @@ sound_spawn = pygame.mixer.Sound("sounds/spawn.mp3")
 sound_slider = pygame.mixer.Sound("sounds/gui/slider.mp3")
 sound_beep_1 = pygame.mixer.Sound("sounds/gui/beep_1.mp3")
 sound_pause = pygame.mixer.Sound("sounds/pause.mp3")
+sound_pause_in = pygame.mixer.Sound("sounds/pause_in.mp3")
 sound_close = pygame.mixer.Sound("sounds/close.mp3")
 sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
@@ -1250,6 +1320,17 @@ while running:
                         selected_shape = "delete all"
                     elif selected_spawn_button == spawn_buttons[6]:
                         selected_shape = "force field"
+                    elif selected_spawn_button == spawn_buttons[7]:
+                        selected_shape = "None"
+                    elif selected_spawn_button == spawn_buttons[8]:
+                        selected_shape = "None"
+                    elif selected_spawn_button == spawn_buttons[9]:
+                        selected_shape = "None"
+                    elif selected_spawn_button == spawn_buttons[10]:
+                        selected_shape = "None"
+                    elif selected_spawn_button == spawn_buttons[11]:
+                        selected_shape = "human"
+
 
             elif event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element in spawn_buttons:
@@ -1329,6 +1410,7 @@ while running:
 
             if event.key == pygame.K_SPACE:
                 sound_pause.play()
+
                 vis_pause_icon(show=not pause_icon_visible)
                 running_physics = not running_physics
                 key_space = not key_space
@@ -1363,8 +1445,9 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
-                if info is not None and not static_body:
-                    object_dragging = info.shape.body
+                if info is not None:
+                    if info.shape.body != static_body:
+                        object_dragging = info.shape.body
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
