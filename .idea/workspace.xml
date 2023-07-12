@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added object dragging using force vector">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="11.07.23">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
@@ -162,9 +163,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.newgodoo a116" />
+        <item itemvalue="Python.newgodoo a114_1" />
         <item itemvalue="Python.console_example (1)" />
         <item itemvalue="Python.newgodoo a115" />
-        <item itemvalue="Python.newgodoo a114_1" />
         <item itemvalue="Python.console_example" />
       </list>
     </recent_temporary>
@@ -364,7 +365,15 @@
       <option name="project" value="LOCAL" />
       <updated>1688999432554</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="11.07.23">
+      <option name="closed" value="true" />
+      <created>1689001610417</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1689001610417</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -385,6 +394,7 @@
     <MESSAGE value="scaling now affects camera speed" />
     <MESSAGE value="added object dragging" />
     <MESSAGE value="added object dragging using force vector" />
-    <option name="LAST_COMMIT_MESSAGE" value="added object dragging using force vector" />
+    <MESSAGE value="11.07.23" />
+    <option name="LAST_COMMIT_MESSAGE" value="11.07.23" />
   </component>
 </project>

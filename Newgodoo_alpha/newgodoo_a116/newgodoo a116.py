@@ -94,6 +94,10 @@ camera_drag_start = (0, 0)
 f1 = pygame.font.Font(None, 25)
 f2 = pygame.font.Font(None, 25)
 
+object_dragging = None
+dragging_body = None
+mouse_joint = None
+
 static_field_start = (0, 0)
 static_field_end = (0, 0)
 creating_static_field = False
@@ -131,9 +135,10 @@ set_elasticity = 0.25
 set_square_size = [30, 30]
 set_circle_radius = 30
 set_triangle_size = 30
+set_polyhedron_size = 60
 set_friction = 0.7
 
-set_number_faces = 5
+set_number_faces = 6
 gear_radius = 30
 gear_thickness = 5
 
@@ -433,6 +438,68 @@ triangle_text_elasticity = pygame_gui.elements.UILabel(
     container=window_triangle,
     manager=gui_manager,
 )
+
+#POLYHENDRON##########################################################
+window_polyhedron = pygame_gui.elements.UIWindow(
+    pygame.Rect(200, 10, 300, 200),
+    manager=gui_manager,
+    window_display_title="polyhedron settings"
+)
+polyhedron_image = pygame_gui.elements.UIImage(
+    relative_rect=pygame.Rect(215, 5, 50, 50),
+    image_surface=pygame.image.load(image_spawn_paths[3]),
+    container=window_polyhedron,
+    manager=gui_manager
+)
+polyhedron_size_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(60, 10, 100, 20),
+    container=window_polyhedron,
+    initial_text=str(set_polyhedron_size),
+    manager=gui_manager,
+)
+text_polyhedron_size = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(10, 10, 50, 20),
+    text="Size:",
+    container=window_polyhedron,
+    manager=gui_manager,
+)
+polyhedron_faces_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(60, 30, 100, 20),
+    container=window_polyhedron,
+    initial_text=str(set_number_faces),
+    manager=gui_manager,
+)
+text_faces_size = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(10, 30, 50, 20),
+    text="Faces:",
+    container=window_polyhedron,
+    manager=gui_manager,
+)
+
+polyhedron_friction_input = pygame_gui.elements.UITextEntryLine(
+    initial_text=str(set_friction),
+    relative_rect=pygame.Rect(80, 55, 100, 20),
+    container=window_polyhedron,
+    manager=gui_manager,
+)
+text_polyhedron_friction = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 55, 80, 20),
+    text="friction:",
+    container=window_polyhedron,
+    manager=gui_manager,
+)
+polyhedron_elasticity_input = pygame_gui.elements.UITextEntryLine(
+    relative_rect=pygame.Rect(90, 75, 105, 20),
+    initial_text=str(set_elasticity),
+    container=window_polyhedron,
+    manager=gui_manager,
+)
+polyhedron_text_elasticity = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 75, 85, 20),
+    text="elasticity:",
+    container=window_polyhedron,
+    manager=gui_manager,
+)
 # OTHER_GUI######################################################################################
 text_guide_gui = pygame_gui.elements.UITextBox(
     relative_rect=pygame.Rect(screen_width - 280, 150, 240, 300),
@@ -607,14 +674,11 @@ def delete_all():
     static_lines = []
 
 def spawn_polyhedron(position):
-    tooth_angle = 2 * math.pi / set_number_faces
-
-    radius = set_circle_radius / 2
-
+    tooth_angle = 2 * math.pi / int(polyhedron_faces_input.get_text())
+    radius = float(polyhedron_size_input.get_text()) / 2
     tooth_radius = radius * 0.4
-
     points = []
-    for i in range(set_number_faces * 2):
+    for i in range(int(polyhedron_faces_input.get_text()) * 2):
         angle = i * tooth_angle / 2
         if i % 2 == 0:
             points.append((radius * math.cos(angle), radius * math.sin(angle)))
@@ -628,8 +692,8 @@ def spawn_polyhedron(position):
     body.position = position
     shape = pymunk.Poly(body, points)
     shape.collision_type = COLLTYPE_DEFAULT
-    shape.friction = set_friction
-    shape.elasticity = set_elasticity
+    shape.friction = float(polyhedron_friction_input.get_text())
+    shape.elasticity = float(polyhedron_elasticity_input.get_text())
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
     add_body_shape(body, shape)
 
@@ -703,11 +767,10 @@ def attraction():
         for body, shape in objects:
             distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
                         world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
-
             if distance <= force_field_radius:
                 force_vector = (
                 (world_mouse_pos[0] - body.position[0])*2, (world_mouse_pos[1] - body.position[1])*2)
-                body.velocity = force_vector  # Assign the force_vector directly to the velocity property
+                body.velocity = force_vector
 
 
 def repulsion():
@@ -729,21 +792,29 @@ def ring():
             distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
                         world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
             force_vector = (
-                (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                * force_field_strength
-                * 30
-            )
-            body.apply_force_at_local_point(force_vector, (0, 0))
+                (world_mouse_pos[0] - body.position[0]) * 2, (world_mouse_pos[1] - body.position[1]) * 2)
+            body.velocity = force_vector
 
             if distance <= force_field_radius-300:
                 if shape.point_query(world_mouse_pos):
                     force_vector_in = (
-                            (world_mouse_pos - body.position).rotated(-body.angle).normalized()
-                            * force_field_strength
-                            * 50
-                    )
+                        (world_mouse_pos[0] - body.position[0]) * 2, (world_mouse_pos[1] - body.position[1]) * 2)
+                    body.velocity = (force_vector_in[0]-(force_vector_in[0]+force_vector_in[0]),force_vector_in[0]-(force_vector_in[0]+force_vector_in[0]))
 
-                    body.apply_force_at_local_point(-force_vector_in, (0, 0))
+object_dragging=None
+def object_drag():
+    global object_dragging
+
+
+    if key_space == False:
+        if object_dragging is not None:
+            object_dragging.velocity = (
+                (world_mouse_pos[0] - object_dragging.position[0]) * 10,
+                (world_mouse_pos[1] - object_dragging.position[1]) * 10)
+    else:
+        if object_dragging is not None:
+            object_dragging.position = world_mouse_pos
+            object_dragging.velocity = (0, 0)
 
 # def object_drag():
 #     for body, shape in objects:
@@ -810,6 +881,7 @@ def update():
         attraction()
         repulsion()
         ring()
+        object_drag()
         pygame.draw.circle(screen, (255, 255, 255), pygame.mouse.get_pos(), 10, 2)
 
 
@@ -832,9 +904,7 @@ sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
 
 translation = pymunk.Transform()
-object_dragging = None
-dragging_body = None
-mouse_joint = None
+
 running = True
 space.sleep_time_threshold = 0.5
 def create_spring(body1, body2):
@@ -845,6 +915,7 @@ def hide_all_windows():
     window_square.hide()
     window_circle.hide()
     window_triangle.hide()
+    window_polyhedron.hide()
 
     strength_slider.hide()
     radius_slider.hide()
@@ -1047,20 +1118,26 @@ while running:
                 if command.startswith('exec '):
                     code = command[5:]
                     try:
-                        window_console.add_output_line_to_log(str(exec(code, globals())))
+                        result = str(exec(code, globals()))
+                        print(result)
+                        window_console.add_output_line_to_log(result)
                     except Exception as e:
                         sound_error.play()
                         result = 'Error executing Python code:', e
+                        print(result)
                         result_str = str(result)
                         window_console.add_output_line_to_log(result_str)
 
                 if command.startswith('eval '):
                     code = command[5:]
                     try:
-                        window_console.add_output_line_to_log(str(eval(code, globals())))
+                        result = str(eval(code, globals()))
+                        print(result)
+                        window_console.add_output_line_to_log(result)
                     except Exception as e:
                         sound_error.play()
                         result = 'Error executing Python code:', e
+                        print(result)
                         result_str = str(result)
                         window_console.add_output_line_to_log(result_str)
 
@@ -1166,6 +1243,8 @@ while running:
                         window_triangle.show()
                     elif selected_spawn_button == spawn_buttons[3]:
                         selected_shape = "polyhedron"
+                        hide_all_windows()
+                        window_polyhedron.show()
                     elif selected_spawn_button == spawn_buttons[4]:
                         selected_shape = "spam"
                     elif selected_spawn_button == spawn_buttons[5]:
@@ -1213,7 +1292,7 @@ while running:
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
         debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
-        debug_info_labels[3].set_text(f"static_lines: {len(static_lines)}")
+        debug_info_labels[3].set_text(f"cursor_pos: {world_mouse_pos}")
 
 
 
@@ -1226,13 +1305,11 @@ while running:
 
         if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
             sound_click_3.play()
-            # Начало создания статического поля
             static_field_start = world_mouse_pos
             creating_static_field = True
         elif event.type == pygame.KEYUP and event.key == pygame.K_b:
             sound_click_4.play()
             print("Создается барьер")
-            # Создание статического поля между точками
             static_field_end = world_mouse_pos
             static_field = pymunk.Segment(
                 static_body, static_field_start, static_field_end, 10
@@ -1244,9 +1321,13 @@ while running:
                 traceback.print_exc()
             creating_static_field = False
 
-
-        # Обработка событий клавиатуры
         elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_DELETE:
+                info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+                if info is not None and info.shape in [obj[1] for obj in objects]:
+                    space.remove(info.shape)
+                    objects = [(body, shape) for body, shape in objects if shape != info.shape]
+
             if event.key == pygame.K_SPACE:
                 sound_pause.play()
                 vis_pause_icon(show=not pause_icon_visible)
@@ -1279,28 +1360,18 @@ while running:
         #    if spring and spring.a and spring.b:
         #        space.add(spring)
 
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
                 if info is not None:
                     object_dragging = info.shape.body
-                    object_dragging.is_dragging = True
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 if object_dragging is not None:
                     object_dragging.is_dragging = False
-                object_dragging = None
-
-        if key_space == False:
-            if object_dragging is not None:
-                mouse_pos = pygame.mouse.get_pos()
-                object_dragging.velocity = (
-                    (world_mouse_pos[0] - object_dragging.position[0])*10, (world_mouse_pos[1] - object_dragging.position[1])*10)
-        else:
-            if object_dragging is not None:
-                object_dragging.position = world_mouse_pos
-                object_dragging.velocity = (0, 0)
+                    object_dragging = None
 
 
     if key_f_pressed:

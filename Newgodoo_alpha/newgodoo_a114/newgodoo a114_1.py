@@ -124,7 +124,7 @@ set_circle_radius = 30
 set_triangle_size = 30
 set_friction = 0.7
 
-set_number_faces = 5
+set_number_faces = 6
 gear_radius = 30
 gear_thickness = 5
 
