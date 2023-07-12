@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="11.07.23">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="polyhedron settings added">
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/theme.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a114/newgodoo a114_1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
@@ -373,7 +373,23 @@
       <option name="project" value="LOCAL" />
       <updated>1689001610417</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="polyhedron settings added">
+      <option name="closed" value="true" />
+      <created>1689136570841</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1689136570841</updated>
+    </task>
+    <task id="LOCAL-00026" summary="polyhedron settings added">
+      <option name="closed" value="true" />
+      <created>1689136623054</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1689136623054</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -395,6 +411,7 @@
     <MESSAGE value="added object dragging" />
     <MESSAGE value="added object dragging using force vector" />
     <MESSAGE value="11.07.23" />
-    <option name="LAST_COMMIT_MESSAGE" value="11.07.23" />
+    <MESSAGE value="polyhedron settings added" />
+    <option name="LAST_COMMIT_MESSAGE" value="polyhedron settings added" />
   </component>
 </project>

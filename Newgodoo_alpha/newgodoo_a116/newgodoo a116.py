@@ -75,9 +75,8 @@ space.threads = 8
 space.iterations = 256
 simulation_frequency = 60
 static_body = space.static_body
-floor = pymunk.Segment(
-    static_body, (-10000, screen_height - 100), (10000, screen_height - 100), 100
-)
+vertices = [(-10000, screen_height - 100), (-10000, screen_height), (10000, screen_height), (10000, screen_height - 100)]
+floor = pymunk.Poly(static_body, vertices)
 floor.friction = 1.0
 space.add(floor)
 
@@ -111,7 +110,7 @@ force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
 # Инициализация gui Manager
-gui_manager = pygame_gui.UIManager((screen_width, screen_height))
+gui_manager = pygame_gui.UIManager((screen_width, screen_height), 'theme.json')
 clock = pygame.time.Clock()
 
 shift_speed = 1
@@ -708,8 +707,8 @@ def spawn_circle(position):
     body.position = position
     shape = pymunk.Circle(body, radius)
     shape.collision_type = COLLTYPE_DEFAULT
-    shape.friction = set_friction
-    shape.elasticity = set_elasticity
+    shape.friction = float(circle_friction_input.get_text())
+    shape.elasticity = float(circle_elasticity_input.get_text())
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
@@ -751,8 +750,8 @@ def spawn_triangle(position):
     body.position = position
     shape = pymunk.Poly(body, points)
     shape.collision_type = COLLTYPE_DEFAULT
-    shape.friction = set_friction
-    shape.elasticity = set_elasticity
+    shape.friction = float(triangle_friction_input.get_text())
+    shape.elasticity = float(triangle_elasticity_input.get_text())
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
@@ -1364,7 +1363,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
-                if info is not None:
+                if info is not None and not static_body:
                     object_dragging = info.shape.body
 
         elif event.type == pygame.MOUSEBUTTONUP:
