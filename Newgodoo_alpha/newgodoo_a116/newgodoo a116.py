@@ -1,3 +1,4 @@
+import os
 import time
 import traceback
 
@@ -29,6 +30,14 @@ guide_text = (
     "\nS/X: Camera roll"
     "\nP: Screenshot"
     "\nShift: Move faster"
+)
+
+help_console_text = (
+    "help: display this"
+    "\nexec: execute the Python commands contained in the string as opposed to the program text itself."
+    "\neval: executes the expression string passed to it as a mandatory argument and returns the result of executing this string."
+    "\npython: open a new python thread"
+    "\nclear: clears the output console"
 )
 
 debug_info = "'FPS: ' + (str(round(clock.get_fps()))) +'\nEntities: ' + (str(len(space.bodies))) +'\nGravity: ' + " \
@@ -78,7 +87,11 @@ static_body = space.static_body
 vertices = [(-10000, screen_height - 100), (-10000, screen_height), (10000, screen_height), (10000, screen_height - 100)]
 floor = pymunk.Poly(static_body, vertices)
 floor.friction = 1.0
+floor.elasticity = 0.5
 space.add(floor)
+
+space.threads = os.cpu_count()
+space.threaded = False
 
 objects = []
 static_lines = []
@@ -96,7 +109,7 @@ f2 = pygame.font.Font(None, 25)
 object_dragging = None
 dragging_body = None
 mouse_joint = None
-
+draw_force_field_radius = True
 static_field_start = (0, 0)
 static_field_end = (0, 0)
 creating_static_field = False
@@ -130,7 +143,7 @@ button_spacing = 10
 
 X, Y = 0, 1
 
-set_elasticity = 0.25
+set_elasticity = 0.5
 set_square_size = [30, 30]
 set_circle_radius = 30
 set_triangle_size = 30
@@ -667,13 +680,13 @@ def spawn_random(position):
 def delete_all():
     sound_error.play()
     global objects, static_lines
-    for body, shape in objects:
-        space.remove(body, shape)
+    for body in space.bodies:
+        for shape in body.shapes:
+            space.remove(body, shape)
     objects = []
 
-    for static_line in static_lines:
-        space.remove(static_line)
-    static_lines = []
+    for static_body in static_lines:
+        space.remove(static_body)
 
 def spawn_human(position):
     # Создание головы
@@ -824,15 +837,16 @@ def spawn_triangle(position):
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
-
 def add_body_shape(body, shape):
     space.add(body, shape)
     objects.append((body, shape))
 
-
 def attraction():
     if creating_attraction:
+        if draw_force_field_radius == True:
+            pygame.draw.circle(screen, (255, 0, 0), pygame.mouse.get_pos(), force_field_radius * scaling, 2)
         for body, shape in objects:
+
             distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
                         world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
             if distance <= force_field_radius:
@@ -840,13 +854,13 @@ def attraction():
                 (world_mouse_pos[0] - body.position[0])*2, (world_mouse_pos[1] - body.position[1])*2)
                 body.velocity = force_vector
 
-
 def repulsion():
     if creating_repulsion:
+        if draw_force_field_radius == True:
+            pygame.draw.circle(screen, (255, 0, 0), pygame.mouse.get_pos(), force_field_radius * scaling, 2)
         for body, shape in objects:
             distance = ((world_mouse_pos[0] - body.position.x) ** 2 + (
                         world_mouse_pos[1] - body.position.y) ** 2) ** 0.5
-
             if distance <= force_field_radius:
                 force_vector = (
                         (world_mouse_pos - body.position).rotated(-body.angle).normalized()
@@ -854,6 +868,7 @@ def repulsion():
                         * 30
                 )
                 body.apply_force_at_local_point(-force_vector, (0, 0))
+
 def ring():
     if creating_force_ring:
         for body, shape in objects:
@@ -920,26 +935,23 @@ def save_data(space, objects, iterations, simulation_frequency, floor_friction, 
 def load_data():
     root = tk.Tk()
     root.withdraw()
-    file_path = filedialog.askopenfilename(
-        filetypes=[("Newgodoo Save Files", "*.ngsv")]
-    )
-
-    if file_path:
-        with open(file_path, "rb") as f:
-            try:
-                data = pickle.load(f)
-            except:
-                print("Что-то пошло не так")
-
-        if len(data) == 7:
-            space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation = data
-            print("Загрузка успешна.")
-            return space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation
+    try:
+        file_path = filedialog.askopenfilename(
+            filetypes=[("Newgodoo Save Files", "*.ngsv")]
+        )
+        if file_path:
+            with open(file_path, "rb") as f:
+                    data = pickle.load(f)
+            if len(data) == 7:
+                space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation = data
+                print("Загрузка успешна.")
+                return space, objects, iterations, simulation_frequency, floor_friction, version_save, world_translation
+            else:
+                print("Неправильный формат данных.")
         else:
-            print("Неправильный формат данных.")
-    else:
-        print("Отменена загрузка.")
-    return None, None, None, None, None, None, None
+            print("Отменена загрузка.")
+    except:
+        print("Что-то пошло не так")
 
 def update():
     if running_physics == True:
@@ -1181,8 +1193,14 @@ while running:
 
                 if command == 'exit':
                     pygame.quit()
+
                 if command == 'help':
-                    window_console.add_output_line_to_log(guide_text)
+                    window_console.add_output_line_to_log("-----------CONSOLE HELP-----------")
+                    window_console.add_output_line_to_log(help_console_text, is_bold=False)
+                    window_console.add_output_line_to_log("-----------GAME HELP-----------")
+                    window_console.add_output_line_to_log(guide_text, is_bold=False)
+
+
 
                 if command.startswith('exec '):
                     code = command[5:]
@@ -1272,6 +1290,7 @@ while running:
                         creating_repulsion = not creating_repulsion
                     elif selected_force_field_button == force_field_buttons[2]:
                         creating_force_ring = not creating_force_ring
+
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_f:
                 toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
@@ -1371,7 +1390,7 @@ while running:
 
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
-        debug_info_labels[2].set_text(f"Gravity: {len(space.gravity)}")
+        debug_info_labels[2].set_text(f"Threaded: {space.threaded}")
         debug_info_labels[3].set_text(f"cursor_pos: {world_mouse_pos}")
 
 
@@ -1395,6 +1414,7 @@ while running:
                 static_body, static_field_start, static_field_end, 10
             )
             static_field.friction = set_friction
+            static_field.elasticity = 0.5
             try:
                 space.add(static_field)
             except:
