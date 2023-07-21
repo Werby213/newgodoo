@@ -295,9 +295,9 @@ text_label_radius = pygame_gui.elements.UILabel(
 
 #SQUARE######################################################################################
 window_square = pygame_gui.elements.UIWindow(
-    pygame.Rect(200, 10, 300, 200),
+    pygame.Rect(200, 10, 400, 300),
     manager=gui_manager,
-    window_display_title="square settings"
+    window_display_title="Square settings"
 )
 square_image = pygame_gui.elements.UIImage(
     relative_rect=pygame.Rect(215, 5, 50, 50),
@@ -352,6 +352,56 @@ square_text_elasticity = pygame_gui.elements.UILabel(
     relative_rect=pygame.Rect(5, 75, 85, 20),
     text="elasticity:",
     container=window_square,
+    manager=gui_manager,
+)
+
+
+square_color = pygame_gui.elements.UIPanel(
+    relative_rect=pygame.Rect(5, 100, window_square.get_relative_rect().width-45, 100),
+    manager=gui_manager,
+    container=window_square,
+)
+
+square_color_red_input = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(90, 10, 150, 20),
+    start_value=force_field_radius,
+    value_range=(0, 255),
+    manager=gui_manager,
+    container=square_color,
+)
+text_square_red_color = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 10, 85, 20),
+    text="Red:",
+    container=square_color,
+    manager=gui_manager,
+)
+
+square_color_green_input = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(90, 30, 150, 20),
+    start_value=force_field_radius,
+    value_range=(0, 255),
+    container=square_color,
+    manager=gui_manager,
+)
+
+text_square_green_color = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 30, 85, 20),
+    text="Green:",
+    container=square_color,
+    manager=gui_manager,
+)
+
+square_color_blue_input = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(90, 50, 150, 20),
+    start_value=force_field_radius,
+    value_range=(0, 255),
+    container=square_color,
+    manager=gui_manager,
+)
+text_square_blue_color = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 50, 85, 20),
+    text="Blue:",
+    container=square_color,
     manager=gui_manager,
 )
 
@@ -515,7 +565,6 @@ polyhedron_text_elasticity = pygame_gui.elements.UILabel(
     container=window_polyhedron,
     manager=gui_manager,
 )
-
 # OTHER_GUI######################################################################################
 text_guide_gui = pygame_gui.elements.UITextBox(
     relative_rect=pygame.Rect(screen_width - 280, 150, 240, 300),
@@ -796,7 +845,7 @@ def spawn_circle(position):
     add_body_shape(body, shape)
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
 
-
+square_color_random = True
 def spawn_square(position):
     size = (float(square_size_input_x.get_text()), float(square_size_input_y.get_text()))
     points = [
@@ -816,7 +865,10 @@ def spawn_square(position):
     shape.friction = float(square_friction_input.get_text())
     shape.elasticity = float(square_elasticity_input.get_text())
     add_body_shape(body, shape)
-    shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
+    if square_color_random == True:
+        shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
+    else:
+        shape.color = (int(square_color_red_input.get_current_value()), int(square_color_green_input.get_current_value()), int(square_color_blue_input.get_current_value()), 255)
 
 
 
