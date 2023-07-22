@@ -52,7 +52,7 @@ screen_width, screen_height = 2440, 1600
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
-version = "Newgodoo a0.1.6"
+version = "Newgodoo a0.1.7"
 version_save = version
 pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 1
@@ -601,6 +601,7 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
 
 
 
+
 pause_icon_image = pygame.image.load("sprites/gui/pause.png").convert_alpha()
 pause_icon_rect = pygame.Rect(screen_width - 450, 10, 50, 50)
 
@@ -857,7 +858,7 @@ def spawn_square(position):
     mass = (size[0] * size[1]) / 200
     moment = pymunk.moment_for_box(
         mass, (2 * size[0], 2 * size[1])
-    )  # Calculate moment of inertia for a square
+    )
     body = pymunk.Body(mass, moment)
     body.position = position
     shape = pymunk.Poly(body, points)
@@ -940,9 +941,7 @@ def ring():
 
 object_dragging=None
 def object_drag():
-    global object_dragging
-
-
+    global object_dragging, key_space
     if key_space == False:
         if object_dragging is not None:
             object_dragging.velocity = (
@@ -952,6 +951,7 @@ def object_drag():
         if object_dragging is not None:
             object_dragging.position = world_mouse_pos
             object_dragging.velocity = (0, 0)
+
 
 # def object_drag():
 #     for body, shape in objects:
@@ -1091,6 +1091,22 @@ python_process = None
 output_str = None
 data_lock = None
 
+
+context_menu_window = pygame_gui.elements.UIPanel(
+    pygame.Rect(0, 0, 200, 300),
+    manager=gui_manager,
+)
+context_menu_list = pygame_gui.elements.UISelectionList(
+    relative_rect=pygame.Rect(0, 0, 200, 300),
+    item_list=['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8'],
+    container=context_menu_window
+)
+
+# for i in range(20):
+#     button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, i * 30), (200, 30)),
+#                                          text=f'Кнопка {i}',
+#                                          manager=gui_manager,
+#                                          container=scrolling_container)
 
 while running:
     screen.fill((20, 20, 20))
@@ -1323,6 +1339,7 @@ while running:
 
             if python_process.poll() is not None:
                 print('Python finished')
+                window_console.add_output_line_to_log('Python finished')
                 python_process = None
 
         elif event.type == pygame.KEYDOWN:
@@ -1529,7 +1546,22 @@ while running:
                     object_dragging.is_dragging = False
                     object_dragging = None
 
+        # Обработка событий правой кнопки мыши
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+            info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+            if info is not None:
+                if info.shape.body != static_body:
+                    context_menu_window.show()
+                    context_menu_window.set_position(position=event.pos)
 
+
+        # Закрытие панели контекстного меню при щелчке вне панели
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if not context_menu_window.rect.collidepoint(event.pos):
+                context_menu_window.hide()
+        if event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
+            selected_button_index = context_menu_list.selected_option
+            print(f"Selected button index: {selected_button_index}")
     if key_f_pressed:
         hold_time = pygame.time.get_ticks() - key_f_hold_start_time
         fill_fraction = min(hold_time / KEY_HOLD_TIME, 1.0)
