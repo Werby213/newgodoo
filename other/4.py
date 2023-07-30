@@ -195,7 +195,6 @@ def add_body_shape(body, shape):
     space.add(body, shape)
     objects.append((body, shape))
 
-@njit
 def update_rotation():
     global mouse_pos
     for body, shape in objects:
