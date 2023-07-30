@@ -693,17 +693,25 @@ delete_all_button = pygame_gui.elements.UIButton(
         text="Delete all",
         manager=gui_manager
 )
+debug_info = [
+    f"FPS: {round(clock.get_fps())}",
+    f"Entities: {len(space.bodies)}",
+    f"Gravity: {space.gravity}",
+    f"Threads: {space.threads}",
+    f"static_lines: {static_lines}",
+    f"Pygame version: {pygame.version.ver}",
+    f"Pymunk version: {pymunk.version}",
+    f"window: {pygame.display.get_window_size(), pygame.display.get_current_refresh_rate()}",
+    f"Mouse position: {pygame.mouse.get_pos()}",
+]
 
-
-
-debug_info_lines = debug_info.split('\n')
 debug_info_labels = []
 debug_y_pos = 10
 
-for line in debug_info_lines:
+for info in debug_info:
     label = pygame_gui.elements.UILabel(
-        relative_rect=pygame.Rect(screen_height+400, debug_y_pos, 300, 50),
-        text=line,
+        relative_rect=pygame.Rect(screen_height + 400, debug_y_pos, 300, 50),
+        text=info,
         manager=gui_manager,
     )
     debug_info_labels.append(label)
@@ -1553,8 +1561,10 @@ while running:
 
         debug_info_labels[0].set_text(f"FPS: {round(clock.get_fps())}")
         debug_info_labels[1].set_text(f"Entities: {len(space.bodies)}")
-        debug_info_labels[2].set_text(f"Threaded: {space.threaded}")
-        debug_info_labels[3].set_text(f"cursor_pos: {world_mouse_pos}")
+        debug_info_labels[2].set_text(f"Gravity: {space.gravity}")
+        debug_info_labels[3].set_text(f"Threads: {space.threads}")
+        debug_info_labels[4].set_text(f"static_lines: {static_lines}")  # Update static_lines accordingly
+        debug_info_labels[8].set_text(f"Mouse position: {pygame.mouse.get_pos()}")  # Update mouse position
 
 
         if key_f11_pressed:
