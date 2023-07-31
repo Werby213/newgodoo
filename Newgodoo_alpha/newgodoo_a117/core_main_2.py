@@ -849,7 +849,6 @@ def spawn_human(position):
     right_arm_shape = pymunk.Poly.create_rectangle(right_arm_body, (arm_width, arm_height))
     space.add(right_arm_body, right_arm_shape)
 
-    # Создание сочленений
     head_torso_joint = pymunk.PinJoint(head_body, torso_body, (0, head_radius), (0, torso_height / 2))
     space.add(head_torso_joint)
 
@@ -1113,7 +1112,7 @@ def load_data():
         if file_path:
             with open(file_path, "rb") as f:
                     data = pickle.load(f)
-            if len(data) == 7:
+            if len(data) == 6:
                 space, iterations, simulation_frequency, floor_friction, version_save, world_translation = data
                 print("Загрузка успешна.")
                 sound_save_done.play()
@@ -1254,7 +1253,7 @@ def draw_grid(screen, grid_size):
 
 camera_translation = (0, 0)
 while running:
-
+    screen.fill((20, 20, 20))
     time_delta = clock.tick(60) / 1000
 
     # Получить позицию курсора относительно мира игры
@@ -1415,8 +1414,6 @@ while running:
                     window_console.add_output_line_to_log("-----------GAME HELP-----------")
                     window_console.add_output_line_to_log(guide_text, is_bold=False)
 
-
-
                 if command.startswith('exec '):
                     code = command[5:]
                     try:
@@ -1489,7 +1486,7 @@ while running:
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                sound_close.play()
+                sound_pause.play()
                 window_settings.hide()
                 key_esc_pressed = not key_esc_pressed
             if event.key == pygame.K_F11:
@@ -1672,7 +1669,6 @@ while running:
 
             if event.key == pygame.K_SPACE:
                 sound_pause.play()
-
                 vis_pause_icon(show=not pause_icon_visible)
                 running_physics = not running_physics
                 key_space = not key_space
@@ -1812,7 +1808,7 @@ while running:
         body = line.body
         pv1 = body.position + line.a.rotated(body.angle)
         pv2 = body.position + line.b.rotated(body.angle)
-    screen.fill((20, 20, 20))
+
     gui_manager.process_events(event)
     gui_manager.update(time_delta)
     space.debug_draw(draw_options)

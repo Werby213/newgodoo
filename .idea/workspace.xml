@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added spiral and freeze force fields">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="fixed delete key function, added settings menu (WIP)">
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main_2.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main_2.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
@@ -162,9 +161,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.core_main_2" />
-        <item itemvalue="Python.test" />
-        <item itemvalue="Python.core_main" />
         <item itemvalue="Python.newgodoo a116" />
+        <item itemvalue="Python.core_main" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.1" />
       </list>
     </recent_temporary>
@@ -452,11 +451,18 @@
       <option name="project" value="LOCAL" />
       <updated>1690778005731</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="fixed delete key function, added settings menu (WIP)">
+      <option name="closed" value="true" />
+      <created>1690795250114</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1690795250114</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="force field UI choice fixed" />
     <MESSAGE value="added force field UI images button" />
     <MESSAGE value="04.07.23" />
     <MESSAGE value="show and hide UI elements functions added" />
@@ -481,6 +487,7 @@
     <MESSAGE value="fixed &quot;ring&quot; force field, added last spawned object remove on Z button, fixed triangle shape generation, added mass calculation for polyhedron, esc menu (settings) development started." />
     <MESSAGE value="debug info updated" />
     <MESSAGE value="added spiral and freeze force fields" />
-    <option name="LAST_COMMIT_MESSAGE" value="added spiral and freeze force fields" />
+    <MESSAGE value="fixed delete key function, added settings menu (WIP)" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed delete key function, added settings menu (WIP)" />
   </component>
 </project>
