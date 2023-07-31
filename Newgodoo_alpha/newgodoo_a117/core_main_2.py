@@ -67,6 +67,7 @@ show_guide = True
 fullscreen = False
 use_system_dpi = False
 key_f11_pressed = False
+key_esc_pressed = False
 screen_width, screen_height = 2560, 1400
 
 pygame.init()
@@ -115,7 +116,7 @@ space.add(floor)
 
 space.threads = os.cpu_count()
 space.threaded = False
-
+center_button = False
 static_lines = []
 line_point1 = None
 selected_shape = None
@@ -321,9 +322,6 @@ hertz_slider = pygame_gui.elements.UIHorizontalSlider(
     container=window_settings
 )
 
-
-
-# Выбор темы оформления в формате JSON для библиотеки pygame_gui
 theme_options = ["theme_light.json", "theme_dark.json", "theme_custom.json"]
 theme_dropdown = UIDropDownMenu(theme_options, "option 0", relative_rect=pygame.Rect(50, 200, 400, 50),
                           manager=gui_manager, container=window_settings, expansion_height_limit=100)
@@ -661,11 +659,6 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
     manager=gui_manager,
 )
 
-
-
-
-
-
 pause_icon_image = pygame.image.load("sprites/gui/pause.png").convert_alpha()
 pause_icon_rect = pygame.Rect(screen_width - 450, 10, 50, 50)
 
@@ -674,9 +667,6 @@ pause_icon = pygame_gui.elements.UIImage(
     image_surface=pause_icon_image,
     manager=gui_manager
 )
-
-
-
 
 
 # FRICTION######################################################################
@@ -1033,9 +1023,9 @@ def spiral():
         if num_bodies == 0:
             return
 
-        spiral_radius = 50  # Radius of the initial spiral
-        spiral_spacing = 10  # Spacing between the objects in the spiral
-        angle_increment = math.pi / 10  # Angle increment for each object in the spiral
+        spiral_radius = 50
+        spiral_spacing = force_field_radius/100
+        angle_increment = math.pi / 10
 
         angle = 0
 
@@ -1250,6 +1240,10 @@ context_menu_window.hide()
 #                                          text=f'Кнопка {i}',
 #                                          manager=gui_manager,
 #                                          container=scrolling_container)
+camera_x = 0
+camera_y = 0
+mouse_x_start_pos = 0
+mouse_y_start_pos = 0
 
 def draw_grid(screen, grid_size):
     color = pygame.Color("gray")
@@ -1496,7 +1490,8 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 sound_close.play()
-                pygame.quit()
+                window_settings.hide()
+                key_esc_pressed = not key_esc_pressed
             if event.key == pygame.K_F11:
                 sound_close.play()
                 key_f11_pressed = True
@@ -1625,7 +1620,8 @@ while running:
         debug_info_labels[4].set_text(f"static_lines: {static_lines}")  # Update static_lines accordingly
         debug_info_labels[8].set_text(f"Mouse position: {pygame.mouse.get_pos()}")  # Update mouse position
 
-
+        if key_esc_pressed:
+            window_settings.show()
         if key_f11_pressed:
             fullscreen = not fullscreen
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
@@ -1671,9 +1667,8 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DELETE:
                 info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
-                if info is not None and info.shape in [obj[1] for obj in space.bodies]:
+                if info is not None:
                     space.remove(info.shape)
-                    space.bodies = [(body, shape) for body, shape in space.bodies if shape != info.shape]
 
             if event.key == pygame.K_SPACE:
                 sound_pause.play()
@@ -1700,12 +1695,21 @@ while running:
         #            if info.shape.body != static_body:
         #                selected_body = info.shape.body
         # elif event.type == pygame.KEYUP:
-        #     if event.key == pygame.K_j:
+        #     if event.key == pygame.K_j:+
         #         if selected_body is not None:
         #             selected_body.is_dragging = False
         #             selected_body = None
         #             create_spring(selected_body, selected_body)
 
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 2:
+                center_button = True
+                mouse_x_start_pos, mouse_y_start_pos = world_mouse_pos
+
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 2:
+                mouse_x_start_pos, mouse_y_start_pos = world_mouse_pos
+                center_button = False
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
@@ -1720,7 +1724,6 @@ while running:
                     object_dragging.is_dragging = False
                     object_dragging = None
 
-        # Обработка событий правой кнопки мыши
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
             info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
             if info is not None:
@@ -1734,7 +1737,10 @@ while running:
         if event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
             selected_button_index = context_menu_list.selected_option
             print(f"Selected button index: {selected_button_index}")
-
+        if center_button or (event.type == pygame.MOUSEMOTION and event.buttons[1] == 1):
+            if event.type == pygame.MOUSEMOTION:
+                translation = translation.translated(world_mouse_pos[0] - (screen_width / 2),
+                                                     world_mouse_pos[1] - (screen_height / 2))
     if key_f_pressed:
         hold_time = pygame.time.get_ticks() - key_f_hold_start_time
         fill_fraction = min(hold_time / KEY_HOLD_TIME, 1.0)
