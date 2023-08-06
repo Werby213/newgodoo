@@ -71,7 +71,7 @@ key_esc_pressed = False
 screen_width, screen_height = 2560, 1400
 
 pygame.init()
-pygame.display.set_icon(pygame.image.load("../newgodoo_a118/laydigital.png"))
+pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 version = "Newgodoo a0.1.7"
 version_save = version
@@ -149,7 +149,7 @@ force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
 # Инициализация gui Manager
-theme_path = '../newgodoo_a118/theme.json'
+theme_path = 'theme.json'
 gui_manager = pygame_gui.UIManager((screen_width, screen_height), theme_path)
 
 clock = pygame.time.Clock()
@@ -681,7 +681,7 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
     manager=gui_manager,
 )
 
-pause_icon_image = pygame.image.load("../newgodoo_a118/sprites/gui/pause.png").convert_alpha()
+pause_icon_image = pygame.image.load("sprites/gui/pause.png").convert_alpha()
 pause_icon_rect = pygame.Rect(screen_width - 450, 10, 50, 50)
 
 pause_icon = pygame_gui.elements.UIImage(
@@ -1173,23 +1173,23 @@ scaling = 1
 rotation = 0
 
 
-sound_click = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click.mp3")
-sound_click_2 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click_2.mp3")
-sound_click_3 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click_3.mp3")
-sound_click_4 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click_4.mp3")
-sound_hovering = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/hovering.mp3")
-sound_error = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/error.mp3")
-sound_spawn = pygame.mixer.Sound("../newgodoo_a118/sounds/spawn.mp3")
-sound_slider = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/slider.mp3")
-sound_beep_1 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/beep_1.mp3")
-sound_pause = pygame.mixer.Sound("../newgodoo_a118/sounds/pause.mp3")
-sound_pause_in = pygame.mixer.Sound("../newgodoo_a118/sounds/pause_in.mp3")
-sound_close = pygame.mixer.Sound("../newgodoo_a118/sounds/close.mp3")
-sound_settings = pygame.mixer.Sound("../newgodoo_a118/sounds/pause_in.mp3")
-sound_screenshot = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/screenshot.mp3")
+sound_click = pygame.mixer.Sound("sounds/gui/click.mp3")
+sound_click_2 = pygame.mixer.Sound("sounds/gui/click_2.mp3")
+sound_click_3 = pygame.mixer.Sound("sounds/gui/click_3.mp3")
+sound_click_4 = pygame.mixer.Sound("sounds/gui/click_4.mp3")
+sound_hovering = pygame.mixer.Sound("sounds/gui/hovering.mp3")
+sound_error = pygame.mixer.Sound("sounds/gui/error.mp3")
+sound_spawn = pygame.mixer.Sound("sounds/spawn.mp3")
+sound_slider = pygame.mixer.Sound("sounds/gui/slider.mp3")
+sound_beep_1 = pygame.mixer.Sound("sounds/gui/beep_1.mp3")
+sound_pause = pygame.mixer.Sound("sounds/pause.mp3")
+sound_pause_in = pygame.mixer.Sound("sounds/pause_in.mp3")
+sound_close = pygame.mixer.Sound("sounds/close.mp3")
+sound_settings = pygame.mixer.Sound("sounds/pause_in.mp3")
+sound_screenshot = pygame.mixer.Sound("sounds/gui/screenshot.mp3")
 
-sound_save_done = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/save_done.mp3")
-sound_load_error = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/save_error.mp3")
+sound_save_done = pygame.mixer.Sound("sounds/gui/save_done.mp3")
+sound_load_error = pygame.mixer.Sound("sounds/gui/save_error.mp3")
 
 sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
