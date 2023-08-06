@@ -193,8 +193,8 @@ running_physics = True
 
 
 
-checkrectangle_true_texture = "sprites/gui/checkbox_true.png"
-checkrectangle_false_texture = "sprites/gui/checkbox_false.png"
+checkbox_true_texture = "sprites/gui/checkbox_true.png"
+checkbox_false_texture = "sprites/gui/checkbox_false.png"
 
 
 
@@ -484,14 +484,14 @@ rectangle_color_mode_button = pygame_gui.elements.UIButton(
 )
 rectangle_color_mode_checkbox_image = pygame_gui.elements.UIImage(
     relative_rect=pygame.Rect(rectangle_color_mode_button.get_relative_rect().width, 2, 35, 35),
-    image_surface=pygame.image.load(checkrectangle_true_texture),
+    image_surface=pygame.image.load(checkbox_true_texture),
     container=rectangle_color_mode_checkbox,
     manager=gui_manager
 )
 
 #CIRCLE######################################################################################
 window_circle = pygame_gui.elements.UIWindow(
-    pygame.Rect(200, 10, 300, 200),
+    pygame.Rect(200, 10, 400, 300),
     manager=gui_manager,
     window_display_title="circle settings"
 )
@@ -538,9 +538,80 @@ circle_text_elasticity = pygame_gui.elements.UILabel(
     container=window_circle,
     manager=gui_manager,
 )
+
+
+circle_color = pygame_gui.elements.UIPanel(
+    relative_rect=pygame.Rect(5, 100, window_rectangle.get_relative_rect().width-45, 130),
+    manager=gui_manager,
+    container=window_circle,
+)
+circle_color_red_input = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(90, 10, 150, 20),
+    start_value=force_field_radius,
+    value_range=(0, 255),
+    manager=gui_manager,
+    container=circle_color,
+)
+text_circle_red_color = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 10, 85, 20),
+    text="Red:",
+    container=circle_color,
+    manager=gui_manager,
+)
+
+circle_color_green_input = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(90, 30, 150, 20),
+    start_value=force_field_radius,
+    value_range=(0, 255),
+    container=circle_color,
+    manager=gui_manager,
+)
+
+text_circle_green_color = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 30, 85, 20),
+    text="Green:",
+    container=circle_color,
+    manager=gui_manager,
+)
+
+circle_color_blue_input = pygame_gui.elements.UIHorizontalSlider(
+    relative_rect=pygame.Rect(90, 50, 150, 20),
+    start_value=force_field_radius,
+    value_range=(0, 255),
+    container=circle_color,
+    manager=gui_manager,
+)
+text_circle_blue_color = pygame_gui.elements.UILabel(
+    relative_rect=pygame.Rect(5, 50, 85, 20),
+    text="Blue:",
+    container=circle_color,
+    manager=gui_manager,
+)
+
+
+
+
+circle_color_mode = True
+circle_color_mode_checkbox = pygame_gui.elements.UIPanel(
+    relative_rect=pygame.Rect(5, 75, 130, 45),
+    manager=gui_manager,
+    container=circle_color,
+)
+circle_color_mode_button = pygame_gui.elements.UIButton(
+    relative_rect=pygame.Rect(-1, -1, 85, 40),
+    manager=gui_manager,
+    container=circle_color_mode_checkbox,
+    text="random"
+)
+circle_color_mode_checkbox_image = pygame_gui.elements.UIImage(
+    relative_rect=pygame.Rect(circle_color_mode_button.get_relative_rect().width, 2, 35, 35),
+    image_surface=pygame.image.load(checkbox_true_texture),
+    container=circle_color_mode_checkbox,
+    manager=gui_manager
+)
 #TRIANGLE##########################################
 window_triangle = pygame_gui.elements.UIWindow(
-    pygame.Rect(200, 10, 300, 200),
+    pygame.Rect(200, 10, 400, 300),
     manager=gui_manager,
     window_display_title="triangle settings"
 )
@@ -590,7 +661,7 @@ triangle_text_elasticity = pygame_gui.elements.UILabel(
 
 #POLYHENDRON##########################################################
 window_polyhedron = pygame_gui.elements.UIWindow(
-    pygame.Rect(200, 10, 300, 200),
+    pygame.Rect(200, 10, 400, 300),
     manager=gui_manager,
     window_display_title="polyhedron settings"
 )
@@ -920,6 +991,7 @@ def spawn_polyhedron(position):
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
     space.add(body, shape)
 
+circle_color_random = True
 def spawn_circle(position):
     radius = float(circle_radius_input.get_text())
     mass = radius * math.pi / 10
@@ -933,7 +1005,12 @@ def spawn_circle(position):
     shape.friction = float(circle_friction_input.get_text())
     shape.elasticity = float(circle_elasticity_input.get_text())
     space.add(body, shape)
-    shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
+    if circle_color_random == True:
+        shape.color = (random.randrange(100, 255), random.randrange(100, 255), random.randrange(100, 255), 255)
+    else:
+        shape.color = (
+        int(circle_color_red_input.get_current_value()), int(circle_color_green_input.get_current_value()),
+        int(circle_color_blue_input.get_current_value()), 255)
 
 rectangle_color_random = True
 def spawn_rectangle(position):
@@ -1315,6 +1392,38 @@ while running:
                 python_process.stdin.flush()
 
             else:
+                if command.startswith('soft '):
+                    def add_ball(space):
+                        mass = 10
+                        radius = 25
+                        moment = pymunk.moment_for_circle(mass, 0, radius)
+                        body = pymunk.Body(mass, moment)
+                        x = random.randint(radius, 100 - radius)
+                        body.position = x, 100 - radius
+
+                        shape = pymunk.Circle(body, radius)
+                        shape.friction = 1
+                        space.add(body, shape)
+                        return shape
+
+
+                    def add_spring(space, body_a, body_b):
+                        stiffness = 300
+                        damping = 20
+                        rest_length = 200
+
+                        spring = pymunk.DampedSpring(body_a, body_b, (0, 0), (0, 0), rest_length, stiffness, damping)
+                        space.add(spring)
+
+                    try:
+                        balls = [add_ball(space) for _ in range(int(command[5:]))]
+
+                        for i in range(len(balls)):
+                            for j in range(i + 1, len(balls)):
+                                add_spring(space, balls[i].body, balls[j].body)
+                    except Exception as e:
+                        window_console.add_output_line_to_log(e)
+                        pass
                 if command == 'exit':
                     pygame.quit()
 
@@ -1427,19 +1536,31 @@ while running:
                 key_f_hold_start_time = 0
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
-
                 sound_hovering.play()
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 #random color checkbox
                 if event.ui_element == rectangle_color_mode_button:
+                    sound_click_3.play()
                     rectangle_color_random = False
                     rectangle_color_mode_checkbox_image.set_image(
-                        new_image=pygame.image.load(checkrectangle_false_texture))
+                        new_image=pygame.image.load(checkbox_false_texture))
                     rectangle_color_mode = not rectangle_color_mode
                     if rectangle_color_mode == True:
+                        sound_click_3.play()
                         rectangle_color_random = True
                         rectangle_color_mode_checkbox_image.set_image(
-                            new_image=pygame.image.load(checkrectangle_true_texture))
+                            new_image=pygame.image.load(checkbox_true_texture))
+                if event.ui_element == circle_color_mode_button:
+                    sound_click_3.play()
+                    circle_color_random = False
+                    circle_color_mode_checkbox_image.set_image(
+                        new_image=pygame.image.load(checkbox_false_texture))
+                    circle_color_mode = not circle_color_mode
+                    if circle_color_mode == True:
+                        sound_click_3.play()
+                        circle_color_random = True
+                        circle_color_mode_checkbox_image.set_image(
+                            new_image=pygame.image.load(checkbox_true_texture))
                 if event.ui_element == save_world_button:
                     sound_click.play()
                     save_data(space, space.iterations, simulation_frequency, floor.friction, version_save, world_translation)
@@ -1651,7 +1772,12 @@ while running:
                 if info.shape.body != static_body:
                     context_menu_window.show()
                     context_menu_window.set_position(position=event.pos)
-
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 4:  # Mouse wheel scroll-up
+                scaling += 0.1 * scaling
+                scaling += zoom_speed
+            elif event.button == 5:  # Mouse wheel scroll-down
+                scaling -= 0.1 * scaling
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if not context_menu_window.rect.collidepoint(event.pos):
                 context_menu_window.hide()
@@ -1700,7 +1826,6 @@ while running:
 
     scaling *= 1 + (zoom_speed * zoom_in - zoom_speed * zoom_out)
     rotation += rotation_speed * rotate_left - rotation_speed * rotate_right
-
 
     #fps_debug = f1.render(
     #    "FPS: "

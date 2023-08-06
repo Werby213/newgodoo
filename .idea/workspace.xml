@@ -4,49 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/sprites/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/core_main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/laydigital.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/close.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/beep_1.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/beep_2.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click_2.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click_3.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click_4.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/error.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/hovering.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/save_done.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/save_error.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/screenshot.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/settings_menu_open.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/slider.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/pause.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/pause_in.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/spawn.mp3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/checkbox_false.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/checkbox_true.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/attraction.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/repulsion.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/ring.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/spiral.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/pause.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/circle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/placeholder.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/polyhedron.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/rectangle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/spam.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/triangle.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/theme.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/unispace bd.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/test1/1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/test1/2.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dpg.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/newgodoo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/newgodoo.iml" afterDir="false" />
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added checkbox to rectangle color settings">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" afterDir="false" />
     </list>
@@ -550,11 +508,26 @@
       <option name="project" value="LOCAL" />
       <updated>1690862645845</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="added checkbox to rectangle color settings">
+      <option name="closed" value="true" />
+      <created>1691336026254</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1691336026254</updated>
+    </task>
+    <task id="LOCAL-00039" summary="added checkbox to rectangle color settings">
+      <option name="closed" value="true" />
+      <created>1691336133964</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1691336133964</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="show and hide UI elements functions added" />
     <MESSAGE value="triangle settings added" />
     <MESSAGE value="05.07.23" />
     <MESSAGE value="pause icon added" />
@@ -579,6 +552,7 @@
     <MESSAGE value="fixed delete key function, added settings menu (WIP)" />
     <MESSAGE value="something" />
     <MESSAGE value="1.1.7" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.1.7" />
+    <MESSAGE value="added checkbox to rectangle color settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="added checkbox to rectangle color settings" />
   </component>
 </project>
