@@ -71,7 +71,7 @@ key_esc_pressed = False
 screen_width, screen_height = 2560, 1400
 
 pygame.init()
-pygame.display.set_icon(pygame.image.load("laydigital.png"))
+pygame.display.set_icon(pygame.image.load("../newgodoo_a118/laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
 version = "Newgodoo a0.1.7"
 version_save = version
@@ -108,7 +108,7 @@ space.threads = os.cpu_count()
 space.iterations = 256
 simulation_frequency = 60
 static_body = space.static_body
-vertices = [(-10000, screen_height - 100), (-10000, screen_height), (10000, screen_height), (10000, screen_height - 100)]
+vertices = [(-10000, screen_height - 500), (-10000, screen_height), (10000, screen_height), (10000, screen_height - 500)]
 floor = pymunk.Poly(static_body, vertices)
 floor.friction = 1.0
 floor.elasticity = 0.5
@@ -149,7 +149,7 @@ force_field_strength = 500  # Сила притяжения поля
 force_field_radius = 500  # Радиус действия поля
 
 # Инициализация gui Manager
-theme_path = './theme.json'
+theme_path = '../newgodoo_a118/theme.json'
 gui_manager = pygame_gui.UIManager((screen_width, screen_height), theme_path)
 
 clock = pygame.time.Clock()
@@ -193,8 +193,8 @@ running_physics = True
 
 
 
-checkrectangle_true_texture = "sprites/gui/checkrectangle_true.png"
-checkrectangle_false_texture = "sprites/gui/checkrectangle_false.png"
+checkrectangle_true_texture = "sprites/gui/checkbox_true.png"
+checkrectangle_false_texture = "sprites/gui/checkbox_false.png"
 
 
 
@@ -298,8 +298,6 @@ window_settings = pygame_gui.elements.UIWindow(
     window_display_title="Settings"
 )
 window_settings.hide()
-
-
 
 resolution_options = ["800x600", "1024x768", "1280x720", "1920x1080"]
 resolution_dropdown = pygame_gui.elements.UIDropDownMenu(
@@ -419,10 +417,12 @@ rectangle_text_elasticity = pygame_gui.elements.UILabel(
 
 
 rectangle_color = pygame_gui.elements.UIPanel(
-    relative_rect=pygame.Rect(5, 100, window_rectangle.get_relative_rect().width-45, 100),
+    relative_rect=pygame.Rect(5, 100, window_rectangle.get_relative_rect().width-45, 130),
     manager=gui_manager,
     container=window_rectangle,
 )
+
+
 
 rectangle_color_red_input = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=pygame.Rect(90, 10, 150, 20),
@@ -465,6 +465,28 @@ text_rectangle_blue_color = pygame_gui.elements.UILabel(
     text="Blue:",
     container=rectangle_color,
     manager=gui_manager,
+)
+
+
+
+
+rectangle_color_mode = True
+rectangle_color_mode_checkbox = pygame_gui.elements.UIPanel(
+    relative_rect=pygame.Rect(5, 75, 130, 45),
+    manager=gui_manager,
+    container=rectangle_color,
+)
+rectangle_color_mode_button = pygame_gui.elements.UIButton(
+    relative_rect=pygame.Rect(-1, -1, 85, 40),
+    manager=gui_manager,
+    container=rectangle_color_mode_checkbox,
+    text="random"
+)
+rectangle_color_mode_checkbox_image = pygame_gui.elements.UIImage(
+    relative_rect=pygame.Rect(rectangle_color_mode_button.get_relative_rect().width, 2, 35, 35),
+    image_surface=pygame.image.load(checkrectangle_true_texture),
+    container=rectangle_color_mode_checkbox,
+    manager=gui_manager
 )
 
 #CIRCLE######################################################################################
@@ -659,7 +681,7 @@ text_simulation_frequency = pygame_gui.elements.UILabel(
     manager=gui_manager,
 )
 
-pause_icon_image = pygame.image.load("sprites/gui/pause.png").convert_alpha()
+pause_icon_image = pygame.image.load("../newgodoo_a118/sprites/gui/pause.png").convert_alpha()
 pause_icon_rect = pygame.Rect(screen_width - 450, 10, 50, 50)
 
 pause_icon = pygame_gui.elements.UIImage(
@@ -778,13 +800,13 @@ def toolset_force_field():
 def random_spam(position):
     for i in range(100):
         if random.randrange(0, 15) == 1:
-            spawn_circle(position)
+            spawn_circle((position[0]+random.randrange(-150,150), position[1]+random.randrange(-150,150)))
         if random.randrange(0, 15) == 1:
-            spawn_rectangle(position)
+            spawn_rectangle((position[0]+random.randrange(-150,150), position[1]+random.randrange(-150,150)))
         if random.randrange(0, 15) == 1:
-            spawn_triangle(position)
+            spawn_triangle((position[0]+random.randrange(-150,150), position[1]+random.randrange(-150,150)))
         if random.randrange(0, 15) == 1:
-            spawn_polyhedron(position)
+            spawn_polyhedron((position[0]+random.randrange(-150,150), position[1]+random.randrange(-150,150)))
 
 
 def spawn_random(position):
@@ -865,6 +887,8 @@ def spawn_human(position):
     right_arm_torso_joint = pymunk.PinJoint(right_arm_body, torso_body, (0, arm_height / 2), (torso_width / 2, 0))
     space.add(right_arm_torso_joint)
 
+spawn_duration = 1.0  # Продолжительность анимации появления в секундах
+spawn_timer = 0.0
 def spawn_polyhedron(position):
     tooth_angle = 2 * math.pi / int(polyhedron_faces_input.get_text())
     radius = float(polyhedron_size_input.get_text())
@@ -895,7 +919,6 @@ def spawn_polyhedron(position):
     shape.elasticity = float(polyhedron_elasticity_input.get_text())
     shape.color = (random.randrange(100,255), random.randrange(100,255), random.randrange(100,255), 255)
     space.add(body, shape)
-
 
 def spawn_circle(position):
     radius = float(circle_radius_input.get_text())
@@ -1150,23 +1173,23 @@ scaling = 1
 rotation = 0
 
 
-sound_click = pygame.mixer.Sound("sounds/gui/click.mp3")
-sound_click_2 = pygame.mixer.Sound("sounds/gui/click_2.mp3")
-sound_click_3 = pygame.mixer.Sound("sounds/gui/click_3.mp3")
-sound_click_4 = pygame.mixer.Sound("sounds/gui/click_4.mp3")
-sound_hovering = pygame.mixer.Sound("sounds/gui/hovering.mp3")
-sound_error = pygame.mixer.Sound("sounds/gui/error.mp3")
-sound_spawn = pygame.mixer.Sound("sounds/spawn.mp3")
-sound_slider = pygame.mixer.Sound("sounds/gui/slider.mp3")
-sound_beep_1 = pygame.mixer.Sound("sounds/gui/beep_1.mp3")
-sound_pause = pygame.mixer.Sound("sounds/pause.mp3")
-sound_pause_in = pygame.mixer.Sound("sounds/pause_in.mp3")
-sound_close = pygame.mixer.Sound("sounds/close.mp3")
-sound_settings = pygame.mixer.Sound("sounds/pause_in.mp3")
-sound_screenshot = pygame.mixer.Sound("sounds/gui/screenshot.mp3")
+sound_click = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click.mp3")
+sound_click_2 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click_2.mp3")
+sound_click_3 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click_3.mp3")
+sound_click_4 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/click_4.mp3")
+sound_hovering = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/hovering.mp3")
+sound_error = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/error.mp3")
+sound_spawn = pygame.mixer.Sound("../newgodoo_a118/sounds/spawn.mp3")
+sound_slider = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/slider.mp3")
+sound_beep_1 = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/beep_1.mp3")
+sound_pause = pygame.mixer.Sound("../newgodoo_a118/sounds/pause.mp3")
+sound_pause_in = pygame.mixer.Sound("../newgodoo_a118/sounds/pause_in.mp3")
+sound_close = pygame.mixer.Sound("../newgodoo_a118/sounds/close.mp3")
+sound_settings = pygame.mixer.Sound("../newgodoo_a118/sounds/pause_in.mp3")
+sound_screenshot = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/screenshot.mp3")
 
-sound_save_done = pygame.mixer.Sound("sounds/gui/save_done.mp3")
-sound_load_error = pygame.mixer.Sound("sounds/gui/save_error.mp3")
+sound_save_done = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/save_done.mp3")
+sound_load_error = pygame.mixer.Sound("../newgodoo_a118/sounds/gui/save_error.mp3")
 
 sound_beep_1.set_volume(0.2)
 sound_spawn.set_volume(0.2)
@@ -1292,120 +1315,6 @@ while running:
                 python_process.stdin.flush()
 
             else:
-                if command == "web":
-                    simulation_frequency = 120
-                    space.gravity = 0, -900
-                    space.damping = 0.5
-                    web_group = 1
-                    bs = []
-                    dist = 0.5
-                    c = Vec2d(world_mouse_pos[0], world_mouse_pos[1])
-                    cb = pymunk.Body(1, 1)
-                    cb.position = c
-                    s = pymunk.Circle(cb, 15)  # to have something to grab
-                    s.filter = pymunk.ShapeFilter(group=web_group)
-                    s.ignore_draw = True
-                    space.add(cb, s)
-
-                    # generate each crossing in the net
-                    for x in range(0, 101):
-                        b = pymunk.Body(1, 1)
-                        v = Vec2d(1, 0).rotated_degrees(x * 18)
-                        scale = screen_height / 2.0 / 6.0 * 0.5
-
-                        dist += 1 / 18.0
-                        dist = dist ** 1.005
-
-                        offset = 100.0
-                        offset = [0.0, -0.80, -1.0, -0.80][((x * 18) % 360) // 18 % 4]
-                        offset = 0.8 + offset
-
-                        offset *= dist ** 2.8 / 100.0
-
-                        v = v.scale_to_length(scale * (dist + offset))
-
-                        b.position = c + v
-                        s = pymunk.Circle(b, 15)
-                        s.filter = pymunk.ShapeFilter(group=web_group)
-                        s.ignore_draw = True
-                        space.add(b, s)
-                        bs.append(b)
-
-
-                    def add_joint(a, b):
-                        rl = a.position.get_distance(b.position) * 0.9
-                        stiffness = 5000.0
-                        damping = 100
-                        j = pymunk.DampedSpring(a, b, (0, 0), (0, 0), rl, stiffness, damping)
-                        j.max_bias = 1000
-                        # j.max_force = 50000
-                        space.add(j)
-
-
-                    for b in bs[:20]:
-                        add_joint(cb, b)
-
-                    for i in range(len(bs) - 1):
-                        add_joint(bs[i], bs[i + 1])
-
-                        i2 = i + 20
-                        if len(bs) > i2:
-                            add_joint(bs[i], bs[i2])
-
-                    ### WEB ATTACH POINTS
-                    static_bs = []
-                    for b in bs[-17::4]:
-                        static_body = pymunk.Body(body_type=pymunk.Body.STATIC)
-                        static_body.position = b.position
-                        static_bs.append(static_body)
-
-                        # j = pymunk.PivotJoint(static_body, b, static_body.position)
-                        j = pymunk.DampedSpring(static_body, b, (0, 0), (0, 0), 0, 0, 0)
-                        j.damping = 100
-                        j.stiffness = 20000
-                        space.add(j)
-
-                if command == 'planet':
-                    gravityStrength = 5.0e6
-                    def planetGravity(body, gravity, damping, dt):
-                        # Gravitational acceleration is proportional to the inverse rectangle of
-                        # distance, and directed toward the origin. The central planet is assumed
-                        # to be massive enough that it affects the satellites but not vice versa.
-                        sq_dist = body.position.get_dist_sqrd((300, 300))
-                        g = (
-                                (body.position - pymunk.Vec2d(300, 300))
-                                * -gravityStrength
-                                / (sq_dist * math.sqrt(sq_dist))
-                        )
-                        pymunk.Body.update_velocity(body, g, damping, dt)
-
-
-                    def add_rectangle(space):
-                        body = pymunk.Body()
-                        body.position = pymunk.Vec2d(random.randint(50, 550), random.randint(50, 550))
-                        body.velocity_func = planetGravity
-
-                        # Set the rectangle's velocity to put it into a circular orbit from its
-                        # starting position.
-                        r = body.position.get_distance((300, 300))
-                        v = math.sqrt(gravityStrength / r) / r
-                        body.velocity = (body.position - pymunk.Vec2d(300, 300)).perpendicular() * v
-                        # Set the rectangle's angular velocity to match its orbital period and
-                        # align its initial angle with its position.
-                        body.angular_velocity = v
-                        body.angle = math.atan2(body.position.y, body.position.x)
-
-                        rectangle = pymunk.Poly.create_rectangle(body, size=(10, 10))
-                        rectangle.mass = 1
-                        rectangle.friction = 0.7
-                        rectangle.elasticity = 0
-                        rectangle.color = pygame.Color("white")
-                        space.add(body, rectangle)
-
-
-                    for x in range(30):
-                        add_rectangle(space)
-
                 if command == 'exit':
                     pygame.quit()
 
@@ -1521,7 +1430,16 @@ while running:
 
                 sound_hovering.play()
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-
+                #random color checkbox
+                if event.ui_element == rectangle_color_mode_button:
+                    rectangle_color_random = False
+                    rectangle_color_mode_checkbox_image.set_image(
+                        new_image=pygame.image.load(checkrectangle_false_texture))
+                    rectangle_color_mode = not rectangle_color_mode
+                    if rectangle_color_mode == True:
+                        rectangle_color_random = True
+                        rectangle_color_mode_checkbox_image.set_image(
+                            new_image=pygame.image.load(checkrectangle_true_texture))
                 if event.ui_element == save_world_button:
                     sound_click.play()
                     save_data(space, space.iterations, simulation_frequency, floor.friction, version_save, world_translation)
