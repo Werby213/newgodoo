@@ -1796,10 +1796,14 @@ while running:
         if event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
             selected_button_index = context_menu_list.selected_option
             print(f"Selected button index: {selected_button_index}")
+
+
         if center_button or (event.type == pygame.MOUSEMOTION and event.buttons[1] == 1):
             if event.type == pygame.MOUSEMOTION:
-                translation = translation.translated(world_mouse_pos[0] - (screen_width / 2),
-                                                     world_mouse_pos[1] - (screen_height / 2))
+                translation = translation.translated(world_mouse_pos[0] - mouse_x_start_pos,
+                                                     world_mouse_pos[1] - mouse_y_start_pos)
+
+
     if key_f_pressed:
         hold_time = pygame.time.get_ticks() - key_f_hold_start_time
         fill_fraction = min(hold_time / KEY_HOLD_TIME, 1.0)
