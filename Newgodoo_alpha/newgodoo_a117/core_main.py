@@ -157,7 +157,9 @@ clock = pygame.time.Clock()
 shift_speed = 1
 KEY_HOLD_TIME = 1000  #в миллисекундах
 key_f_pressed = False
+key_z_pressed = False
 key_f_hold_start_time = 0
+key_z_hold_start_time = 0
 
 # Создание кнопок для спавна предметов
 spawn_buttons = []
@@ -1353,6 +1355,10 @@ def draw_grid(screen, grid_size):
         pygame.draw.line(screen, color, (0, y - translation[1]), (int(screen.get_width()), y - translation[1]))
 
 camera_translation = (0, 0)
+
+target_scaling = scaling
+smoothness = 0.25
+
 while running:
     screen.fill((20, 20, 20))
     time_delta = clock.tick(60) / 1000
@@ -1670,6 +1676,8 @@ while running:
         if event.type == pygame.KEYUP and event.key == pygame.K_RSHIFT:
             shift_speed = 1
         if event.type == pygame.KEYDOWN and event.key == pygame.K_z:
+            key_z_pressed = True
+            key_z_hold_start_time = pygame.time.get_ticks()
             if shift_speed > 1:
                 num_bodies -= 1
                 for i in range(5):
@@ -1685,7 +1693,9 @@ while running:
                         space.remove(shape)
                     space.remove(last_body)
                     num_bodies -= 1
-
+        if event.type == pygame.KEYUP and event.key == pygame.K_z:
+            key_z_pressed = False
+            key_z_hold_start_time = 0
         if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
             sound_click_3.play()
             static_field_start = world_mouse_pos
@@ -1773,11 +1783,10 @@ while running:
                     context_menu_window.show()
                     context_menu_window.set_position(position=event.pos)
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 4:  # Mouse wheel scroll-up
-                scaling += 0.1 * scaling
-                scaling += zoom_speed
-            elif event.button == 5:  # Mouse wheel scroll-down
-                scaling -= 0.1 * scaling
+            if event.button == 4:
+                target_scaling += 0.1 * target_scaling
+            elif event.button == 5:
+                target_scaling -= 0.1 * target_scaling
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if not context_menu_window.rect.collidepoint(event.pos):
                 context_menu_window.hide()
@@ -1799,7 +1808,33 @@ while running:
                                (pygame.mouse.get_pos()[0]+30,pygame.mouse.get_pos()[1]-20) , radius, 20)
         if hold_time >= KEY_HOLD_TIME:
             toolset(tuple(map(sum, zip(world_mouse_pos, camera_offset))))
+    if key_z_pressed:
+        hold_time = pygame.time.get_ticks() - key_z_hold_start_time
+        fill_fraction = min(hold_time / KEY_HOLD_TIME, 1.0)
+        radius = int(20 * fill_fraction)
+        if hold_time >= 100:
+            pygame.draw.circle(screen, (255, 255, 255),
+                               (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), 20, 1)
+            pygame.draw.circle(screen, (255, 0, 0),
+                               (pygame.mouse.get_pos()[0]+30,pygame.mouse.get_pos()[1]-20) , radius, 20)
+        if hold_time >= KEY_HOLD_TIME:
+            if shift_speed > 1:
+                num_bodies -= 1
+                for i in range(5):
+                    if space.bodies:
+                        last_body = space.bodies[-1]
+                        for shape in last_body.shapes:
+                            space.remove(shape)
+                        space.remove(last_body)
+            else:
+                if space.bodies:
+                    last_body = space.bodies[-1]
+                    for shape in last_body.shapes:
+                        space.remove(shape)
+                    space.remove(last_body)
+                    num_bodies -= 1
 
+    scaling += (target_scaling - scaling) * smoothness
     translate_speed = 10 * shift_speed / scaling
     keys = pygame.key.get_pressed()
     left = int(keys[pygame.K_LEFT])

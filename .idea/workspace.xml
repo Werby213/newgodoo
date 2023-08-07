@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="added checkbox to rectangle color settings">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="addded &quot;soft&quot; command">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" afterDir="false" />
     </list>
@@ -524,11 +524,18 @@
       <option name="project" value="LOCAL" />
       <updated>1691336133964</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="addded &quot;soft&quot; command">
+      <option name="closed" value="true" />
+      <created>1691339431493</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1691339431493</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="triangle settings added" />
     <MESSAGE value="05.07.23" />
     <MESSAGE value="pause icon added" />
     <MESSAGE value="auto spawn indicator added" />
@@ -553,6 +560,7 @@
     <MESSAGE value="something" />
     <MESSAGE value="1.1.7" />
     <MESSAGE value="added checkbox to rectangle color settings" />
-    <option name="LAST_COMMIT_MESSAGE" value="added checkbox to rectangle color settings" />
+    <MESSAGE value="addded &quot;soft&quot; command" />
+    <option name="LAST_COMMIT_MESSAGE" value="addded &quot;soft&quot; command" />
   </component>
 </project>
