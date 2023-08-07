@@ -1183,8 +1183,8 @@ def object_drag():
 #                 body.apply_force_at_local_point(force_vector, (0, 0))
 
 
-def save_data(space, iterations, simulation_frequency, floor_friction, version_save, world_translation):
-    data = (space, iterations, simulation_frequency, floor_friction, version_save, world_translation)
+def save_data(space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body):
+    data = (space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body)
     root = tk.Tk()
     root.withdraw()
     file_path = filedialog.asksaveasfilename(
@@ -1215,11 +1215,11 @@ def load_data():
         if file_path:
             with open(file_path, "rb") as f:
                     data = pickle.load(f)
-            if len(data) == 6:
-                space, iterations, simulation_frequency, floor_friction, version_save, world_translation = data
+            if len(data) == 9:
+                space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body = data
                 print("Загрузка успешна.")
                 sound_save_done.play()
-                return space, iterations, simulation_frequency, floor_friction, version_save, world_translation
+                return space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body
             else:
                 print("Неправильный формат данных.")
                 sound_load_error.play()
@@ -1569,12 +1569,13 @@ while running:
                             new_image=pygame.image.load(checkbox_true_texture))
                 if event.ui_element == save_world_button:
                     sound_click.play()
-                    save_data(space, space.iterations, simulation_frequency, floor.friction, version_save, world_translation)
+                    save_data(space, space.iterations, simulation_frequency, floor.friction, version_save, translation, scaling, static_lines, static_body)
                 elif event.ui_element == load_world_button:
                     sound_click.play()
-                    loaded_space, iterations, simulation_frequency, floor_friction, version_save, world_translation = load_data()
+                    loaded_space, iterations, simulation_frequency, floor_friction, version_save, translation, loaded_scaling, static_field, static_body = load_data()
                     if loaded_space:
                         space = loaded_space
+                        scaling = loaded_scaling
                         space.iterations = iterations
                 elif event.ui_element == delete_all_button:
                     delete_all()
@@ -1685,14 +1686,15 @@ while running:
                         last_body = space.bodies[-1]
                         for shape in last_body.shapes:
                             space.remove(shape)
-                            window_console.add_output_line_to_log(str(shape)[8:])
+                            #window_console.add_output_line_to_log("Undo: " + str(shape)[8:])
                         space.remove(last_body)
+                        sound_slider.play()
             else:
                 if space.bodies:
                     last_body = space.bodies[-1]
                     for shape in last_body.shapes:
                         space.remove(shape)
-                        window_console.add_output_line_to_log(str(shape)[8:])
+                        window_console.add_output_line_to_log("Undo: " + str(shape)[8:])
                     space.remove(last_body)
                     num_bodies -= 1
                     sound_slider.play()
@@ -1750,7 +1752,7 @@ while running:
         #            if info.shape.body != static_body:
         #                selected_body = info.shape.body
         # elif event.type == pygame.KEYUP:
-        #     if event.key == pygame.K_j:+
+        #     if event.key == pygame.K_j:
         #         if selected_body is not None:
         #             selected_body.is_dragging = False
         #             selected_body = None
@@ -1836,6 +1838,7 @@ while running:
                             except Exception as e:
                                 window_console.add_output_line_to_log(str(e))
                         space.remove(last_body)
+                        sound_slider.play()
             else:
                 if space.bodies:
                     last_body = space.bodies[-1]
@@ -1846,6 +1849,7 @@ while running:
                             window_console.add_output_line_to_log(str(e))
                     space.remove(last_body)
                     num_bodies -= 1
+                    sound_slider.play()
 
     scaling += (target_scaling - scaling) * smoothness
     translate_speed = 10 * shift_speed / scaling
@@ -1875,20 +1879,6 @@ while running:
     scaling *= 1 + (zoom_speed * zoom_in - zoom_speed * zoom_out)
     rotation += rotation_speed * rotate_left - rotation_speed * rotate_right
 
-    #fps_debug = f1.render(
-    #    "FPS: "
-    #    + (str(round(clock.get_fps())))
-    #    + "\nEntities: "
-    #    + (str(len(space.bodies)))
-    #    + "\nGravity: "
-    #    + (str(len(space.gravity)))
-    #    + "\nThreads: "
-    #    + (str(round(space.threads))),
-    #    True,
-    #    (180, 0, 0),
-    #)
-    #screen.blit(fps_debug, (screen_width - 300, 10))
-
     if show_guide:
         text_guide_gui.visible = True
 
@@ -1914,15 +1904,3 @@ while running:
     update()
     pygame.display.flip()
 pygame.quit()
-
-
-# elif event.type == pygame.MOUSEBUTTONDOWN:
-#    if event.button == 1:
-#        for body, shape in objects:
-#            if shape.point_query(mouse_get_pos()):
-#                selected_shape = shape
-#                dragging_body = body
-#                break
-#    elif event.button == 2:
-#        camera_dragging = True
-#        camera_drag_start = Vec2d(event.pos[0], event.pos[1])

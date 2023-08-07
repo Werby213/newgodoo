@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="updated checkbox sprites">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="fixed mousewheel camera control">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
@@ -547,11 +548,18 @@
       <option name="project" value="LOCAL" />
       <updated>1691393968516</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="fixed mousewheel camera control">
+      <option name="closed" value="true" />
+      <created>1691394245155</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1691394245155</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="auto spawn indicator added" />
     <MESSAGE value="fixed objects list save, a1.1.5 version" />
     <MESSAGE value="added system_dpi setting for fullscreen" />
     <MESSAGE value="added windows for shape settings, added console and 3 examples." />
@@ -576,6 +584,7 @@
     <MESSAGE value="addded &quot;soft&quot; command" />
     <MESSAGE value="added Z autodelete" />
     <MESSAGE value="updated checkbox sprites" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated checkbox sprites" />
+    <MESSAGE value="fixed mousewheel camera control" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed mousewheel camera control" />
   </component>
 </project>
