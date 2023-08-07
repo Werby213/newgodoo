@@ -1685,14 +1685,17 @@ while running:
                         last_body = space.bodies[-1]
                         for shape in last_body.shapes:
                             space.remove(shape)
+                            window_console.add_output_line_to_log(str(shape)[8:])
                         space.remove(last_body)
             else:
                 if space.bodies:
                     last_body = space.bodies[-1]
                     for shape in last_body.shapes:
                         space.remove(shape)
+                        window_console.add_output_line_to_log(str(shape)[8:])
                     space.remove(last_body)
                     num_bodies -= 1
+                    sound_slider.play()
         if event.type == pygame.KEYUP and event.key == pygame.K_z:
             key_z_pressed = False
             key_z_hold_start_time = 0
@@ -1824,13 +1827,19 @@ while running:
                     if space.bodies:
                         last_body = space.bodies[-1]
                         for shape in last_body.shapes:
-                            space.remove(shape)
+                            try:
+                                space.remove(shape)
+                            except Exception as e:
+                                window_console.add_output_line_to_log(str(e))
                         space.remove(last_body)
             else:
                 if space.bodies:
                     last_body = space.bodies[-1]
                     for shape in last_body.shapes:
-                        space.remove(shape)
+                        try:
+                            space.remove(shape)
+                        except Exception as e:
+                            window_console.add_output_line_to_log(str(e))
                     space.remove(last_body)
                     num_bodies -= 1
 
