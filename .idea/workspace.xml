@@ -4,7 +4,76 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="fixed mousewheel camera control">
+    <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="fixed save system">
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/core_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/laydigital.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/close.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/beep_1.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/beep_2.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click_2.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click_3.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/click_4.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/error.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/hovering.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/save_done.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/save_error.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/screenshot.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/settings_menu_open.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/gui/slider.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/pause.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/pause_in.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sounds/spawn.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/checkbox_false.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/checkbox_true.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/attraction.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/repulsion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/ring.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/force_field/spiral.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/placeholder.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/polyhedron.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/rectangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/spam.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/sprites/gui/spawn/triangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/theme.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/unispace bd.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/core_main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/gui.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/laydigital.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/close.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/beep_1.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/beep_2.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/click.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/click_2.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/click_3.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/click_4.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/error.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/hovering.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/save_done.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/save_error.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/screenshot.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/settings_menu_open.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/gui/slider.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/pause.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/pause_in.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sounds/spawn.mp3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/checkbox_false.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/checkbox_true.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/force_field/attraction.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/force_field/repulsion.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/force_field/ring.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/force_field/spiral.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/pause.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/spawn/circle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/spawn/placeholder.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/spawn/polyhedron.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/spawn/rectangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/spawn/spam.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/sprites/gui/spawn/triangle.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/theme.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/unispace bd.ttf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117/core_main.py" afterDir="false" />
     </list>
@@ -36,17 +105,17 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a116&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/User/PycharmProjects/newgodoo/Newgodoo_alpha/newgodoo_a119&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a119" />
+      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a116" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a117" />
-      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha" />
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a116\sounds" />
-      <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\spawn" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a118" />
@@ -56,49 +125,7 @@
       <recent name="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a114\sprites\gui\force_field" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.core_main (1)">
-    <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="newgodoo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/test1" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/test1/1.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="newgodoo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/test1" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/test1/2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.core_main (2)">
     <configuration name="core_main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="newgodoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -120,6 +147,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="core_main (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="newgodoo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/core_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="core_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="newgodoo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -128,11 +176,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a117" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\User\PycharmProjects\newgodoo\Newgodoo_alpha\newgodoo_a118\core_main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/core_main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -184,20 +232,41 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="newgodoo a116" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="newgodoo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a116/newgodoo a116.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Python.2" />
-      <item itemvalue="Python.1" />
+      <item itemvalue="Python.core_main (2)" />
+      <item itemvalue="Python.newgodoo a116" />
       <item itemvalue="Python.core_main" />
       <item itemvalue="Python.core_main (1)" />
       <item itemvalue="Python.dpg" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.core_main (2)" />
+        <item itemvalue="Python.core_main" />
+        <item itemvalue="Python.newgodoo a116" />
         <item itemvalue="Python.core_main (1)" />
         <item itemvalue="Python.core_main (1)" />
-        <item itemvalue="Python.2" />
-        <item itemvalue="Python.1" />
-        <item itemvalue="Python.dpg" />
       </list>
     </recent_temporary>
   </component>
@@ -556,11 +625,18 @@
       <option name="project" value="LOCAL" />
       <updated>1691394245155</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="fixed save system">
+      <option name="closed" value="true" />
+      <created>1691395260335</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1691395260335</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fixed objects list save, a1.1.5 version" />
     <MESSAGE value="added system_dpi setting for fullscreen" />
     <MESSAGE value="added windows for shape settings, added console and 3 examples." />
     <MESSAGE value="added exec and eval console commands" />
@@ -585,6 +661,7 @@
     <MESSAGE value="added Z autodelete" />
     <MESSAGE value="updated checkbox sprites" />
     <MESSAGE value="fixed mousewheel camera control" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed mousewheel camera control" />
+    <MESSAGE value="fixed save system" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed save system" />
   </component>
 </project>

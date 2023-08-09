@@ -73,7 +73,7 @@ screen_width, screen_height = 2560, 1400
 pygame.init()
 pygame.display.set_icon(pygame.image.load("laydigital.png"))
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
-version = "Newgodoo a0.1.7"
+version = "Newgodoo a0.1.8"
 version_save = version
 pygame.display.set_caption(version)
 COLLTYPE_DEFAULT = 1
@@ -1215,14 +1215,10 @@ def load_data():
         if file_path:
             with open(file_path, "rb") as f:
                     data = pickle.load(f)
-            if len(data) == 9:
-                space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body = data
-                print("Загрузка успешна.")
-                sound_save_done.play()
-                return space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body
-            else:
-                print("Неправильный формат данных.")
-                sound_load_error.play()
+            space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body = data
+            print("Загрузка успешна.")
+            sound_save_done.play()
+            return space, iterations, simulation_frequency, floor_friction, version_save, translation, scaling, static_field, static_body
         else:
             print("Отменена загрузка.")
             sound_load_error.play()
@@ -1398,6 +1394,29 @@ while running:
                 python_process.stdin.flush()
 
             else:
+                if command == '1':
+                    car_body = pymunk.Body(10, float('inf'))  # Масса, инерция
+                    car_shape = pymunk.Poly.create_box(car_body, size=(100, 40))
+                    car_body.position = 200, 150
+                    space.add(car_body, car_shape)
+
+                    # Создание пружинных сочленений для колес
+                    wheel1_body = pymunk.Body(5, float('inf'))
+                    wheel1_shape = pymunk.Circle(wheel1_body, 20)
+                    wheel1_body.position = car_body.position + (-50, -30)
+                    space.add(wheel1_body, wheel1_shape)
+
+                    wheel2_body = pymunk.Body(5, float('inf'))
+                    wheel2_shape = pymunk.Circle(wheel2_body, 20)
+                    wheel2_body.position = car_body.position + (50, -30)
+                    space.add(wheel2_body, wheel2_shape)
+
+                    spring1 = pymunk.DampedSpring(car_body, wheel1_body, (0, 0), (0, 0), rest_length=40, stiffness=2000,
+                                                  damping=100)
+                    spring2 = pymunk.DampedSpring(car_body, wheel2_body, (0, 0), (0, 0), rest_length=40, stiffness=2000,
+                                                  damping=100)
+                    space.add(spring1, spring2)
+
                 if command.startswith('soft '):
                     def add_ball(space):
                         mass = 10
@@ -1707,7 +1726,6 @@ while running:
             creating_static_field = True
         elif event.type == pygame.KEYUP and event.key == pygame.K_b:
             sound_click_4.play()
-            print("Создается барьер")
             static_field_end = world_mouse_pos
             static_field = pymunk.Segment(
                 static_body, static_field_start, static_field_end, 10
@@ -1822,7 +1840,7 @@ while running:
         fill_fraction = min(hold_time / KEY_HOLD_TIME, 1.0)
         radius = int(20 * fill_fraction)
         if hold_time >= 100:
-            pygame.draw.circle(screen, (255, 255, 255),
+            pygame.draw.circle(screen, (255, 0, 0),
                                (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), 20, 1)
             pygame.draw.circle(screen, (255, 0, 0),
                                (pygame.mouse.get_pos()[0]+30,pygame.mouse.get_pos()[1]-20) , radius, 20)
