@@ -1,6 +1,5 @@
 from gui import *
 
-
 import pygame
 import pygame_gui
 import pymunk
@@ -21,7 +20,7 @@ import os
 import time
 import traceback
 
-class Core(pymunk, gui):
+class Core:
     def __init__(self):
         #main
         self.version = "Newgodoo a0.1.9"
@@ -34,8 +33,6 @@ class Core(pymunk, gui):
         pygame.display.set_icon(pygame.image.load("laydigital.png"))
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("myappid")
         pygame.display.set_caption(self.version)
-        self.theme_path = 'theme.json'
-        self.gui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height), self.theme_path)
         self.clock = pygame.time.Clock()
 
         if self.fullscreen:
@@ -62,6 +59,7 @@ class Core(pymunk, gui):
                                                  pygame.RESIZABLE | pygame.DOUBLEBUF | pygame.HWSURFACE)
 
         #pymunk
+        self.space = pymunk.Space(threaded=True)
         self.space.threads = os.cpu_count()
         self.space.threaded = False
         self.COLLTYPE_DEFAULT = 1
@@ -130,7 +128,6 @@ class Core(pymunk, gui):
         self.key_f_hold_start_time = 0
         self.key_z_hold_start_time = 0
 
-        self.pause_icon.hide()
         self.pause_icon_visible = False
         self.show_guide = True
         self.static_lines = []
@@ -577,7 +574,430 @@ class Core(pymunk, gui):
             self.pause_icon.hide()
             pause_icon_visible = False
             pygame.display.set_caption(self.version)
+    def run(self):
+        while self.running:
+            self.screen.fill((20, 20, 20))
+            time_delta = self.clock.tick(60) / 1000
 
+            # Получить позицию курсора относительно мира игры
+            mouse_pos = pymunk.pygame_util.get_mouse_pos(self.screen)
+
+            cursor_pos = pymunk.Vec2d(mouse_pos[0], mouse_pos[1])
+
+            inverse_translation = pymunk.Transform.translation(-self.screen_width / 2, -self.screen_height / 2)
+            inverse_rotation = pymunk.Transform.rotation(-self.rotation)
+            inverse_scaling = pymunk.Transform.scaling(1 / self.scaling)
+
+            inverse_transform = inverse_scaling @ inverse_rotation @ inverse_translation
+
+            inverse_translation_cam = pymunk.Transform.translation(
+                -self.translation.tx, -self.translation.ty
+            )
+
+            world_cursor_pos = inverse_transform @ cursor_pos
+            world_translation = inverse_translation_cam @ pymunk.Vec2d(0, 0)
+
+            world_mouse_pos = (
+                world_cursor_pos.x + world_translation.x + self.screen_width / 2,
+                world_cursor_pos.y + world_translation.y + self.screen_height / 2,
+            )
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.sound_pause.play()
+                        self.window_settings.hide()
+                        self.key_esc_pressed = not self.key_esc_pressed
+                    if event.key == pygame.K_F11:
+                        self.sound_close.play()
+                        key_f11_pressed = True
+                    if event.key == pygame.K_f:
+                        key_f_pressed = True
+                        key_f_hold_start_time = pygame.time.get_ticks()
+                    if event.key == pygame.K_n:
+                        self.sound_beep_1.play()
+                        if self.selected_force_field_button is not None:
+                            if self.selected_force_field_button == self.force_field_buttons[0]:
+                                self.creating_attraction = not self.creating_attraction
+                            elif self.selected_force_field_button == self.force_field_buttons[1]:
+                                self.creating_repulsion = not self.creating_repulsion
+                            elif self.selected_force_field_button == self.force_field_buttons[2]:
+                                self.creating_force_ring = not self.creating_force_ring
+                                self.shuffled_bodies = random.sample(self.space.bodies, self.num_bodies)
+                            elif self.selected_force_field_button == self.force_field_buttons[3]:
+                                self.creating_force_spiral = not self.creating_force_spiral
+                            elif self.selected_force_field_button == self.force_field_buttons[4]:
+                                self.creating_force_freeze = not self.creating_force_freeze
+                    elif event.type == pygame.KEYUP:
+                        if event.key == pygame.K_f:
+                            self.toolset(tuple(map(sum, zip(world_mouse_pos, self.camera_offset))))
+                            shuffled_bodies = self.space.bodies
+                            key_f_pressed = False
+                            key_f_hold_start_time = 0
+                    if event.type == pygame.USEREVENT:
+                        if event.user_type == pygame_gui.UI_BUTTON_ON_HOVERED:
+                            self.sound_hovering.play()
+                        if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                            # random color checkbox
+                            if event.ui_element == self.rectangle_color_mode_button:
+                                self.sound_click_3.play()
+                                rectangle_color_random = False
+                                self.rectangle_color_mode_checkbox_image.set_image(
+                                    new_image=pygame.image.load(self.checkbox_false_texture))
+                                rectangle_color_mode = not self.rectangle_color_mode
+                                if rectangle_color_mode == True:
+                                    self.sound_click_3.play()
+                                    rectangle_color_random = True
+                                    self.rectangle_color_mode_checkbox_image.set_image(
+                                        new_image=pygame.image.load(self.checkbox_true_texture))
+                            if event.ui_element == self.circle_color_mode_button:
+                                self.sound_click_3.play()
+                                circle_color_random = False
+                                self.circle_color_mode_checkbox_image.set_image(
+                                    new_image=pygame.image.load(self.checkbox_false_texture))
+                                self.circle_color_mode = not self.circle_color_mode
+                                if self.circle_color_mode == True:
+                                    self.sound_click_3.play()
+                                    circle_color_random = True
+                                    self.circle_color_mode_checkbox_image.set_image(
+                                        new_image=pygame.image.load(self.checkbox_true_texture))
+                            if event.ui_element == self.save_world_button:
+                                self.sound_click.play()
+                                self.save_data(self.space, self.space.iterations, self.simulation_frequency, self.floor.friction, self.version_save,
+                                          self.translation, self.scaling, self.static_lines, self.static_body)
+                            elif event.ui_element == self.load_world_button:
+                                self.sound_click.play()
+                                loaded_space, iterations, simulation_frequency, floor_friction, version_save, translation, loaded_scaling, static_field, static_body = self.load_data()
+                                if loaded_space:
+                                    self.space = loaded_space
+                                    self.scaling = loaded_scaling
+                                    self.space.iterations = iterations
+                            elif event.ui_element == self.delete_all_button:
+                                self.delete_all()
+                            elif event.ui_element in self.force_field_buttons:
+                                self.selected_force_field_button = event.ui_element
+                                self.toolset_force_field()
+                                self.show_force_field_settings()
+                            if event.ui_element in self.spawn_buttons:
+                                self.sound_click_2.play()
+                                selected_spawn_button = event.ui_element
+                                if selected_spawn_button == self.spawn_buttons[0]:
+                                    self.selected_shape = "circle"
+                                    self.hide_all_windows()
+                                    self.window_circle.show()
+                                elif selected_spawn_button == self.spawn_buttons[1]:
+                                    self.selected_shape = "rectangle"
+                                    self.hide_all_windows()
+                                    self.window_rectangle.show()
+                                elif selected_spawn_button == self.spawn_buttons[2]:
+                                    self.selected_shape = "triangle"
+                                    self.hide_all_windows()
+                                    self.window_triangle.show()
+                                elif selected_spawn_button == self.spawn_buttons[3]:
+                                    self.selected_shape = "polyhedron"
+                                    self.hide_all_windows()
+                                    self.window_polyhedron.show()
+                                elif selected_spawn_button == self.spawn_buttons[4]:
+                                    self.selected_shape = "spam"
+                                elif selected_spawn_button == self.spawn_buttons[5]:
+                                    self.selected_shape = "delete all"
+                                elif selected_spawn_button == self.spawn_buttons[6]:
+                                    self.selected_shape = "force field"
+                                elif selected_spawn_button == self.spawn_buttons[7]:
+                                    self.selected_shape = "None"
+                                elif selected_spawn_button == self.spawn_buttons[8]:
+                                    self.selected_shape = "None"
+                                elif selected_spawn_button == self.spawn_buttons[9]:
+                                    self.selected_shape = "None"
+                                elif selected_spawn_button == self.spawn_buttons[10]:
+                                    self.selected_shape = "None"
+                                elif selected_spawn_button == self.spawn_buttons[11]:
+                                    self.selected_shape = "human"
+
+
+                        elif event.user_type == pygame_gui.UI_BUTTON_PRESSED:
+                            if event.ui_element in self.spawn_buttons:
+                                self.toolset(tuple(map(sum, zip(world_mouse_pos, self.camera_offset))))
+                        elif event.user_type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED:
+                            if event.ui_element == self.strength_slider:
+                                force_field_strength = int(event.value)
+                                self.text_label_strength.set_text(
+                                    "Force Field Strength: {}".format(force_field_strength)
+                                )
+                            elif event.ui_element == self.radius_slider:
+                                force_field_radius = int(event.value)
+                                self.text_label_radius.set_text(
+                                    "Force Field Radius: {}".format(force_field_radius)
+                                )
+
+                            elif event.ui_element == self.iterations_slider:
+                                self. space.iterations = int(event.value)
+                                self.text_iterations.set_text(
+                                    "iterations        :{}".format(self.space.iterations)
+                                )
+
+                            elif event.ui_element == self.simulation_frequency_slider:
+                                simulation_frequency = int(event.value)
+                                self.text_simulation_frequency.set_text(
+                                    "sim. frequency     :{}".format(simulation_frequency)
+                                )
+
+                            elif event.ui_element == self.friction_slider:
+                                set_friction = int(event.value)
+                                self.text_friction.set_text("friction       :{}".format(set_friction))
+
+                            elif event.ui_element == self.elasticity_slider:
+                                set_elasticity = int(event.value)
+                                self.text_elasticity.set_text(
+                                    "elasticity       :{}".format(set_elasticity)
+                                )
+
+                    self.debug_info_labels[0].set_text(f"FPS: {round(self.clock.get_fps())}")
+                    self.debug_info_labels[1].set_text(f"Entities: {len(self.space.bodies)}")
+                    self.debug_info_labels[2].set_text(f"Gravity: {self.space.gravity}")
+                    self.debug_info_labels[3].set_text(f"Threads: {self.space.threads}")
+                    self.debug_info_labels[4].set_text(f"static_lines: {static_lines}")  # Update static_lines accordingly
+                    self.debug_info_labels[8].set_text(f"Mouse position: {pygame.mouse.get_pos()}")  # Update mouse position
+
+                    if self.key_esc_pressed:
+                        self.window_settings.show()
+                    if self.key_f11_pressed:
+                        self.fullscreen = not self.fullscreen
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_LSHIFT:
+                        self.shift_speed = 5
+                    if event.type == pygame.KEYUP and event.key == pygame.K_LSHIFT:
+                        self.shift_speed = 1
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_RSHIFT:
+                        self.shift_speed = 5
+                    if event.type == pygame.KEYUP and event.key == pygame.K_RSHIFT:
+                        self.shift_speed = 1
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_z:
+                        self.key_z_pressed = True
+                        self.key_z_hold_start_time = pygame.time.get_ticks()
+                        if self.shift_speed > 1:
+                            self.num_bodies -= 1
+                            for i in range(5):
+                                if self.space.bodies:
+                                    last_body = self.space.bodies[-1]
+                                    for shape in last_body.shapes:
+                                        self.space.remove(shape)
+                                        # window_console.add_output_line_to_log("Undo: " + str(shape)[8:])
+                                    self.space.remove(last_body)
+                                    self.sound_slider.play()
+                        else:
+                            if self.space.bodies:
+                                last_body = self.space.bodies[-1]
+                                for shape in last_body.shapes:
+                                    self.space.remove(shape)
+                                    self.window_console.add_output_line_to_log("Undo: " + str(shape)[8:])
+                                self.space.remove(last_body)
+                                num_bodies -= 1
+                                self.sound_slider.play()
+                    if event.type == pygame.KEYUP and event.key == pygame.K_z:
+                        key_z_pressed = False
+                        key_z_hold_start_time = 0
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+                        self.sound_click_3.play()
+                        static_field_start = world_mouse_pos
+                        creating_static_field = True
+                    elif event.type == pygame.KEYUP and event.key == pygame.K_b:
+                        self.sound_click_4.play()
+                        static_field_end = world_mouse_pos
+                        static_field = pymunk.Segment(
+                            static_body, static_field_start, static_field_end, 10
+                        )
+                        static_field.friction = set_friction
+                        static_field.elasticity = 0.5
+                        try:
+                            self.space.add(static_field)
+                        except Exception as e:
+                            traceback.print_exc()
+                            self.window_console.add_output_line_to_log("Error while spawning static: " + str(e))
+                        creating_static_field = False
+
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_DELETE:
+                            info = self.space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+                            if info is not None:
+                                self.space.remove(info.shape)
+
+                        if event.key == pygame.K_SPACE:
+                            self.sound_pause.play()
+                            self.vis_pause_icon(show=not pause_icon_visible)
+                            running_physics = not running_physics
+                            key_space = not key_space
+
+                        elif event.key == pygame.K_l:
+                            show_guide = not show_guide
+                        elif event.type == pygame.KEYDOWN and event.key == pygame.K_p:
+                            pygame.image.save(self.screen, "../screenshot.png")
+                            self.window_console.add_output_line_to_log("Screenshot saved!")
+                            self.sound_screenshot.play()
+
+                        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                            if line_point1 is None:
+                                line_point1 = world_mouse_pos
+
+                    # elif event.type == pygame.KEYDOWN:
+                    #     if event.key == pygame.K_j:
+                    #    # Check if mouse is hovering over a Pymunk shape
+                    #        info = space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+                    #        if info is not None:
+                    #            if info.shape.body != static_body:
+                    #                selected_body = info.shape.body
+                    # elif event.type == pygame.KEYUP:
+                    #     if event.key == pygame.K_j:
+                    #         if selected_body is not None:
+                    #             selected_body.is_dragging = False
+                    #             selected_body = None
+                    #             create_spring(selected_body, selected_body)
+
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 2:
+                            center_button = True
+                            mouse_x_start_pos, mouse_y_start_pos = world_mouse_pos
+
+                    elif event.type == pygame.MOUSEBUTTONUP:
+                        if event.button == 2:
+                            mouse_x_start_pos, mouse_y_start_pos = world_mouse_pos
+                            center_button = False
+
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1:
+                            info = self.space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+                            if info is not None:
+                                if info.shape.body != static_body:
+                                    self.object_dragging = info.shape.body
+
+                    elif event.type == pygame.MOUSEBUTTONUP:
+                        if event.button == 1:
+                            if self.object_dragging is not None:
+                                self.object_dragging.is_dragging = False
+                                self.object_dragging = None
+
+                    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
+                        info = self.space.point_query_nearest(world_mouse_pos, 0, pymunk.ShapeFilter())
+                        if info is not None:
+                            if info.shape.body != static_body:
+                                self.context_menu_window.show()
+                                self.context_menu_window.set_position(position=event.pos)
+                    elif event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 4:
+                            self.target_scaling += 0.1 * self.target_scaling
+                        elif event.button == 5:
+                            self.target_scaling -= 0.1 * self.target_scaling
+                    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        if not self.context_menu_window.rect.collidepoint(event.pos):
+                            self.context_menu_window.hide()
+                    if event.type == pygame.USEREVENT and event.user_type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
+                        selected_button_index = self.context_menu_list.selected_option
+                        print(f"Selected button index: {selected_button_index}")
+
+                    if self.center_button or (event.type == pygame.MOUSEMOTION and event.buttons[1] == 1):
+                        if event.type == pygame.MOUSEMOTION:
+                            self.translation = self.translation.translated(world_mouse_pos[0] - self.mouse_x_start_pos,
+                                                                 world_mouse_pos[1] - self.mouse_y_start_pos)
+
+                if self.key_f_pressed:
+                    hold_time = pygame.time.get_ticks() - self.key_f_hold_start_time
+                    fill_fraction = min(hold_time / self.KEY_HOLD_TIME, 1.0)
+                    radius = int(20 * fill_fraction)
+                    if hold_time >= 100:
+                        pygame.draw.circle(self.screen, (255, 255, 255),
+                                           (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), 20, 1)
+                        pygame.draw.circle(self.screen, (255, 255, 255),
+                                           (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), radius, 20)
+                    if self.hold_time >= self.KEY_HOLD_TIME:
+                        self.toolset(tuple(map(sum, zip(world_mouse_pos, self.camera_offset))))
+                if self.key_z_pressed:
+                    hold_time = pygame.time.get_ticks() - self.key_z_hold_start_time
+                    fill_fraction = min(hold_time / self.KEY_HOLD_TIME, 1.0)
+                    radius = int(20 * fill_fraction)
+                    if hold_time >= 100:
+                        pygame.draw.circle(self.screen, (255, 0, 0),
+                                           (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), 20, 1)
+                        pygame.draw.circle(self.screen, (255, 0, 0),
+                                           (pygame.mouse.get_pos()[0] + 30, pygame.mouse.get_pos()[1] - 20), radius, 20)
+                    if self.hold_time >= self.KEY_HOLD_TIME:
+                        if self.shift_speed > 1:
+                            self.num_bodies -= 1
+                            for i in range(5):
+                                if self.space.bodies:
+                                    last_body = self.space.bodies[-1]
+                                    for shape in last_body.shapes:
+                                        try:
+                                            self.space.remove(shape)
+                                        except Exception as e:
+                                            self.window_console.add_output_line_to_log(str(e))
+                                    self.space.remove(last_body)
+                                    self.sound_slider.play()
+                        else:
+                            if self.space.bodies:
+                                last_body = self.space.bodies[-1]
+                                for shape in last_body.shapes:
+                                    try:
+                                        self.space.remove(shape)
+                                    except Exception as e:
+                                        self.window_console.add_output_line_to_log(str(e))
+                                self.space.remove(last_body)
+                                self.num_bodies -= 1
+                                self.sound_slider.play()
+
+                self.scaling += (self.target_scaling - self.scaling) * self.smoothness
+                translate_speed = 10 * self.shift_speed / self.scaling
+                keys = pygame.key.get_pressed()
+                left = int(keys[pygame.K_LEFT])
+                up = int(keys[pygame.K_UP])
+                down = int(keys[pygame.K_DOWN])
+                right = int(keys[pygame.K_RIGHT])
+
+                zoom_in = int(keys[pygame.K_EQUALS])
+                zoom_out = int(keys[pygame.K_MINUS])
+                rotate_left = int(keys[pygame.K_KP_6])
+                rotate_right = int(keys[pygame.K_KP_4])
+
+                translation = translation.translated(
+                    translate_speed * left - translate_speed * right,
+                    translate_speed * up - translate_speed * down,
+                )
+                self.draw_options.transform = (
+                        pymunk.Transform.translation(self.screen_width / 2, self.screen_height / 2)
+                        @ pymunk.Transform.scaling(self.scaling)
+                        @ translation
+                        @ pymunk.Transform.rotation(self.rotation)
+                        @ pymunk.Transform.translation(-self.screen_width / 2, -self.screen_height / 2)
+                )
+
+                self.scaling *= 1 + (self.zoom_speed * zoom_in - self.zoom_speed * zoom_out)
+                self.rotation += self.rotation_speed * rotate_left - self.rotation_speed * rotate_right
+
+                if self.show_guide:
+                    self.text_guide_gui.visible = True
+
+                if self.creating_static_field:
+                    self.static_field_end = pygame.mouse.get_pos()
+                    pygame.draw.line(self.screen, (255, 255, 255), ((static_field_start[0] + self.screen_width) / self.scaling,
+                                                               (static_field_start[1] + self.screen_height) / self.scaling),
+                                     (pygame.mouse.get_pos()[0],
+                                      pygame.mouse.get_pos()[1]), 10)
+                # if creating_spring:
+                #    spring_end = pygame.mouse.get_pos()
+                #    pygame.draw.line(screen, (255, 255, 255), (spring_start[0] - world_translation[0],
+                #                                               spring_start[1] - world_translation[1]), spring_end, 10)
+
+                for line in static_lines:
+                    body = line.body
+                    pv1 = body.position + line.a.rotated(body.angle)
+                    pv2 = body.position + line.b.rotated(body.angle)
+
+                self.gui_manager.process_events(event)
+                self.gui_manager.update(time_delta)
+                self.space.debug_draw(self.draw_options)
+                self.gui_manager.draw_ui(self.screen)
+                self.update()
+                pygame.display.flip()
 
 
 

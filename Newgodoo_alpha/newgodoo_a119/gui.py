@@ -1,6 +1,12 @@
+import pygame_gui
+import pygame
 from core_main import *
-class gui(Core):
-    def gui(self):
+class Gui:
+    def __init__(self):
+        pygame.init()
+        self.theme_path = 'theme.json'
+        self.gui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height), self.theme_path)
+    def Gui(self):
 
         force_field_button_positions = [
             (self.screen_width - 135, self.screen_height - 500 + (50 + 1) * i) for i in range(5)
@@ -569,25 +575,26 @@ class gui(Core):
             value_range=(0.01, 10),
             manager=self.gui_manager,
         )
-        text_elasticity = pygame_gui.elements.UILabel(
+        self.text_elasticity = pygame_gui.elements.UILabel(
             relative_rect=pygame.Rect(self.screen_width - 260, self.screen_height - 120, 300, 20),
             text="elasticity     :{}".format(self.set_friction),
             manager=self.gui_manager,
         )
         #SAVE/LOAD BUTTONS#####################################################################
-        save_world_button = pygame_gui.elements.UIButton(
+        self.save_world_button = pygame_gui.elements.UIButton(
                 relative_rect=pygame.Rect(self.screen_width - 135, 10, 125, 40),
                 text="Save World",
                 manager=self.gui_manager
         )
-        load_world_button = pygame_gui.elements.UIButton(
+        self.load_world_button = pygame_gui.elements.UIButton(
                 relative_rect=pygame.Rect(self.screen_width - 135, 60, 125, 40),
                 text="Load World",
                 manager=self.gui_manager
         )
         #DELETE_ALL_BUTTON##########################################################################
-        delete_all_button = pygame_gui.elements.UIButton(
+        self.delete_all_button = pygame_gui.elements.UIButton(
                 relative_rect=pygame.Rect(10, self.screen_height-50, 125, 40),
                 text="Delete all",
                 manager=self.gui_manager
         )
+        self.pause_icon.hide()

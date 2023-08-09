@@ -1395,12 +1395,11 @@ while running:
 
             else:
                 if command == '1':
-                    car_body = pymunk.Body(10, float('inf'))  # Масса, инерция
+                    car_body = pymunk.Body(10, float('inf'))
                     car_shape = pymunk.Poly.create_box(car_body, size=(100, 40))
                     car_body.position = 200, 150
                     space.add(car_body, car_shape)
 
-                    # Создание пружинных сочленений для колес
                     wheel1_body = pymunk.Body(5, float('inf'))
                     wheel1_shape = pymunk.Circle(wheel1_body, 20)
                     wheel1_body.position = car_body.position + (-50, -30)
