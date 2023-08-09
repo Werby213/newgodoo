@@ -8,11 +8,11 @@ class Gui:
         self.gui_manager = pygame_gui.UIManager((self.screen_width, self.screen_height), self.theme_path)
     def Gui(self):
 
-        force_field_button_positions = [
+        self.force_field_button_positions = [
             (self.screen_width - 135, self.screen_height - 500 + (50 + 1) * i) for i in range(5)
         ]
 
-        for i, pos in enumerate(force_field_button_positions):
+        for i, pos in enumerate(self.force_field_button_positions):
             image_rect = pygame.Rect(pos[0] - 50, pos[1] + 1, 47, 47)
             button_rect = pygame.Rect(pos, (110, 50))
             button_text = ""

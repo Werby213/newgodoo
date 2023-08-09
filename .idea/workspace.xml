@@ -5,10 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4769baa-08dc-4799-95f0-f87cdf055136" name="Changes" comment="trying implement OOP">
-      <change afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/core_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a118/core_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/core_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/core_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/Newgodoo_alpha/newgodoo_a119/gui.py" afterDir="false" />
     </list>
     <list id="3908b5c6-6faa-4f0a-a235-29a7e6088d7a" name="New changelist" comment="" />
@@ -574,7 +570,15 @@
       <option name="project" value="LOCAL" />
       <updated>1691589254954</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="trying implement OOP">
+      <option name="closed" value="true" />
+      <created>1691591850042</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1691591850042</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
